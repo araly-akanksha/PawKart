@@ -10,8 +10,8 @@
 ## PawKart  
 ### Real-Time Inventory Synchronization and Intelligent Replenishment for Independent Pet Stores Competing in Quick-Commerce Environments: An Academic Research Paper
 
-**Araly Akanksha Naidu**, Dept. of MSc.Big Data Analytics, USN  
-**Betty K Geroge**, Dept. of MCA, USN  
+**Araly Akanksha Naidu**, Dept. of MSc.Big Data Analytics, 252BDA32  
+**Betty K**, Dept. of MCA, 253MCA49  
 **Anna Jose**, Dept. of MCA, USN  
 **Amrutha M**, Dept. of MCA, USN  
 **Yeshwanth Kumar H**, Dept. of MSc.Big Data Analytics, USN  
