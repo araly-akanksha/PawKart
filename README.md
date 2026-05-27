@@ -33,7 +33,7 @@ The framework bridges the gap between enterprise-grade quick-commerce technologi
 ---
 
 # Keywords
-
+Artificial Intelligence (AI), Omnichannel Retailing, Inventory Management, Stockout Prediction, Demand Forecasting, Reinforcement Learning, Machine Learning, Quick Commerce, Product Substitution, Warehouse Optimization, Hyperlocal Delivery, Smart Inventory Systems, Retail Analytics, Supply Chain Optimization, Real-Time Inventory Tracking.
 
 
 ---
