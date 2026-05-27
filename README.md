@@ -86,4 +86,42 @@ To design and develop an AI-driven, event-based predictive inventory and quick-c
 ---
 
 ## 5. Methodology
-### 5.1. Resources used
+### 5.1. System Architecture Overview
+The inventory management system we are proposing is made up of seven layers. This is based on the -fulfillment center network planning framework by Yang and others and the event-driven omnichannel stack by Jose from 2025. Each layer can be used on its own, which means we can scale up or down and fix problems without affecting layers. We want the system to be available 99.99% of the time and we are using event sourcing and CQRS design principles to make this happen.
+
+### 5.2. Channel Integration Layer
+
+We get information from customers through four channels: scanning barcodes at the store shopping on the web or mobile app chatting with us on WhatsApp to reorder and a portal for suppliers. Each channel sends information to the event bus, which's like a message center without directly talking to the inventory services. This means we can add channels like sensors on shelves or voice shopping without changing how we restock shelves.
+
+### 5.3. Event Bus and Messaging Infrastructure
+
+We use Apache Kafka or sometimes AWS Kinesis to handle all the messages. We record every change as an event. We can replay these events to get the current state of things. This is called event sourcing. We use something called CQRS to get the information we need. We divide the messages into groups based on the store so we can make sure things happen in the order for each store.
+
+### 5.4. Machine Learning Core
+
+We have three systems that work together to predict demand and decide when to restock.
+
+First we predict demand. We use a kind of neural network to forecast demand for each product in each store for the next seven days. This takes into account how sales are related across stores and over time.
+
+Next we have agents that decide when to restock. We use something called -agent reinforcement learning, where each store has its own agent. These agents work together to order products so we do not end up with much or too little stock.
+
+Finally we try to understand how sure we are about our predictions. Of using a fixed buffer of stock we use the predictions to decide how much stock we need. If demand is stable we keep stock. If demand is changing a lot we keep stock.
+
+### 5.5. Inventory Execution Layer
+
+When it is time to restock we use a policy to decide when to order more products. This policy is based on the predictions from the machine learning core. If we do not have stock we automatically place an order. We also try to move stock from one store to another in the efficient way possible.
+I_t < s
+
+### 5.6. Model Lifecycle Management
+
+We have a layer that takes care of the machine learning models. We use something called Feast to get the information we need to make predictions. We also keep an eye on the models to make sure they are still working well. If they are not we retrain them. Before we use a model we test it to make sure it is working better than the old one.
+
+### 5.7. Data Layer
+
+We have three databases that store different kinds of information. We use one for sales data, one for data like inventory and orders and one, for reporting and training the machine learning models.
+
+### 5.8. Infrastructure and Deployment
+
+All of our services are containerized and run on Kubernetes. We use namespaces to keep each stores workload separate. We scale up or down based on how much work we have to do. We use an API gateway to handle traffic and we have pipelines that automate the deployment of new services and models. If something goes wrong we can automatically roll back to a version.
+
+---
