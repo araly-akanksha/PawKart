@@ -1,0 +1,2 @@
+# PawKart
+PawKart is an AI-driven omnichannel pet retail and inventory management platform designed to help pet stores efficiently manage products, inventory, deliveries, and customer orders across online and offline channels.  The system uses Artificial Intelligence, Machine Learning, and smart inventory optimization techniques to reduce stockouts, improve product availability, optimize warehouse operations, and enhance customer experience in the pet retail industry.
