@@ -38,9 +38,11 @@ Artificial Intelligence (AI), Omnichannel Retailing, Inventory Management, Stock
 ---
 
 ## 1. Introduction
+The rise of quick commerce has transformed urban retail from a channel-centered model into a speed-centered one, where customers increasingly expect real-time visibility of inventory and delivery within minutes rather than hours. In quick-commerce environments, short lead times, small basket sizes, and localized fulfillment have become defining service expectations, and these requirements place intense pressure on inventory accuracy, replenishment speed, and last-mile coordination. For independent pet stores, this shift is especially consequential because their customer base often includes urgency-driven purchases, specialized product needs, and repeat buying behavior that make stock availability and timely delivery central to customer retention.
 
+At the same time, independent pet retailers typically operate with limited digital infrastructure, manual stock handling, and fragmented fulfillment processes, which makes it difficult to match the responsiveness of quick-commerce platforms. The literature on omnichannel retail shows that stores are increasingly expected to function not only as sales points but also as fulfillment nodes, requiring real-time coordination of inventory, orders, and delivery promises across channels. Research on event-driven inventory systems further indicates that traditional batch-based inventory updates are too slow for modern retail conditions, because they create delays, data inconsistencies, and stock visibility errors that directly affect customer experience. On this basis, the problem is not merely faster delivery, but the integration of inventory sensing, forecasting, replenishment, and execution into a single responsive retail system.
 
-
+This study therefore positions independent pet stores within the broader transformation of omnichannel and quick-commerce retail. The proposed framework responds to the operational gap between enterprise-grade quick-commerce systems and the practical realities of small specialty retailers by combining real-time inventory tracking, event-based updates, demand forecasting, dynamic reorder-point logic, and coordinated last-mile delivery. It also reflects the growing recognition in the literature that inventory management is no longer a back-office task, but a strategic capability that shapes competitiveness, service reliability, and market relevance.
 
 ---
 
