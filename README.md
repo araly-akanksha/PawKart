@@ -60,10 +60,28 @@ Despite these advances, the literature reveals a significant methodological and 
 ---
 
 ## 3. Problem Statement
+Independent pet stores in Bengaluru face increasing competitive pressure from quick-commerce platforms such as Zepto due to operational inefficiencies and limited technological capabilities. Unlike large-scale quick-commerce ecosystems that offer ultra-fast delivery, real-time inventory synchronization, and automated fulfillment systems, many independent pet retailers continue to rely on manual inventory tracking and disconnected retail operations. As a result, these stores struggle to maintain accurate stock visibility, prevent inventory inconsistencies, manage fast-moving and perishable products efficiently, and meet growing customer expectations for rapid delivery services.
+
+The absence of integrated digital inventory systems often leads to stockouts, delayed fulfillment, overstocking, and reduced customer satisfaction, ultimately affecting the competitiveness and sustainability of small-scale pet retail businesses. Furthermore, existing omnichannel and quick-commerce inventory solutions are primarily designed for enterprise-level retailers with advanced technological infrastructure, making them difficult to implement within the operational and financial constraints of independent specialty stores.
+
+This research addresses these challenges by proposing an AI-driven omnichannel inventory and retail management framework that integrates real-time inventory visibility, predictive demand forecasting, intelligent replenishment, and quick-commerce delivery coordination. The proposed system aims to improve inventory accuracy, operational efficiency, and customer responsiveness while enabling independent pet retailers to compete more effectively in increasingly digital and convenience-oriented retail markets.
 
 ---
 
 ## 4. Objectives
+Based on your proposed framework and problem statement, the objectives of this research can be written as follows:
+
+### 4.1. Main Objective
+To design and develop an AI-driven, event-based predictive inventory and quick-commerce fulfillment framework for independent pet stores that improves real-time inventory visibility, reduces stock inconsistencies, enhances demand forecasting accuracy, and enables faster hyperlocal order fulfillment.
+
+### 4.2. Specific Objectives
+1) To develop a real-time inventory monitoring system using RFID tags, sensors, and event-driven architecture for continuous stock synchronization across independent pet stores.
+2) To implement machine learning–based demand forecasting models that predict customer purchasing behavior and improve inventory planning accuracy.
+3) To design a dynamic reorder-point optimization mechanism that minimizes stockouts, reduces manual inventory errors, and improves replenishment efficiency.
+4) To integrate automated fulfillment coordination and hyperlocal delivery management for enabling sub-30-minute delivery operations in independent pet retail environments.
+5) To build an explainable and user-friendly intelligent retail system that can be effectively used by non-technical independent pet store owners.
+6) To evaluate the effectiveness of the proposed framework using performance metrics such as inventory accuracy, stockout reduction, order fulfillment time, and forecasting precision.
+7) To establish a scalable quick-commerce transformation framework that helps independent pet stores compete with large quick-commerce platforms through intelligent automation and predictive analytics.
 
 ---
 
