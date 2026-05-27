@@ -57,5 +57,4 @@ Artificial Intelligence (AI), Omnichannel Retailing, Inventory Management, Stock
 ---
 
 ## 5. Methodology
----
 ### 5.1. Resources used
