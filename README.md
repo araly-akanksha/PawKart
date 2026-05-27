@@ -32,30 +32,15 @@ The framework bridges the gap between enterprise-grade quick-commerce technologi
 
 ---
 
-# Features
+# Keywords
 
-✅ Real-Time Inventory Tracking  
-✅ AI-Based Stockout Prediction  
-✅ Product Management  
-✅ Omnichannel Synchronization  
-✅ Hyperlocal Delivery  
-✅ Smart Product Recommendation  
-✅ Batch & Expiry Tracking  
-✅ Warehouse Coordination  
+
 
 ---
 
 # Technologies Used
 
-| Technology | Purpose |
-|---|---|
-| Python | AI & Backend |
-| React.js | Frontend |
-| Flutter | Mobile App |
-| FastAPI | APIs |
-| MySQL | Database |
-| TensorFlow | Deep Learning |
-| Firebase | Authentication |
+
 
 ---
 
@@ -67,12 +52,7 @@ The framework bridges the gap between enterprise-grade quick-commerce technologi
 
 ---
 
-# Contributors
-
-- Akanksha Naidu
-- Team Member 2
-- Team Member 3
-
+# 
 ---
 
 # License
