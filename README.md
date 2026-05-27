@@ -12,8 +12,8 @@
 
 **Araly Akanksha Naidu**, Dept. of MSc.Big Data Analytics, 252BDA32  
 **Betty K**, Dept. of MCA, 253MCA49  
-**Anna Jose**, Dept. of MCA, 253MCA55
-**Amrutha M**, Dept. of MCA, 253MCA23
+**Anna Jose**, Dept. of MCA, 253MCA55  
+**Amrutha M**, Dept. of MCA, 253MCA23  
 **Yeshwanth Kumar H**, Dept. of MSc.Big Data Analytics, 252BDA23
 
 ---
