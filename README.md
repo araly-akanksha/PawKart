@@ -7,7 +7,7 @@
 
 ---
 
-# PawKart  
+## PawKart  
 ### Real-Time Inventory Synchronization and Intelligent Replenishment for Independent Pet Stores Competing in Quick-Commerce Environments: An Academic Research Paper
 
 **Araly Akanksha Naidu**, Dept. of MSc.Big Data Analytics, USN  
@@ -18,7 +18,7 @@
 
 ---
 
-# Abstract
+## Abstract
 
 The rise of quick-commerce platforms has completely changed what urban retail customers expect. They now want to see what inventory is available in time and get their orders delivered in under 30 minutes. This is a deal for businesses that want to stay competitive. Independent pet stores have a time keeping up. They serve a specific group of customers who are passionate about pets and this group is growing fast.. These stores have old systems for managing inventory and they often have to restock shelves by hand. They also don't have the technology to quickly get orders to customers.
 
@@ -32,7 +32,7 @@ The framework bridges the gap between enterprise-grade quick-commerce technologi
 
 ---
 
-# Keywords
+## Keywords
 Artificial Intelligence (AI), Omnichannel Retailing, Inventory Management, Stockout Prediction, Demand Forecasting, Reinforcement Learning, Machine Learning, Quick Commerce, Product Substitution, Warehouse Optimization, Hyperlocal Delivery, Smart Inventory Systems, Retail Analytics, Supply Chain Optimization, Real-Time Inventory Tracking.
 
 
