@@ -29,6 +29,7 @@ The system is designed to be easy to use, for store owners who aren't tech exper
 The study provides a framework that independent pet stores can use to improve their operations and compete with retailers. By using real-time inventory tracking, predictive analytics and automation independent pet stores can provide service to their customers and stay competitive in a rapidly changing retail landscape. Independent pet stores can use this system to get better at what they do provide reliable service and become more like quick-commerce businesses. The system helps independent pet stores to enhance their competitiveness. Independent pet stores serve specialized consumer segments. They need real-time inventory visibility and sub-30-minute delivery. The proposed system combines real-time inventory monitoring, demand forecasting, dynamic reorder-point optimization and heuristic-enhanced last-mile delivery coordination.
 
 The framework bridges the gap between enterprise-grade quick-commerce technologies and the practical realities of specialty retail. It establishes a pathway, for independent pet stores to transition toward intelligent quick-commerce-ready retail ecosystems.
+
 ---
 
 # Features
