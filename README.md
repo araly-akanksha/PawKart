@@ -1,9 +1,9 @@
 <div align="center">
 
 <img src="assets/1.png" width="300"/>
-<img src="assets/2.png" width="300"/>
+<img src="assets/2.png" width="250"/>
 <img src="assets/3.png" width="300"/>
-
+</div>
 ---
 
 # PawKart  
@@ -14,7 +14,6 @@
 **Anna Jose**, Dept. of MCA, USN  
 **Amrutha M**, Dept. of MCA, USN  
 **Yeshwanth Kumar H**, Dept. of MSc.Big Data Analytics, USN  
-</div>
 
 ---
 
