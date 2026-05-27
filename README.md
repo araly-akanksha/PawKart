@@ -8,7 +8,7 @@
 ---
 
 # PawKart  
-### AI-Driven Omnichannel Pet Retail & Inventory Management Platform
+### Real-Time Inventory Synchronization and Intelligent Replenishment for Independent Pet Stores Competing in Quick-Commerce Environments: An Academic Research Paper
 
 **Araly Akanksha Naidu**, Dept. of MSc.Big Data Analytics, USN  
 **Betty K Geroge**, Dept. of MCA, USN  
