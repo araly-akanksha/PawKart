@@ -35,26 +35,27 @@ The framework bridges the gap between enterprise-grade quick-commerce technologi
 ## Keywords
 Artificial Intelligence (AI), Omnichannel Retailing, Inventory Management, Stockout Prediction, Demand Forecasting, Reinforcement Learning, Machine Learning, Quick Commerce, Product Substitution, Warehouse Optimization, Hyperlocal Delivery, Smart Inventory Systems, Retail Analytics, Supply Chain Optimization, Real-Time Inventory Tracking.
 
+---
+
+## 1. Introduction
+
+
+
 
 ---
 
-# Technologies Used
-
-
+## 2. Literature Review
 
 ---
 
-# System Architecture
-
-<p align="center">
-  <img src="assets/pawkart_logo.png" width="500"/>
-</p>
+## 3. Problem Statement
 
 ---
 
-# 
+## 4. Objectives
+
 ---
 
-# License
-
-This project is developed for academic and research purposes.
+## 5. Methodology
+---
+### 5.1. Resources used
