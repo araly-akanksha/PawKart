@@ -14,8 +14,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from keras.models import Sequential
+from keras.layers import LSTM, Dense, Dropout
 
 # ============================================================
 # LOAD FORECASTING DATASET
