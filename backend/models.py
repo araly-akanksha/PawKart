@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 from datetime import datetime
 from sqlalchemy import DateTime
 
+
 Base = declarative_base()
 
 class Product(Base):
@@ -32,7 +33,7 @@ class RFIDEvent(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    rfid_tag = Column(String)
+    product_id = Column(Integer)
 
     event_type = Column(String)
 
