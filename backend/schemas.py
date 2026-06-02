@@ -13,3 +13,8 @@ class InventoryCreate(BaseModel):
 class StockUpdate(BaseModel):
     product_id: int
     quantity_sold: int
+
+
+class RFIDScan(BaseModel):
+    rfid_tag: str
+    event_type: str
