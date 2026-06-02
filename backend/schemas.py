@@ -16,5 +16,5 @@ class StockUpdate(BaseModel):
 
 
 class RFIDScan(BaseModel):
-    rfid_tag: str
+    product_id: int
     event_type: str
