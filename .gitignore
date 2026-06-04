@@ -1,5 +1,31 @@
+# Environment secrets
+.env
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
 venv/
 .venv/
-.env
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keras/TensorFlow
+*.h5
+
+# Distribution
+*.egg-info/
+dist/
+build/

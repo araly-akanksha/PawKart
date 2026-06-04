@@ -1,0 +1,274 @@
+# ============================================================
+# PAWKART PYDANTIC SCHEMAS
+# ============================================================
+#
+# Input schemas (Create/Update) and Output schemas (Response)
+# for all API endpoints. Enables typed Swagger documentation.
+#
+# ============================================================
+
+from pydantic import BaseModel, Field
+from typing import Optional, List
+from datetime import datetime
+
+
+# ── Product Schemas ──────────────────────────────────────────
+
+class ProductCreate(BaseModel):
+    product_name: str
+    description: Optional[str] = None
+    category: str
+    price: float = Field(gt=0)
+    sku: Optional[str] = None
+    image_url: Optional[str] = None
+    available: bool = True
+
+
+class ProductUpdate(BaseModel):
+    product_name: Optional[str] = None
+    description: Optional[str] = None
+    category: Optional[str] = None
+    price: Optional[float] = Field(default=None, gt=0)
+    sku: Optional[str] = None
+    image_url: Optional[str] = None
+    available: Optional[bool] = None
+
+
+class ProductResponse(BaseModel):
+    id: int
+    product_name: str
+    description: Optional[str]
+    category: str
+    price: float
+    sku: Optional[str]
+    image_url: Optional[str]
+    available: bool
+    created_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+# ── Inventory Schemas ────────────────────────────────────────
+
+class InventoryCreate(BaseModel):
+    product_id: int
+    current_stock: int = Field(ge=0)
+    reorder_level: int = Field(ge=0, default=10)
+    unit: str = "pcs"
+
+
+class InventoryUpdate(BaseModel):
+    current_stock: Optional[int] = Field(default=None, ge=0)
+    reorder_level: Optional[int] = Field(default=None, ge=0)
+    unit: Optional[str] = None
+
+
+class StockUpdate(BaseModel):
+    product_id: int
+    quantity_sold: int = Field(gt=0)
+
+
+class InventoryResponse(BaseModel):
+    id: int
+    product_id: int
+    product_name: Optional[str] = None
+    current_stock: int
+    reorder_level: int
+    unit: str
+    inventory_health_score: Optional[float]
+    last_updated: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class LowStockAlert(BaseModel):
+    product_id: int
+    product_name: str
+    current_stock: int
+    reorder_level: int
+    unit: str
+    deficit: int  # how many units below reorder level
+
+
+# ── RFID Schemas ─────────────────────────────────────────────
+
+class RFIDScan(BaseModel):
+    product_id: int
+    rfid_tag_id: Optional[str] = None
+    event_type: str = Field(
+        description="Event type: SALE, RESTOCK, RETURN, or AUDIT"
+    )
+
+
+class RFIDEventResponse(BaseModel):
+    id: int
+    product_id: int
+    rfid_tag_id: Optional[str]
+    event_type: str
+    timestamp: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class RFIDStatsResponse(BaseModel):
+    total_events: int
+    sale_count: int
+    restock_count: int
+    return_count: int
+    audit_count: int
+
+
+# ── Order Schemas (adapted from Replit) ──────────────────────
+
+class OrderItemCreate(BaseModel):
+    product_id: int
+    quantity: int = Field(gt=0)
+
+
+class OrderCreate(BaseModel):
+    customer_name: str
+    customer_phone: Optional[str] = None
+    customer_address: Optional[str] = None
+    delivery_slot: Optional[str] = None
+    items: List[OrderItemCreate]
+
+
+class OrderItemResponse(BaseModel):
+    id: int
+    product_id: int
+    product_name: str
+    quantity: int
+    unit_price: float
+    subtotal: float
+
+    class Config:
+        from_attributes = True
+
+
+class OrderResponse(BaseModel):
+    id: int
+    customer_name: str
+    customer_phone: Optional[str]
+    customer_address: Optional[str]
+    status: str
+    total_amount: float
+    item_count: int = 0
+    delivery_slot: Optional[str]
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class OrderDetailResponse(OrderResponse):
+    items: List[OrderItemResponse] = []
+
+
+class OrderStatusUpdate(BaseModel):
+    status: str = Field(
+        description="New status: pending, confirmed, preparing, "
+                    "out_for_delivery, delivered, cancelled"
+    )
+
+
+class OrderSummaryResponse(BaseModel):
+    pending: int = 0
+    confirmed: int = 0
+    preparing: int = 0
+    out_for_delivery: int = 0
+    delivered: int = 0
+    cancelled: int = 0
+    total: int = 0
+
+
+# ── Store Schemas (adapted from Replit) ──────────────────────
+
+class StoreResponse(BaseModel):
+    id: int
+    name: str
+    owner_name: str
+    email: str
+    phone: Optional[str]
+    address: Optional[str]
+    logo_url: Optional[str]
+    is_open: bool
+    opening_time: Optional[str]
+    closing_time: Optional[str]
+    delivery_radius_km: Optional[float]
+    min_order_amount: Optional[float]
+
+    class Config:
+        from_attributes = True
+
+
+class StoreUpdate(BaseModel):
+    name: Optional[str] = None
+    owner_name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    logo_url: Optional[str] = None
+    is_open: Optional[bool] = None
+    opening_time: Optional[str] = None
+    closing_time: Optional[str] = None
+    delivery_radius_km: Optional[float] = None
+    min_order_amount: Optional[float] = None
+
+
+# ── Analytics Schemas (adapted from Replit) ──────────────────
+
+class DashboardSummary(BaseModel):
+    today_revenue: float = 0.0
+    today_orders: int = 0
+    pending_orders: int = 0
+    low_stock_count: int = 0
+    fulfillment_rate: float = 0.0
+    avg_delivery_minutes: Optional[float] = None
+    active_products: int = 0
+    revenue_change: Optional[float] = None
+    orders_change: Optional[float] = None
+
+
+class SalesDataPoint(BaseModel):
+    date: str
+    revenue: float
+    order_count: int
+
+
+class FulfillmentStats(BaseModel):
+    fulfillment_rate: float
+    avg_delivery_minutes: Optional[float]
+    cancel_rate: float
+    on_time_rate: float
+
+
+class TopProductResponse(BaseModel):
+    product_id: int
+    product_name: str
+    total_sold: int
+    revenue: float
+
+
+# ── Forecasting Schemas ──────────────────────────────────────
+
+class ForecastResponse(BaseModel):
+    product_id: int
+    predicted_demand_next_week: int
+    demand_category: str
+    confidence: Optional[str] = None
+    explanation: Optional[str] = None
+
+
+# ── Optimization Schemas ─────────────────────────────────────
+
+class ReorderResponse(BaseModel):
+    product_id: int
+    current_stock: int
+    predicted_demand: Optional[int] = None
+    recommended_reorder_quantity: int
+    risk_level: str
+    explanation: str
