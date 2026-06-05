@@ -5,6 +5,7 @@ import Products from './pages/Products';
 import Inventory from './pages/Inventory';
 import Orders from './pages/Orders';
 import RFID from './pages/RFID';
+import Forecast from './pages/Forecast';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/rfid" element={<RFID />} />
+          <Route path="/forecast" element={<Forecast />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
         </Route>

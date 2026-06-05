@@ -26,7 +26,7 @@ export default function Analytics() {
       {fulfill && (
         <div className="grid-4" style={{ marginBottom: 20 }}>
           <div className="stat-card"><div><div className="stat-value" style={{ color: 'var(--success)' }}>{fulfill.fulfillment_rate}%</div><div className="stat-label">Fulfillment Rate</div></div></div>
-          <div className="stat-card"><div><div className="stat-value">{fulfill.avg_delivery_time_minutes || '—'}</div><div className="stat-label">Avg Delivery (min)</div></div></div>
+          <div className="stat-card"><div><div className="stat-value">{fulfill.avg_delivery_minutes || '—'}</div><div className="stat-label">Avg Delivery (min)</div></div></div>
           <div className="stat-card"><div><div className="stat-value" style={{ color: 'var(--success)' }}>{fulfill.on_time_rate || 0}%</div><div className="stat-label">On-Time Rate</div></div></div>
           <div className="stat-card"><div><div className="stat-value" style={{ color: 'var(--danger)' }}>{fulfill.cancel_rate || 0}%</div><div className="stat-label">Cancel Rate</div></div></div>
         </div>
@@ -58,8 +58,8 @@ export default function Analytics() {
                 <tr key={i}>
                   <td style={{ fontWeight: 700, color: 'var(--primary)' }}>{i + 1}</td>
                   <td style={{ fontWeight: 600 }}>{p.product_name}</td>
-                  <td>{p.total_quantity}</td>
-                  <td>₹{(p.total_revenue || 0).toLocaleString('en-IN')}</td>
+                  <td>{p.total_sold}</td>
+                  <td>₹{(p.revenue || 0).toLocaleString('en-IN')}</td>
                 </tr>
               ))}
               {top.length === 0 && <tr><td colSpan="4" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No sales data yet</td></tr>}

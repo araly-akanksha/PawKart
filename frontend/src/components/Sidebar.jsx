@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   PawPrint, LayoutDashboard, Package, Warehouse,
-  ShoppingCart, Radio, BarChart3, Settings
+  ShoppingCart, Radio, Brain, BarChart3, Settings
 } from 'lucide-react';
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/inventory', icon: Warehouse, label: 'Inventory' },
   { to: '/orders', icon: ShoppingCart, label: 'Orders' },
   { to: '/rfid', icon: Radio, label: 'RFID Monitor' },
+  { to: '/forecast', icon: Brain, label: 'AI Forecast' },
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
