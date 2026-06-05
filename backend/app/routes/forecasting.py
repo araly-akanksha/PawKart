@@ -65,19 +65,22 @@ except Exception as e:
 
 # ── Helpers ─────────────────────────────────────────────────
 
-def classify_demand(predicted: float) -> str:
-    if predicted > 500:
+def classify_demand(weekly_units: int) -> str:
+    """Classify demand based on predicted weekly unit volume."""
+    if weekly_units > 50:
         return "High Demand"
-    elif predicted > 200:
+    elif weekly_units > 20:
         return "Medium Demand"
-    else:
+    elif weekly_units > 5:
         return "Low Demand"
+    else:
+        return "Very Low Demand"
 
 
 def _build_sales_sequence(product_id: int, db: Session) -> list:
     """30 daily sales totals for a product (oldest → newest)."""
     import numpy as np
-    today = datetime.utcnow().date()
+    today = datetime.now().date()
     daily = []
 
     for offset in range(29, -1, -1):
@@ -103,7 +106,7 @@ def _build_sales_sequence(product_id: int, db: Session) -> list:
 
 def _forecast_statistical(product_id: int, db: Session) -> float:
     """Estimate weekly demand from 30-day order history."""
-    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    thirty_days_ago = datetime.now() - timedelta(days=30)
 
     total_sold = (
         db.query(func.coalesce(func.sum(OrderItem.quantity), 0))
@@ -173,7 +176,7 @@ def forecast_demand(product_id: int, db: Session = Depends(get_db)):
             return ForecastResponse(
                 product_id=product_id,
                 predicted_demand_next_week=r["weekly"],
-                demand_category=classify_demand(r["daily"]),
+                demand_category=classify_demand(r["weekly"]),
                 confidence="high" if r["nonzero_days"] >= 10 else "medium",
                 explanation=(
                     f"🧠 LSTM Neural Network Forecast for '{name}':\n\n"
@@ -197,7 +200,7 @@ def forecast_demand(product_id: int, db: Session = Depends(get_db)):
     return ForecastResponse(
         product_id=product_id,
         predicted_demand_next_week=predicted,
-        demand_category=classify_demand(predicted),
+        demand_category=classify_demand(int(predicted)),
         confidence="medium" if predicted > 0 else "low",
         explanation=(
             f"📊 Statistical Forecast for '{name}':\n\n"

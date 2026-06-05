@@ -84,7 +84,7 @@ def optimize_reorder(product_id: int, db: Session = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
 
     # Calculate weekly demand from last 30 days of orders
-    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    thirty_days_ago = datetime.now() - timedelta(days=30)
 
     total_sold = (
         db.query(func.coalesce(func.sum(OrderItem.quantity), 0))
