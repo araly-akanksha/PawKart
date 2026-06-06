@@ -22,10 +22,48 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Keras/TensorFlow
+# Keras/TensorFlow model files
 *.h5
 
 # Distribution
 *.egg-info/
 dist/
 build/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Large data files (keep only Datasets/flipkart_pet_products.csv)
+*.csv
+!Datasets/flipkart_pet_products.csv
+
+# ML model binaries (keep .keras needed by lstm_engine.py)
+# lstm_demand_forecasting_model.keras is required by backend
+
+# Olist datasets (not part of PawKart)
+Datasets/olist_*
+
+# Screenshots / misc assets
+assets/
+
+# One-time scripts (kept locally, not needed in repo)
+data_preprocessing.py
+demand_forecasting_model.py
+inventory_optimization.py
+save_scaler.py
+
+# Test/debug scripts
+backend/diagnose.py
+backend/smoke_test.py
+backend/test_api.py
+backend/test_lstm.py
+backend/verify_all.py
+backend/create_tables.py
+
+# Local extras
+ai_models/
+database/
+documentation/
+figma_designs/
+research_paper/
