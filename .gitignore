@@ -59,6 +59,7 @@ backend/smoke_test.py
 backend/test_api.py
 backend/test_lstm.py
 backend/verify_all.py
+frontend/src/App.css
 backend/create_tables.py
 
 # Local extras
