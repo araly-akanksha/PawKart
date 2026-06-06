@@ -45,7 +45,7 @@ npm-debug.log*
 Datasets/olist_*
 
 # Screenshots / misc assets
-assets/
+# Screenshots referenced by README are in assets/
 
 # One-time scripts (kept locally, not needed in repo)
 data_preprocessing.py
