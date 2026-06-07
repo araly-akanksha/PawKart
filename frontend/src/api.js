@@ -90,6 +90,11 @@ export const fetchTopProducts = () => fetchJSON('/analytics/top-products');
 
 // ── Forecasting ───────────────────────────────────────────
 export const fetchForecast = (productId) => fetchJSON(`/forecast/${productId}`);
+export const fetchModelInfo = () => fetchJSON('/forecast/model-info');
 
 // ── Optimization ──────────────────────────────────────────
 export const fetchReorder = (productId) => fetchJSON(`/optimize-reorder/${productId}`);
+
+// ── Dispatch (SO4: Automated Delivery) ────────────────────
+export const dispatchOrder = (id) => postJSON(`/orders/${id}/dispatch`, {});
+export const fetchDispatchStatus = (id) => fetchJSON(`/orders/${id}/dispatch-status`);

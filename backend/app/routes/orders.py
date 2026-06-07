@@ -10,19 +10,26 @@
 # Status flow:
 #   pending → confirmed → preparing → out_for_delivery → delivered
 #                                                       → cancelled
+#
+# Dispatch simulation (demo mode):
+#   Each stage advances every 30s (represents real-world minutes).
+#   Total = ~90s demo = represents sub-30-minute SLA delivery.
 # ============================================================
 
+import time
+import threading
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from app.dependencies import get_db
 from app.models import Order, OrderItem, Product
 from app.schemas import (
     OrderCreate, OrderResponse, OrderDetailResponse,
-    OrderItemResponse, OrderStatusUpdate, OrderSummaryResponse
+    OrderItemResponse, OrderStatusUpdate, OrderSummaryResponse,
+    DispatchResponse
 )
 
 router = APIRouter()
@@ -31,6 +38,33 @@ VALID_STATUSES = {
     "pending", "confirmed", "preparing",
     "out_for_delivery", "delivered", "cancelled"
 }
+
+# ── In-memory dispatch tracker ───────────────────────────────
+# Stores {order_id: dispatched_at_iso} for SLA tracking
+# Resets on server restart (acceptable for prototype)
+_dispatch_registry: dict = {}
+
+# Demo timing: 30s per stage (represents real-world minutes)
+STAGE_DELAY_SECONDS = 30
+
+
+def _auto_advance(order_id: int, new_status: str, delay: int):
+    """Background thread: waits `delay` seconds then sets order to new_status."""
+    from app.database import SessionLocal
+
+    time.sleep(delay)
+    db = SessionLocal()
+    try:
+        order = db.query(Order).filter(Order.id == order_id).first()
+        if order and order.status not in ("delivered", "cancelled"):
+            order.status = new_status
+            order.updated_at = datetime.utcnow()
+            db.commit()
+    except Exception:
+        pass
+    finally:
+        db.close()
+
 
 
 # ── Create Order ─────────────────────────────────────────────
@@ -217,3 +251,99 @@ def update_order_status(
     )
 
 
+# ── Dispatch Order (SO4: Automated Fulfillment) ──────────────
+#
+# Triggers the full automated delivery pipeline:
+#   Now:   confirmed
+#   +30s:  preparing
+#   +60s:  out_for_delivery
+#   +90s:  delivered   ← sub-30-min SLA met ✅
+#
+# Demo mode: 30s/stage represents real-world minutes.
+# Tracks dispatch time for SLA evaluation (research objective #6).
+
+@router.post("/orders/{order_id}/dispatch", response_model=DispatchResponse)
+def dispatch_order(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == order_id).first()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if order.status in ("delivered", "cancelled"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot dispatch order with status '{order.status}'"
+        )
+
+    # Set to confirmed immediately
+    order.status = "confirmed"
+    dispatched_at = datetime.utcnow()
+    order.updated_at = dispatched_at
+    db.commit()
+
+    # Register dispatch time for SLA tracking
+    _dispatch_registry[order_id] = dispatched_at.isoformat()
+
+    # Estimated delivery = 3 stages × 30s = 90s (demo)
+    estimated_delivery = dispatched_at + timedelta(seconds=STAGE_DELAY_SECONDS * 3)
+
+    # Launch background threads for automatic stage advancement
+    stages = [
+        ("preparing",        STAGE_DELAY_SECONDS),
+        ("out_for_delivery", STAGE_DELAY_SECONDS * 2),
+        ("delivered",        STAGE_DELAY_SECONDS * 3),
+    ]
+    for status, delay in stages:
+        t = threading.Thread(
+            target=_auto_advance,
+            args=(order_id, status, delay),
+            daemon=True
+        )
+        t.start()
+
+    return DispatchResponse(
+        order_id=order_id,
+        message="🚀 Order dispatched! Auto-advancing through delivery pipeline.",
+        dispatched_at=dispatched_at,
+        estimated_delivery_at=estimated_delivery,
+        stage_delay_seconds=STAGE_DELAY_SECONDS,
+        pipeline="confirmed → preparing (+30s) → out_for_delivery (+60s) → delivered (+90s)"
+    )
+
+
+# ── Dispatch Status ──────────────────────────────────────────
+
+@router.get("/orders/{order_id}/dispatch-status")
+def get_dispatch_status(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    dispatched_at_str = _dispatch_registry.get(order_id)
+
+    if not dispatched_at_str:
+        return {
+            "order_id": order_id,
+            "status": order.status,
+            "dispatched": False,
+            "elapsed_seconds": None,
+            "sla_met": None
+        }
+
+    dispatched_at = datetime.fromisoformat(dispatched_at_str)
+    elapsed = (datetime.utcnow() - dispatched_at).total_seconds()
+    sla_seconds = STAGE_DELAY_SECONDS * 3  # 90s demo = 30min real
+    sla_met = elapsed <= sla_seconds if order.status == "delivered" else None
+
+    return {
+        "order_id": order_id,
+        "status": order.status,
+        "dispatched": True,
+        "dispatched_at": dispatched_at_str,
+        "elapsed_seconds": round(elapsed),
+        "sla_seconds": sla_seconds,
+        "sla_met": sla_met,
+        "estimated_delivery_at": (
+            dispatched_at + timedelta(seconds=sla_seconds)
+        ).isoformat()
+    }

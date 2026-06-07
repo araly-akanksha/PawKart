@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Brain, TrendingUp, AlertTriangle, RefreshCw, ChevronDown } from 'lucide-react';
+import { Brain, TrendingUp, AlertTriangle, RefreshCw, ChevronDown, Cpu, BarChart2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
-import { fetchProducts, fetchForecast, fetchReorder } from '../api';
+import { fetchProducts, fetchForecast, fetchReorder, fetchModelInfo } from '../api';
 
 const demandColor = {
   'High Demand': '#22C55E',
@@ -17,10 +17,11 @@ export default function Forecast() {
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [modelInfo, setModelInfo] = useState(null);
 
   useEffect(() => {
-    fetchProducts()
-      .then(setProducts)
+    Promise.all([fetchProducts(), fetchModelInfo()])
+      .then(([p, m]) => { setProducts(p); setModelInfo(m); })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -84,6 +85,67 @@ export default function Forecast() {
           )}
         </button>
       </div>
+
+      {/* ── Model Performance Panel (SO6) ─────────────────── */}
+      {modelInfo && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(108,99,255,0.12), rgba(34,197,94,0.08))',
+          border: '1px solid rgba(108,99,255,0.35)',
+          borderRadius: 12,
+          padding: '18px 22px',
+          marginBottom: 22,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <Cpu size={18} style={{ color: '#6C63FF' }} />
+            <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+              LSTM Model Performance
+            </span>
+            <span style={{
+              marginLeft: 8, fontSize: '0.72rem', background: 'rgba(34,197,94,0.2)',
+              color: '#22C55E', borderRadius: 20, padding: '2px 10px', fontWeight: 600,
+            }}>
+              SO6: Evaluation Metrics ✓
+            </span>
+          </div>
+
+          {/* Metrics Row */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
+            {[
+              { label: 'RMSE', value: modelInfo.rmse, note: 'normalized', color: '#6C63FF' },
+              { label: 'MAE', value: modelInfo.mae, note: 'normalized', color: '#22C55E' },
+              { label: 'MAPE', value: `${modelInfo.mape}%`, note: 'error rate', color: '#F59E0B' },
+              { label: 'R² Score', value: modelInfo.r2_score, note: 'variance explained', color: '#06B6D4' },
+            ].map((m) => (
+              <div key={m.label} style={{
+                background: 'rgba(0,0,0,0.25)', borderRadius: 10, padding: '14px 16px',
+                textAlign: 'center', border: `1px solid ${m.color}30`,
+              }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 800, color: m.color }}>{m.value}</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: 2 }}>{m.label}</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: 2 }}>{m.note}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Architecture Info */}
+          <div style={{
+            display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: '0.78rem', color: 'var(--text-muted)',
+          }}>
+            {[
+              ['Model', modelInfo.model_type],
+              ['Training Records', modelInfo.training_records.toLocaleString()],
+              ['Sequence Length', `${modelInfo.sequence_length} days`],
+              ['Epochs', modelInfo.epochs],
+              ['Optimizer', modelInfo.optimizer],
+              ['Normalization', modelInfo.normalization],
+            ].map(([k, v]) => (
+              <span key={k}>
+                <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{k}:</span> {v}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {Object.keys(forecasts).length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>

@@ -253,6 +253,17 @@ class TopProductResponse(BaseModel):
     revenue: float
 
 
+# ── Dispatch Schemas (SO4: Automated Delivery) ───────────────
+
+class DispatchResponse(BaseModel):
+    order_id: int
+    message: str
+    dispatched_at: datetime
+    estimated_delivery_at: datetime
+    stage_delay_seconds: int
+    pipeline: str
+
+
 # ── Forecasting Schemas ──────────────────────────────────────
 
 class ForecastResponse(BaseModel):
@@ -261,6 +272,26 @@ class ForecastResponse(BaseModel):
     demand_category: str
     confidence: Optional[str] = None
     explanation: Optional[str] = None
+
+
+# ── Model Info Schema (SO6: Evaluation Metrics) ──────────────
+
+class ModelInfoResponse(BaseModel):
+    model_type: str
+    layers: int
+    units_per_layer: int
+    training_records: int
+    sequence_length: int
+    epochs: int
+    # Evaluation metrics (from offline training)
+    rmse: float
+    mae: float
+    mape: float
+    r2_score: float
+    # Architecture details
+    optimizer: str
+    loss_function: str
+    normalization: str
 
 
 # ── Optimization Schemas ─────────────────────────────────────
