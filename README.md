@@ -280,32 +280,61 @@ We acknowledge ERA Foundation India and ComedKares for their institutional recog
 
 ## References
 [1] Y. Chen, S. Cheung, and S. Tan, "Stockout and retail logistics: The impact of inventory accuracy on service levels," International Journal of Production Economics, vol. 228, p. 107760, 2020.
+
 [2] M. Ketzenberg, M. Metters, and V. Vargas, "Inventory policy for dense retail outlets," Journal of Operations Management, vol. 18, no. 3, pp. 303-316, 2000.
+
 [3] H. Kuhn and A. Sternbeck, "Integrative retail logistics: An exploratory study," Operations Management Research, vol. 6, no. 1-2, pp. 2-18, 2013.
+
 [4] A. Raman, N. DeHoratius, and Z. Ton, "Execution: The missing link in retail operations," California Management Review, vol. 43, no. 3, pp. 136-152, 2001.
+
 [5] N. DeHoratius and A. Raman, "Inventory record inaccuracy: An empirical analysis," Management Science, vol. 54, no. 4, pp. 627-641, 2008.
+
 [6] T. H. Cui, J. S. Raju, and Z. J. Zhang, "Fairness and channel coordination," Management Science, vol. 53, no. 8, pp. 1303-1314, 2007.
+
 [7] S. Acimovic and S. Graves, "Making better fulfillment decisions on the fly in an online retail environment," Manufacturing and Service Operations Management, vol. 17, no. 1, pp. 34-51, 2015.
+
 [8] K. Fernie and L. Sparks, Logistics and Retail Management: Emerging Issues and New Challenges in the Retail Supply Chain, 4th ed. London: Kogan Page, 2014.
+
 [9] B. Scholz-Reiter, T. Makuschewitz, F. Bose, and M. Teucke, "Towards the Internet of Things in logistics: Autonomous control of material flows," in Proc. Int. Conf. on Dynamics in Logistics (LDIC), Bremen, Germany, 2009, pp. 1-10.
+
 [10] D. McFarlane, V. Giannikas, A. C. Y. Wong, and M. Harrison, "Product intelligence in industrial control: Theory and practice," Annual Reviews in Control, vol. 37, no. 1, pp. 69-88, 2013.
+
 [11] J. Chen, H. Zhang, and Y. Sun, "Implementing coordination contracts in a manufacturer Stackelberg dual-channel supply chain," Omega, vol. 41, no. 1, pp. 145-153, 2013.
+
 [12] M. E. Ferguson and O. Koenigsberg, "How should a firm manage deteriorating inventory?" Production and Operations Management, vol. 16, no. 3, pp. 306-321, 2007.
+
 [13] G. Hua, S. Wang, and T. C. E. Cheng, "Price and lead time decisions in dual-channel supply chains," European Journal of Operational Research, vol. 205, no. 1, pp. 113-126, 2010.
+
 [14] R. Ganeshan, "Managing supply chain inventories: A multiple retailer, one warehouse, multiple supplier model," International Journal of Production Economics, vol. 59, no. 1-3, pp. 341-354, 1999.
+
 [15] A. Thabet and H. Fathali, "Real-time inventory management in retail using IoT," in Proc. IEEE Int. Conf. on Smart Technologies and Systems for Internet of Things (STS-IoT), 2022, pp. 1-6.
+
 [16] X. Li, Q. Li, and X. Chen, "Deep learning for demand forecasting in retail supply chains," Expert Systems with Applications, vol. 165, p. 113861, 2021.
+
 [17] V. Mnih, K. Kavukcuoglu, D. Silver, et al., "Human-level control through deep reinforcement learning," Nature, vol. 518, no. 7540, pp. 529-533, 2015.
+
 [18] J. Schulman, F. Wolski, P. Dhariwal, A. Radford, and O. Klimov, "Proximal policy optimization algorithms," arXiv preprint arXiv:1707.06347, 2017.
+
 [19] S. Hochreiter and J. Schmidhuber, "Long short-term memory," Neural Computation, vol. 9, no. 8, pp. 1735-1780, 1997.
+
 [20] S. M. Lundberg and S.-I. Lee, "A unified approach to interpreting model predictions," in Advances in Neural Information Processing Systems (NeurIPS), vol. 30, 2017.
+
 [21] Apache Software Foundation, "Apache Kafka: A distributed streaming platform," 2024. [Online]. Available: https://kafka.apache.org
+
 [22] Amazon Web Services, "Amazon Kinesis Data Streams," 2024. [Online]. Available: https://aws.amazon.com/kinesis/data-streams/
+
 [23] Kubernetes Contributors, "Kubernetes: Production-grade container orchestration," 2024. [Online]. Available: https://kubernetes.io
+
 [24] T. Chen and C. Guestrin, "XGBoost: A scalable tree boosting system," in Proc. 22nd ACM SIGKDD Int. Conf. on Knowledge Discovery and Data Mining (KDD), New York, NY, 2016, pp. 785-794.
+
 [25] H. Yang, S. Oprea, and L. Liu, "Fulfillment center network planning for quick commerce," Transportation Research Part E: Logistics and Transportation Review, vol. 167, p. 102920, 2022.
+
 [26] A. Jose, "Event-driven omnichannel retail stack: Design patterns for real-time inventory synchronization," in Proc. Int. Conf. on Retail Technology and Supply Chain Management, 2025.
+
 [27] Feast Contributors, "Feast: Open source feature store," 2024. [Online]. Available: https://feast.dev
+
 [28] F. Chollet et al., "Keras: The Python deep learning library," 2024. [Online]. Available: https://keras.io
+
 [29] A. Raffin, A. Hill, A. Gleave, A. Kanervisto, M. Ernestus, and N. Dormann, "Stable-Baselines3: Reliable reinforcement learning implementations," Journal of Machine Learning Research, vol. 22, no. 268, pp. 1-8, 2021.
+
 [30] G. Brockman, V. Cheung, L. Pettersson, et al., "OpenAI Gym," arXiv preprint arXiv:1606.01540, 2016.
