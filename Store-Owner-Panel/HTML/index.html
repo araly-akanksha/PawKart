@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PawKart</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     PAGE: LANDING
+════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+
+  <nav class="navbar">
+    <div class="brand" onclick="window.scrollTo({top:0, behavior:'smooth'})"><img src="../IMG/1780997231855_PawKart.png" alt="PawKart"></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#landing-features">Features</a></li>
+      <li><a href="#landing-steps">How It Works</a></li>
+      <li><a href="#landing-about">About</a></li>
+      <li><a href="#landing-faq">FAQ</a></li>
+      <li><a href="#landing-contact">Contact</a></li>
+    </ul>
+    <button class="login-btn" onclick="nav('login')">Login</button>
+  </nav>
+
+  <section class="landing-hero">
+    <div class="hero-left">
+      <h1>Everything Your Pet Needs, Delivered Smarter.</h1>
+      <p>PawKart helps customers, stores and warehouses manage pet products seamlessly from one unified platform.</p>
+      <div class="hero-buttons">
+        <button class="primary-btn" onclick="nav('login')">Get Started</button>
+        <button class="secondary-btn" onclick="document.getElementById('landing-features').scrollIntoView({behavior:'smooth'})">Learn More</button>
+      </div>
+    </div>
+    <div class="hero-right">
+    </div>
+  </section>
+
+  <section class="landing-features" id="landing-features">
+    <div class="features-header">
+      <span class="features-badge">FEATURES</span>
+      <h2>Why Choose <span>PawKart</span>?</h2>
+      <p>One platform built for every role in pet commerce.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card feature-purple">
+        <div class="feature-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        </div>
+        <h3>Inventory Management</h3>
+        <p>Track stock in real time across all stores and warehouses with live alerts.</p>
+      </div>
+      <div class="feature-card feature-blue">
+        <div class="feature-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 21H2V3l7 4 7-4 6 4v14z"></path><path d="M22 10H16"></path><path d="M12 10H8"></path><path d="M16 14h6"></path><path d="M2 14h6"></path></svg>
+        </div>
+        <h3>Warehouse Operations</h3>
+        <p>Manage products, batches and storage zones efficiently from a single view.</p>
+      </div>
+      <div class="feature-card feature-green">
+        <div class="feature-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        </div>
+        <h3>Order Tracking</h3>
+        <p>Monitor every order instantly with live delivery status and notifications.</p>
+      </div>
+      <div class="feature-card feature-orange">
+        <div class="feature-icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <h3>Fast Deliveries</h3>
+        <p>Optimised delivery routes ensure your pet products arrive on time, every time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       PAGE: HOW IT WORKS
+  ════════════════════════════════════════ -->
+  <section class="landing-steps" id="landing-steps">
+    <div class="steps-header">
+      <span class="steps-badge">HOW IT WORKS</span>
+      <h2>Three Steps to Pet Commerce <span>Success</span></h2>
+      <p>Getting started with PawKart is quick, simple, and optimized for your role.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+        </div>
+        <h3>Select Your Role</h3>
+        <p>Log in as a Customer, Store Manager, or Admin to instantly access your custom toolset and workspace.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </div>
+        <h3>Sync &amp; Manage</h3>
+        <p>Track store inventory in real-time, view warehouse batches, and coordinate order levels from one screen.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        </div>
+        <h3>Fulfill &amp; Deliver</h3>
+        <p>Monitor order shipments, check dispatch status, and ensure premium pet products arrive on schedule.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       PAGE: ABOUT
+  ════════════════════════════════════════ -->
+  <section class="landing-about" id="landing-about">
+    <div class="about-container">
+      <div class="about-content">
+        <span class="about-badge">ABOUT US</span>
+        <h2>Connecting Pets, Stores, and Warehouses <span>Smarter</span></h2>
+        <p class="about-desc-primary">At PawKart, we believe pet care should be simple, efficient, and delightful. We bridge the gap between pet parents, retail stores, and fulfillment warehouses to create a seamless supply ecosystem.</p>
+        <p class="about-desc-secondary">Our unified platform automates inventory management, tracks order and delivery status in real-time, and ensures that local businesses can operate smoothly while customers get everything their pets need on time.</p>
+        
+        <div class="about-stats">
+          <div class="stat-box">
+            <h4>10k+</h4>
+            <p>Pets Served</p>
+          </div>
+          <div class="stat-box">
+            <h4>150+</h4>
+            <p>Partner Stores</p>
+          </div>
+          <div class="stat-box">
+            <h4>99.8%</h4>
+            <p>Delivery Rate</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-media">
+        <div class="about-image-wrapper">
+          <img src="../IMG/about_illustration.png" alt="PawKart Story">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       PAGE: TESTIMONIALS
+  ════════════════════════════════════════ -->
+  <section class="landing-testimonials" id="landing-testimonials">
+    <div class="testimonials-header">
+      <span class="testimonials-badge">TESTIMONIALS</span>
+      <h2>What Our <span>Partners</span> Say</h2>
+      <p>Hear from the pet parents, retail stores, and warehouse operators who trust PawKart daily.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="rating">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"PawKart transformed our retail store. Inventory sync that used to take hours is now completely automated. Our customers love the delivery speed!"</p>
+        <div class="author-info">
+          <div class="author-avatar">AS</div>
+          <div>
+            <h4>Amit Sharma</h4>
+            <p>Owner, Paws &amp; Claws Boutique</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="rating">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"Managing batch numbers and storage zones is incredibly simple now. The live alerts help us restock before products run out of storage."</p>
+        <div class="author-info">
+          <div class="author-avatar">RK</div>
+          <div>
+            <h4>Rajesh Kumar</h4>
+            <p>Operations Manager, Feed Warehouse</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="rating">⭐⭐⭐⭐⭐</div>
+        <p class="quote">"I order premium feed for my golden retriever every month. The delivery tracking is extremely accurate, and it always arrives on time!"</p>
+        <div class="author-info">
+          <div class="author-avatar">PP</div>
+          <div>
+            <h4>Priya Patel</h4>
+            <p>Dog Mom / Customer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       PAGE: FAQ
+  ════════════════════════════════════════ -->
+  <section class="landing-faq" id="landing-faq">
+    <div class="faq-header">
+      <span class="faq-badge">FAQ</span>
+      <h2>Frequently Asked <span>Questions</span></h2>
+      <p>Quick answers to help you get the most out of the PawKart platform.</p>
+    </div>
+    <div class="faq-container">
+      <details class="faq-item">
+        <summary class="faq-question">How does PawKart work for different user roles? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>PawKart has custom-tailored dashboards for three specific roles. Customers can shop and track orders; Store Managers can monitor local store inventory and sales; and Admins can coordinate warehouse dispatch and site security.</p>
+        </div>
+      </details>
+      
+      <details class="faq-item">
+        <summary class="faq-question">Can I monitor warehouse inventory in real time? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Yes! Our store manager and admin portals track batch codes, stock levels, and dispatch processes live. You will receive alert badges whenever items run low.</p>
+        </div>
+      </details>
+      
+      <details class="faq-item">
+        <summary class="faq-question">How does the delivery tracking system work? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Once an order is created, its journey is tracked from "Ordered", "Packed", "Shipped", to "Delivered" on the customer's timeline screen, synced automatically with warehouse logistics.</p>
+        </div>
+      </details>
+      
+      <details class="faq-item">
+        <summary class="faq-question">Is there a mobile version of the dashboard? <span class="faq-icon">+</span></summary>
+        <div class="faq-answer">
+          <p>Absolutely! The storefront and all management portals are fully responsive and optimized to run beautifully on smartphones, tablets, laptops, and desktops.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       PAGE: CONTACT
+  ════════════════════════════════════════ -->
+  <section class="landing-contact" id="landing-contact">
+    <div class="contact-container">
+      <div class="contact-info">
+        <span class="contact-badge">CONTACT US</span>
+        <h2>Let's Start a <span>Conversation</span></h2>
+        <p>Have questions about PawKart? Whether you are a pet owner, a store manager, or warehouse operator, our support team is ready to help you optimize your logistics.</p>
+        
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <div>
+              <h4>Email Support</h4>
+              <p>support@pawkart.com</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <div>
+              <h4>Phone Support</h4>
+              <p>+91 98765 43210</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div>
+              <h4>Headquarters</h4>
+              <p>123 Main Street, Bangalore, India</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form-card">
+        <form onsubmit="event.preventDefault(); alert('Message sent successfully! Our team will reach out to you shortly.'); this.reset();">
+          <div class="form-group">
+            <label for="contact-name">Full Name</label>
+            <input type="text" id="contact-name" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" placeholder="john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" rows="4" placeholder="How can we help your pet business?" required></textarea>
+          </div>
+          <button type="submit" class="contact-submit-btn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="landing-footer" id="landing-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="../IMG/1780997231855_PawKart.png" alt="PawKart" class="footer-logo">
+        <p>Connecting pet parents, local stores, and warehouses to build the ultimate unified pet commerce ecosystem.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Platform</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#landing-features">Features</a></li>
+          <li><a href="#landing-steps">How It Works</a></li>
+          <li><a href="#landing-about">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#landing-faq">FAQs</a></li>
+          <li><a href="#landing-contact">Contact Us</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>User Portals</h3>
+        <ul>
+          <li><a href="#login" onclick="nav('login')">Customer Login</a></li>
+          <li><a href="#login" onclick="nav('login')">Store Manager</a></li>
+          <li><a href="#login" onclick="nav('login')">Admin Portal</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PawKart. Built for modern pet commerce. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: LOGIN
+════════════════════════════════════════ -->
+<div id="page-login" class="page">
+
+  <div class="login-container">
+
+    <div class="login-left">
+      <div class="login-brand" onclick="nav('landing')">
+        <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+        <span>PawKart</span>
+      </div>
+      
+      <div class="login-left-content">
+        <h2>Simplify Pet Commerce. 👋</h2>
+        <p>One unified platform connecting pet parents, local retail stores, and warehouse logistics centers.</p>
+        
+        <div class="benefits">
+          <div class="benefit-item">
+            <div class="benefit-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </div>
+            <span>Inventory Management</span>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            </div>
+            <span>Real-Time Order Tracking</span>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <span>Integrated Pet Store Hubs</span>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <span>Smart Business Insights</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="login-card">
+        <a href="#" class="login-back-btn" onclick="event.preventDefault(); nav('landing');">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Back to Website
+        </a>
+        <h2>Sign In</h2>
+        <p class="login-subtitle">Choose your access portal to continue</p>
+
+        <div class="role-selector">
+          <button class="role-btn active" onclick="selectRole(this)">Customer</button>
+          <button class="role-btn" onclick="selectRole(this)">Store Manager</button>
+          <button class="role-btn" onclick="selectRole(this)">Admin</button>
+        </div>
+
+        <div class="login-form">
+          <div class="input-container">
+            <div class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <input type="email" placeholder="Email Address" required>
+          </div>
+          
+          <div class="input-container">
+            <div class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <input type="password" placeholder="Password" required>
+          </div>
+          
+          <button class="signin-btn" onclick="doLogin()">Login to Account</button>
+          <button id="guest-login-btn" class="guest-btn" onclick="loginAsGuest()">Continue as Guest</button>
+        </div>
+
+        <p class="login-footer-note">Don't have an account? <a href="#" style="color:var(--purple);font-weight:600">Sign up</a></p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: SHOP HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div class="search-wrapper">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" placeholder="Search pet products, food, toys...">
+    </div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="action-icon-btn cart-trigger" onclick="nav('cart')" title="My Cart">
+        <div class="cart-badge-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-dot">3</span>
+        </div>
+        <span>Cart</span>
+      </button>
+      <button class="action-icon-btn avatar-btn" onclick="nav('profile')" title="My Profile">
+        <div class="avatar-circle">AK</div>
+        <span>Profile</span>
+      </button>
+      <button class="action-icon-btn logout-trigger" onclick="nav('login')" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="shop-hero-wrapper">
+    <div class="shop-hero">
+      <div class="shop-hero-content">
+        <span class="shop-hero-tag">🐾 WE LOVE PETS</span>
+        <h1>Everything Your<br>Pet Needs</h1>
+        <p>Premium food, interactive toys, organic healthcare, and comfort accessories delivered straight to your door.</p>
+        <button class="shop-hero-btn" onclick="document.querySelector('.products').scrollIntoView({behavior:'smooth'})">
+          Shop Now
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; transition: transform 0.2s;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="section-header">
+      <h2>Shop By Category</h2>
+      <p>Explore curated essentials tailored specifically for your pets</p>
+    </div>
+    <div class="category-grid">
+      <div class="category-card cat-dog" onclick="openCategory('dog')">
+        <div class="category-emoji-box">🐶</div>
+        <span>Dog Food</span>
+      </div>
+      <div class="category-card cat-cat" onclick="openCategory('cat')">
+        <div class="category-emoji-box">🐱</div>
+        <span>Cat Food</span>
+      </div>
+      <div class="category-card cat-bird" onclick="openCategory('bird')">
+        <div class="category-emoji-box">🦜</div>
+        <span>Bird Care</span>
+      </div>
+      <div class="category-card cat-aquarium" onclick="openCategory('aquarium')">
+        <div class="category-emoji-box">🐟</div>
+        <span>Aquarium</span>
+      </div>
+      <div class="category-card cat-toys" onclick="openCategory('toys')">
+        <div class="category-emoji-box">🧸</div>
+        <span>Toys</span>
+      </div>
+      <div class="category-card cat-health" onclick="openCategory('health')">
+        <div class="category-emoji-box">💊</div>
+        <span>Healthcare</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="products">
+    <div class="section-header">
+      <h2>Featured Products</h2>
+      <p>Our top-rated organic meals and pet favorites</p>
+    </div>
+    <div class="product-grid">
+      <div class="product-card" onclick="openProductDetail('dog_food')">
+        <div class="prod-image-wrapper">
+          <img src="../IMG/product_dog_food.png" alt="Premium Dog Food">
+          <span class="prod-badge badge-organic">Organic</span>
+        </div>
+        <div class="prod-info-wrapper">
+          <div class="prod-rating">★ ★ ★ ★ ★ <span>(4.8)</span></div>
+          <h3>Premium Dog Food</h3>
+          <p class="prod-desc">Nutritious high-protein kibble for active dogs.</p>
+          <div class="prod-footer">
+            <span class="price">₹599</span>
+            <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('dog_food', 1); showToast('Premium Dog Food added to cart!')" title="Add to Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card" onclick="openProductDetail('cat_toys')">
+        <div class="prod-image-wrapper">
+          <img src="../IMG/product_cat_toys.png" alt="Cat Toy Pack">
+          <span class="prod-badge badge-bestseller">Best Seller</span>
+        </div>
+        <div class="prod-info-wrapper">
+          <div class="prod-rating">★ ★ ★ ★ ★ <span>(4.9)</span></div>
+          <h3>Cat Toy Pack</h3>
+          <p class="prod-desc">Interactive variety set to keep cats active and playful.</p>
+          <div class="prod-footer">
+            <span class="price">₹349</span>
+            <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('cat_toys', 1); showToast('Cat Toy Pack added to cart!')" title="Add to Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card" onclick="openProductDetail('shampoo')">
+        <div class="prod-image-wrapper">
+          <img src="../IMG/product_shampoo.png" alt="Pet Shampoo">
+          <span class="prod-badge badge-new">New</span>
+        </div>
+        <div class="prod-info-wrapper">
+          <div class="prod-rating">★ ★ ★ ★ ★ <span>(4.7)</span></div>
+          <h3>Pet Shampoo</h3>
+          <p class="prod-desc">Gentle lavender oat formula for soft and healthy skin.</p>
+          <div class="prod-footer">
+            <span class="price">₹249</span>
+            <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('shampoo', 1); showToast('Pet Shampoo added to cart!')" title="Add to Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card" onclick="openProductDetail('bird_feed')">
+        <div class="prod-image-wrapper">
+          <img src="../IMG/product_bird_feed.png" alt="Bird Feed">
+          <span class="prod-badge badge-organic">100% Organic</span>
+        </div>
+        <div class="prod-info-wrapper">
+          <div class="prod-rating">★ ★ ★ ★ ★ <span>(4.6)</span></div>
+          <h3>Bird Feed</h3>
+          <p class="prod-desc">Nutritious seed mix enriched with essential vitamins.</p>
+          <div class="prod-footer">
+            <span class="price">₹199</span>
+            <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('bird_feed', 1); showToast('Bird Feed added to cart!')" title="Add to Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="shop-footer">
+    <div class="footer-top">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+      <p>Connecting pet parents, local stores, and warehouses to build the ultimate unified pet commerce ecosystem.</p>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PawKart. Built for modern pet commerce. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: CATEGORY PRODUCTS
+════════════════════════════════════════ -->
+<div id="page-category" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+      <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="action-icon-btn cart-trigger" onclick="nav('cart')" title="My Cart">
+        <div class="cart-badge-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-dot">3</span>
+        </div>
+        <span>Cart</span>
+      </button>
+      <button class="action-icon-btn avatar-btn" onclick="nav('profile')" title="My Profile">
+        <div class="avatar-circle">AK</div>
+        <span>Profile</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="category-hero" id="co-category-hero">
+    <h1 id="co-category-title">🐶 Dog Food</h1>
+    <p id="co-category-desc">Premium selection of delicious meals and organic bites for your dog.</p>
+  </section>
+
+  <section class="category-page-content">
+    <h2 id="co-category-subtitle">Available Products</h2>
+    <div class="product-grid" id="category-products-grid">
+      <!-- Dynamically Populated -->
+    </div>
+  </section>
+
+  <footer class="shop-footer">
+    <div class="footer-top">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+      <p>Connecting pet parents, local stores, and warehouses to build the ultimate unified pet commerce ecosystem.</p>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PawKart. Built for modern pet commerce. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: PRODUCT DETAILS
+════════════════════════════════════════ -->
+<div id="page-product" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+      <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="action-icon-btn cart-trigger" onclick="nav('cart')" title="My Cart">
+        <div class="cart-badge-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-dot">3</span>
+        </div>
+        <span>Cart</span>
+      </button>
+      <button class="action-icon-btn avatar-btn" onclick="nav('profile')" title="My Profile">
+        <div class="avatar-circle">AK</div>
+        <span>Profile</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="product-detail-container">
+    <!-- Main Info Grid -->
+    <section class="product-main-info">
+      <div class="product-gallery">
+        <img id="mainImage" src="../IMG/product_dog_food.png" alt="Product">
+        <div class="thumbnail-row" id="pd-thumbnails">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="product-info-panel">
+        <div class="stock-badge">
+          <span class="pulse-dot"></span>
+          In Stock (Ready to Ship)
+        </div>
+        <h1 id="pd-title">Premium Dog Food</h1>
+        <div class="rating-summary-row" onclick="document.getElementById('pd-reviews-section').scrollIntoView({behavior:'smooth'})">
+          <div class="stars-gold" id="pd-stars-top">★★★★★</div>
+          <span id="pd-rating-text">4.8 (523 Reviews)</span>
+        </div>
+        <div class="big-price" id="pd-price">₹599</div>
+        <p class="description" id="pd-desc">High-protein dog food made from premium ingredients for healthier growth and stronger immunity.</p>
+        
+        <div class="quantity-selector-wrapper">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-picker">
+            <button onclick="changeDetailQty(-1)">−</button>
+            <span id="detail-qty-val">1</span>
+            <button onclick="changeDetailQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="pd-buttons">
+          <button class="cart-btn" id="pd-add-to-cart-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            Add To Cart
+          </button>
+          <button class="buy-btn" id="pd-buy-now-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Buy Now
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Split layout for Details and Reviews -->
+    <section class="product-secondary-info">
+      <div class="secondary-info-grid">
+        <!-- Highlights -->
+        <div class="pd-details-card">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--purple);">
+              <polyline points="22 11.08 12 19 2 9 22 9"></polyline>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Product Highlights
+          </h2>
+          <div class="features-list-grid" id="pd-features-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Feedback & Review Dashboard -->
+        <div class="pd-reviews-card" id="pd-reviews-section">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--purple);">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Customer Reviews
+          </h2>
+          <div class="reviews-layout">
+            <!-- Overall rating metrics -->
+            <div class="reviews-stats-summary">
+              <div class="overall-rating-box">
+                <span class="rating-big-num" id="pd-rating-num">4.8</span>
+                <div class="stars-gold" id="pd-stars-breakdown">★★★★★</div>
+                <span class="rating-sub-count" id="pd-reviews-count">523 Reviews</span>
+              </div>
+              <div class="rating-bars-container" id="pd-rating-bars">
+                <!-- Dynamic progress bars -->
+              </div>
+            </div>
+
+            <!-- List of review cards -->
+            <div class="reviews-list-container" id="pd-reviews-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="shop-footer">
+    <div class="footer-top">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+      <p>Connecting pet parents, local stores, and warehouses to build the ultimate unified pet commerce ecosystem.</p>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PawKart. Built for modern pet commerce. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: ORDERS
+════════════════════════════════════════ -->
+<div id="page-orders" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+      <button class="action-icon-btn cart-trigger" onclick="nav('cart')" title="My Cart">
+        <div class="cart-badge-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-dot">3</span>
+        </div>
+        <span>Cart</span>
+      </button>
+      <button class="action-icon-btn avatar-btn" onclick="nav('profile')" title="My Profile">
+        <div class="avatar-circle">AK</div>
+        <span>Profile</span>
+      </button>
+      <button class="action-icon-btn logout-trigger" onclick="nav('login')" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="orders-page-container">
+    <div class="orders-header">
+      <h1>My Orders</h1>
+      <p>Track shipment details and delivery status of your recent pet purchases</p>
+    </div>
+
+    <div id="orders-list-container"></div>
+  </section>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: CART
+════════════════════════════════════════ -->
+<div id="page-cart" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+      <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="action-icon-btn avatar-btn" onclick="nav('profile')" title="My Profile">
+        <div class="avatar-circle">AK</div>
+        <span>Profile</span>
+      </button>
+      <button class="action-icon-btn logout-trigger" onclick="nav('login')" title="Logout">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="cart-layout">
+    <div class="cart-items-box">
+      <h2>Your Cart</h2>
+      
+      <!-- Cart Card 1 -->
+      <div class="cart-card" data-product-id="dog_food">
+        <img class="cart-item-thumb" src="../IMG/product_dog_food.png" alt="Premium Dog Food">
+        <div class="cart-item-info">
+          <h3>Premium Dog Food</h3>
+          <p class="cart-price">₹599</p>
+        </div>
+        <div class="qty-controls">
+          <button onclick="changeQty(this,-1)">−</button>
+          <span>1</span>
+          <button onclick="changeQty(this,1)">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeItem(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Remove
+        </button>
+      </div>
+      
+      <!-- Cart Card 2 -->
+      <div class="cart-card" data-product-id="shampoo">
+        <img class="cart-item-thumb" src="../IMG/product_shampoo.png" alt="Pet Shampoo">
+        <div class="cart-item-info">
+          <h3>Pet Shampoo</h3>
+          <p class="cart-price">₹249</p>
+        </div>
+        <div class="qty-controls">
+          <button onclick="changeQty(this,-1)">−</button>
+          <span>2</span>
+          <button onclick="changeQty(this,1)">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeItem(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <h2>Order Summary</h2>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span class="summary-val">₹1097</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span class="summary-val">₹50</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span class="summary-val total-price">₹1147</span>
+      </div>
+      <button class="checkout-btn" onclick="openCheckout()">
+        Proceed To Checkout
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; transition: transform 0.2s;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: CHECKOUT
+════════════════════════════════════════ -->
+<div id="page-checkout" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('cart')" title="Back to Cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Cart</span>
+      </button>
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="checkout-layout">
+    <div class="checkout-inputs-box">
+      <h2>Secure Checkout</h2>
+      
+      <div class="checkout-form">
+        <div class="checkout-section-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--purple);">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Shipping Address
+        </div>
+        
+        <div class="form-group">
+          <label for="co-name">Full Name</label>
+          <input type="text" id="co-name" value="Akanksha Naidu" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="co-phone">Phone Number</label>
+            <input type="tel" id="co-phone" value="+91 9876543210" required>
+          </div>
+          <div class="form-group">
+            <label for="co-pincode">Pincode</label>
+            <input type="text" id="co-pincode" value="560001" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="co-address">Street Address / Area</label>
+          <input type="text" id="co-address" value="123 Main Street, Indiranagar" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="co-city">City</label>
+            <input type="text" id="co-city" value="Bangalore" required>
+          </div>
+          <div class="form-group">
+            <label for="co-state">State</label>
+            <input type="text" id="co-state" value="Karnataka" required>
+          </div>
+        </div>
+
+        <div class="checkout-section-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--purple);">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+          Payment Method
+        </div>
+
+        <div class="payment-methods">
+          <div class="pay-tab active" onclick="selectPaymentMethod('card')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            <span>Card</span>
+          </div>
+          <div class="pay-tab" onclick="selectPaymentMethod('upi')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <span>UPI</span>
+          </div>
+          <div class="pay-tab" onclick="selectPaymentMethod('cod')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="12" y="2" width="10" height="18" rx="2" ry="2"></rect>
+              <path d="M12 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7"></path>
+              <circle cx="17" cy="11" r="1"></circle>
+            </svg>
+            <span>COD</span>
+          </div>
+        </div>
+
+        <div class="payment-details-panel">
+          <!-- Card Details Content -->
+          <div id="panel-card" class="payment-panel-content active">
+            <div class="form-group">
+              <label for="co-cardnum">Card Number</label>
+              <input type="text" id="co-cardnum" placeholder="4111 2222 3333 4444" value="4111 2222 3333 4444">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="co-cardexpiry">Expiry Date</label>
+                <input type="text" id="co-cardexpiry" placeholder="MM/YY" value="12/28">
+              </div>
+              <div class="form-group">
+                <label for="co-cardcvv">CVV</label>
+                <input type="password" id="co-cardcvv" placeholder="123" value="123">
+              </div>
+            </div>
+          </div>
+          
+          <!-- UPI Details Content -->
+          <div id="panel-upi" class="payment-panel-content">
+            <div class="form-group">
+              <label for="co-upiid">UPI ID (VPA)</label>
+              <input type="text" id="co-upiid" placeholder="username@upi" value="akanksha@upi">
+            </div>
+          </div>
+          
+          <!-- COD Details Content -->
+          <div id="panel-cod" class="payment-panel-content">
+            <p class="cod-text">💵 Cash on Delivery Selected.<br>You can pay via Cash, Card, or UPI directly to the delivery partner when your pet essentials arrive.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="checkout-summary-card">
+      <h2>Order Review</h2>
+      <div class="checkout-review-list" id="co-items-list">
+        <!-- Dynamically populated -->
+      </div>
+      
+      <div class="summary-row">
+        <span>Order Subtotal</span>
+        <span class="summary-val" id="co-subtotal">₹0</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery / Shipping</span>
+        <span class="summary-val" id="co-shipping">₹0</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total Amount</span>
+        <span class="summary-val total-price" id="co-total">₹0</span>
+      </div>
+      
+      <button class="place-order-btn" onclick="placeOrder()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        Confirm &amp; Place Order
+      </button>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE: PROFILE
+════════════════════════════════════════ -->
+<div id="page-profile" class="page">
+
+  <header class="shop-header">
+    <div class="logo" onclick="nav('home')">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart">
+    </div>
+    <div style="flex: 1;"></div>
+    <div class="hdr-actions">
+      <button class="action-icon-btn" onclick="nav('home')" title="Back to Shop">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Shop</span>
+      </button>
+      <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="action-icon-btn cart-trigger" onclick="nav('cart')" title="My Cart">
+        <div class="cart-badge-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-dot">3</span>
+        </div>
+        <span>Cart</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="profile-layout">
+    <div class="profile-card">
+      <div class="avatar-premium-wrapper">
+        <div class="avatar-premium">AK</div>
+        <span class="member-tag">Verified Parent</span>
+      </div>
+      <h2>Akanksha Naidu</h2>
+      <p class="profile-email">akanksha@email.com</p>
+      <button class="edit-btn" onclick="alert('Profile editing will be available soon!');">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"></path>
+        </svg>
+        Edit Profile
+      </button>
+    </div>
+    
+    <div class="profile-details">
+      <div class="info-card">
+        <div class="info-card-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="info-card-icon text-purple">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <h3>Personal Information</h3>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-grid-item">
+            <span class="info-label">Full Name</span>
+            <span class="info-value">Akanksha Naidu</span>
+          </div>
+          <div class="info-grid-item">
+            <span class="info-label">Email Address</span>
+            <span class="info-value">akanksha@email.com</span>
+          </div>
+          <div class="info-grid-item">
+            <span class="info-label">Phone Number</span>
+            <span class="info-value">+91 9876543210</span>
+          </div>
+          <div class="info-grid-item">
+            <span class="info-label">Preferred Contact</span>
+            <span class="info-value">Email & SMS</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-card-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="info-card-icon text-green">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <h3>Saved Address</h3>
+        </div>
+        <p class="address-paragraph">
+          <strong>Home Address</strong><br>
+          123 Main Street, Indiranagar<br>
+          Bangalore, Karnataka, India - 560001
+        </p>
+      </div>
+      
+      <div class="info-card">
+        <div class="info-card-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="info-card-icon text-orange">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <h3>Account Summary</h3>
+        </div>
+        
+        <div class="metrics-grid">
+          <div class="metric-block">
+            <span class="metric-val text-purple">18</span>
+            <span class="metric-label">Total Orders</span>
+          </div>
+          <div class="metric-block">
+            <span class="metric-val text-green">₹12,450</span>
+            <span class="metric-label">Total Spent</span>
+          </div>
+          <div class="metric-block">
+            <span class="metric-val text-orange">Jan 2025</span>
+            <span class="metric-label">Member Since</span>
+          </div>
+        </div>
+      </div>
+      
+      <button class="logout-btn-premium" onclick="nav('login')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout of Account
+      </button>
+    </div>
+  </section>
+
+</div>
+
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script src="../JS/script.js"></script>
+
+</body>
+</html>

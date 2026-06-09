@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawKart Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../CSS/admin.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="../IMG/1780997231855_PawKart.png" alt="PawKart Logo">
+    <span>PawKart Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Core</div>
+    <button class="nav-item active" data-page="overview"><i class="ti ti-dashboard"></i> Overview</button>
+    <button class="nav-item" data-page="stores"><i class="ti ti-store"></i> Managed Stores</button>
+    <button class="nav-item" data-page="warehouses"><i class="ti ti-building-warehouse"></i> Managed Warehouses</button>
+    <button class="nav-item" data-page="products"><i class="ti ti-box"></i> Products</button>
+    <button class="nav-item" data-page="orders"><i class="ti ti-shopping-cart"></i> Orders</button>
+    <div class="nav-section">Insights</div>
+    <button class="nav-item" data-page="analysis"><i class="ti ti-chart-pie"></i> Analysis</button>
+    <button class="nav-item" data-page="forecast"><i class="ti ti-brain"></i> AI Forecasts</button>
+    <div class="nav-section">Support</div>
+    <button class="nav-item" data-page="complaints"><i class="ti ti-alert-circle"></i> Complaints</button>
+    <button class="nav-item" data-page="users"><i class="ti ti-users"></i> Users</button>
+    <button class="nav-item" data-page="settings"><i class="ti ti-settings"></i> Settings</button>
+  </nav>
+  <div class="sidebar-footer">
+    <strong>Admin Control</strong>
+    <p>Version 2.4.1</p>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="pageTitle">Platform Overview <span>Platform Admin</span></div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="alert('No system logs.')">
+        <i class="ti ti-bell"></i>
+      </button>
+      <div style="display: flex; align-items: center; gap: 12px; padding-left: 12px; border-left: 1px solid var(--border); margin: 0 8px;">
+        <div class="avatar">AD</div>
+        <div style="display: flex; flex-direction: column;">
+          <h4 style="margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); line-height: 1.2;">Admin</h4>
+          <span style="font-size: 0.75rem; color: var(--text-secondary);">Superuser</span>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="logout()">
+        <i class="ti ti-logout"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── PLATFORM OVERVIEW PAGE ── -->
+    <div class="page active" id="page-overview">
+      <div class="page-header">
+        <div>
+          <h1>Platform Overview</h1>
+          <p>Consolidated omnichannel logistics, store networks, and system health.</p>
+        </div>
+      </div>
+
+      <section class="admin-stats">
+        <div class="stat-card">
+          <div class="s-icon"><i class="ti ti-coin"></i></div>
+          <h3>₹12,45,690</h3>
+          <p>Platform Revenue</p>
+          <div class="trend up">↑ +24.8%</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-icon" style="color: var(--blue); background: #EFF6FF;"><i class="ti ti-building-warehouse"></i></div>
+          <h3>5 Hubs</h3>
+          <p>Active Warehouses</p>
+          <div class="trend neutral">Healthy</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-icon" style="color: var(--yellow); background: #FEF3C7;"><i class="ti ti-store"></i></div>
+          <h3>524</h3>
+          <p>Managed Stores</p>
+          <div class="trend up">↑ +14 new</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-icon" style="color: #059669; background: #ECFDF5;"><i class="ti ti-box"></i></div>
+          <h3>15.4K</h3>
+          <p>SKU Catalog</p>
+          <div class="trend up">↑ +120 new</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-icon" style="color: #D97706; background: #FEF3C7;"><i class="ti ti-user-check"></i></div>
+          <h3 id="overview-pending-approvals">3</h3>
+          <p>Pending Approvals</p>
+          <div class="trend down">↓ -2</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-icon" style="color: var(--red); background: #FEE2E2;"><i class="ti ti-alert-triangle"></i></div>
+          <h3 id="overview-disputes-count">2</h3>
+          <p>Open Disputes</p>
+          <div class="trend down">↓ -1</div>
+        </div>
+      </section>
+
+      <div class="two-col">
+        <div class="performance-card">
+          <h2><i class="ti ti-chart-bar"></i> Managed Retail Outlets Revenue Performance</h2>
+          <div id="overviewStoresPerformance">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="complaints-preview">
+          <h2><i class="ti ti-ticket"></i> Recent Active Tickets</h2>
+          <div id="overviewComplaintsPreview">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MANAGED STORES PAGE ── -->
+    <div class="page" id="page-stores">
+      <div class="page-header">
+        <div>
+          <h1>Managed Retail Stores</h1>
+          <p>Add, monitor, and configure active retail locations in the network.</p>
+        </div>
+        <button class="add-btn" onclick="openAddStoreModal()">
+          <i class="ti ti-plus"></i> Register Store
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="storeSearch" placeholder="Search stores..." oninput="filterStores()" />
+        <select id="storeFilterLocation" onchange="filterStores()">
+          <option value="All">All Locations</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+        </select>
+        <select id="storeFilterStatus" onchange="filterStores()">
+          <option value="All">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="stores-grid-4" id="storesContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ── MANAGED WAREHOUSES PAGE ── -->
+    <div class="page" id="page-warehouses">
+      <div class="page-header">
+        <div>
+          <h1>Managed Warehouses</h1>
+          <p>Configure regional logistics hubs, storage limits, and supply batches.</p>
+        </div>
+        <button class="add-btn" onclick="openAddWarehouseModal()">
+          <i class="ti ti-plus"></i> Add Hub
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="warehouseSearch" placeholder="Search warehouses..." oninput="filterWarehouses()" />
+      </div>
+
+      <div class="stores-grid-4" id="warehousesContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ── PRODUCTS PAGE ── -->
+    <div class="page" id="page-products">
+      <div class="page-header">
+        <div>
+          <h1>Products SKU Directory</h1>
+          <p>Define baseline products, set base retail price, and manage SKU catalog.</p>
+        </div>
+        <button class="add-btn" onclick="openAddProductModal()">
+          <i class="ti ti-plus"></i> Create SKU
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="productSearch" placeholder="Search SKU catalog..." oninput="filterProducts()" />
+        <select id="productFilterCategory" onchange="filterProducts()">
+          <option value="All">All Categories</option>
+          <option value="Dog Food">Dog Food</option>
+          <option value="Cat Food">Cat Food</option>
+          <option value="Toys">Toys</option>
+          <option value="Healthcare">Healthcare</option>
+        </select>
+      </div>
+
+      <div class="products-grid" id="productsContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ── ORDERS PAGE ── -->
+    <div class="page" id="page-orders">
+      <div class="page-header">
+        <div>
+          <h1>Global Platform Orders</h1>
+          <p>Monitor nationwide order status, process batch operations, and cancel disputes.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="orderSearch" placeholder="Search order ID or customer..." oninput="filterOrders()" />
+        <select id="orderFilterStatus" onchange="filterOrders()">
+          <option value="All">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div class="orders-table">
+        <div class="ot-head">
+          <span>Order ID</span>
+          <span>Customer</span>
+          <span>Assigned Store</span>
+          <span>Items Details</span>
+          <span>Total Amount</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+        <div id="ordersContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COMPLAINTS PAGE ── -->
+    <div class="page" id="page-complaints">
+      <div class="page-header">
+        <div>
+          <h1>Network Complaints &amp; Tickets</h1>
+          <p>Resolve tickets from customers, track store dispute errors, and inspect logs.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="complaintSearch" placeholder="Search dispute subjects..." oninput="filterComplaints()" />
+        <select id="complaintFilterPriority" onchange="filterComplaints()">
+          <option value="All">All Priorities</option>
+          <option value="critical">Critical</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <div class="complaints-table">
+        <div class="ct-head">
+          <span>ID</span>
+          <span>Dispute Subject</span>
+          <span>Customer</span>
+          <span>Priority</span>
+          <span>Associated Store</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+        <div id="complaintsContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── USERS PAGE ── -->
+    <div class="page" id="page-users">
+      <div class="page-header">
+        <div>
+          <h1>Platform User Directory</h1>
+          <p>Moderate user credentials, modify security permissions, and edit role tags.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="userSearch" placeholder="Search user by name or email..." oninput="filterUsers()" />
+        <select id="userFilterRole" onchange="filterUsers()">
+          <option value="All">All Roles</option>
+          <option value="customer">Customer</option>
+          <option value="owner">Store Manager</option>
+          <option value="admin-role">Platform Admin</option>
+        </select>
+      </div>
+
+      <div class="users-table">
+        <div class="ut-head">
+          <span>Avatar</span>
+          <span>Full Name</span>
+          <span>Email Address</span>
+          <span>Phone Contact</span>
+          <span>Platform Role</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+        <div id="usersContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS PAGE ── -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div>
+          <h1>System Configuration Panel</h1>
+          <p>Configure global environments, edit system parameters, and create backups.</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+        <aside class="settings-sidebar">
+          <button class="settings-tab active" onclick="switchSettingsTab(this, 'general')"><i class="ti ti-adjustments"></i> Core Config</button>
+          <button class="settings-tab" onclick="switchSettingsTab(this, 'security')"><i class="ti ti-shield"></i> Security Rules</button>
+          <button class="settings-tab" onclick="switchSettingsTab(this, 'database')"><i class="ti ti-database"></i> Database Backups</button>
+        </aside>
+
+        <div class="settings-content">
+          <!-- General Tab -->
+          <div class="settings-card settings-panel active" id="settings-general">
+            <h2>Core Platform Settings</h2>
+            <p class="card-desc">Configure baseline titles and endpoint protocols.</p>
+            <div class="settings-field">
+              <label>System Dashboard Title</label>
+              <input type="text" id="set-system-title" value="PawKart Admin Control" />
+            </div>
+            <div class="settings-field">
+              <label>Master Alert Email</label>
+              <input type="email" id="set-alert-email" value="admin@pawkart.com" />
+            </div>
+            <div class="settings-field">
+              <label>API Endpoint Gateway</label>
+              <input type="text" id="set-api-gateway" value="https://api.pawkart.com/v2" />
+            </div>
+            <div class="settings-save">
+              <button class="btn-primary" onclick="alert('General config saved successfully!')">Save Changes</button>
+            </div>
+          </div>
+
+          <!-- Security Tab -->
+          <div class="settings-card settings-panel" id="settings-security" style="display: none;">
+            <h2>Environment Security Rules</h2>
+            <p class="card-desc">Configure session tokens and audit logs.</p>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Require Email Verification</strong>
+                <p>Verify all new store registrations before authorization.</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>Log System Audit Reports</strong>
+                <p>Record all price adjustments and backup exports in audit logs.</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <strong>IP Security Validation</strong>
+                <p>Lock login credentials to verified regional subnets.</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-divider" style="margin: 16px 0; height: 1px; background: #F1F5F9;"></div>
+            <div class="settings-save">
+              <button class="btn-primary" onclick="alert('Security configurations saved!')">Save Rules</button>
+            </div>
+          </div>
+
+          <!-- Database Tab -->
+          <div class="settings-card settings-panel" id="settings-database" style="display: none;">
+            <h2>System Backup Logs</h2>
+            <p class="card-desc">Create snapshots of products catalog and transaction tables.</p>
+            
+            <div style="background: #FAFAFF; border: 1px solid #EDE9FE; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 13px; font-weight: 600; color: #1a1a2e;">Platform Database Backup</span>
+                <span class="badge resolved">Success</span>
+              </div>
+              <p style="font-size: 11px; color: #94A3B8; margin-bottom: 12px;">Last Backup: today at 11:24 AM (Size: 45.2 MB)</p>
+              <button class="btn-primary" onclick="alert('Database backup created successfully!')">Create Backup Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ANALYSIS PAGE ── -->
+    <div class="page" id="page-analysis">
+      <div class="page-header">
+        <div>
+          <h1>Business Analysis</h1>
+          <p>Key performance indicators, sales volume, and historical business intelligence.</p>
+        </div>
+      </div>
+      <div id="analysisContainer"></div>
+    </div>
+
+    <!-- ── AI FORECAST PAGE ── -->
+    <div class="page" id="page-forecast">
+      <div class="page-header">
+        <div>
+          <h1>AI Forecasting &amp; Insights</h1>
+          <p>Machine learning predictions for demand, inventory risk, and recommended restocks.</p>
+        </div>
+        <button class="add-btn" onclick="alert('Running manual AI sync...')">
+          <i class="ti ti-refresh"></i> Run AI Sync
+        </button>
+      </div>
+      <div id="forecastContainer"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- JAVASCRIPT -->
+<script src="../JS/admin.js"></script>
+
+</body>
+</html>

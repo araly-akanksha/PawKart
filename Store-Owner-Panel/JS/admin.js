@@ -1,0 +1,756 @@
+// Mock Database State
+let stores = [
+  { id: 1, name: "PawKart Koramangala Store", location: "Bangalore", manager: "Akanksha Naidu", status: "active", revenue: 542000 },
+  { id: 2, name: "PawKart Indiranagar Store", location: "Bangalore", manager: "Rohit Sharma", status: "active", revenue: 421000 },
+  { id: 3, name: "PawKart HSR Layout Store", location: "Bangalore", manager: "Priya Singh", status: "active", revenue: 282690 },
+  { id: 4, name: "PawKart Whitefield Store", location: "Bangalore", manager: "Suresh Kumar", status: "inactive", revenue: 0 }
+];
+
+let warehouses = [
+  { id: 1, name: "Warehouse A", location: "Bangalore East", capacity: 85, status: "active", batches: 140 },
+  { id: 2, name: "Warehouse B", location: "Bangalore West", capacity: 42, status: "active", batches: 80 },
+  { id: 3, name: "Mumbai Hub", location: "Mumbai Central", capacity: 95, status: "critical", batches: 210 },
+  { id: 4, name: "Chennai Hub", location: "Chennai South", capacity: 0, status: "inactive", batches: 0 }
+];
+
+let products = [
+  { id: 1, name: "Premium Dog Food", category: "Dog Food", price: 599, quantity: 1200, status: "in-stock" },
+  { id: 2, name: "Pet Shampoo", category: "Healthcare", price: 249, quantity: 14, status: "low-stock" },
+  { id: 3, name: "Cat Treats", category: "Cat Food", price: 149, quantity: 840, status: "in-stock" },
+  { id: 4, name: "Chew Toy", category: "Toys", price: 399, quantity: 0, status: "out-stock" }
+];
+
+let orders = [
+  { id: "PK1024", customer: "Rahul Sharma", store: "Koramangala Store", items: "Premium Dog Food x2", amount: 1198, status: "delivered" },
+  { id: "PK1025", customer: "Priya Singh", store: "Indiranagar Store", items: "Pet Shampoo x1", amount: 249, status: "processing" },
+  { id: "PK1026", customer: "Meera Iyer", store: "HSR Layout Store", items: "Cat Treats x3", amount: 447, status: "cancelled" },
+  { id: "PK1027", customer: "Karan Johar", store: "Warehouse A", items: "Premium Dog Food x1", amount: 599, status: "pending" }
+];
+
+let complaints = [
+  { id: "CP1084", subject: "Delayed Dog Food Shipment", customer: "Rahul Sharma", priority: "critical", store: "Koramangala", status: "open" },
+  { id: "CP1085", subject: "Damaged Shampoo Container", customer: "Priya Singh", priority: "medium", store: "Indiranagar", status: "progress" },
+  { id: "CP1086", subject: "Billing Error UPI Transaction", customer: "Meera Iyer", priority: "low", store: "HSR Layout", status: "resolved" }
+];
+
+let users = [
+  { avatar: "AK", name: "Akanksha Naidu", email: "akanksha@email.com", phone: "+91 9876543210", role: "owner", status: "active" },
+  { avatar: "AD", name: "Admin User", email: "admin@pawkart.com", phone: "+91 9999999999", role: "admin-role", status: "active" },
+  { avatar: "RS", name: "Rohit Sharma", email: "rohit@email.com", phone: "+91 8888888888", role: "owner", status: "active" },
+  { avatar: "JD", name: "John Doe", email: "john@email.com", phone: "+91 7777777777", role: "customer", status: "inactive" }
+];
+
+let activePage = "overview";
+
+// ── NAVIGATION ──
+const pageTitles = {
+  overview: "Platform Overview <span>Platform Admin</span>",
+  stores: "Managed Retail Stores <span>Store Network</span>",
+  warehouses: "Managed Warehouses <span>Logistics Hubs</span>",
+  products: "Products SKU Directory <span>Inventory Base</span>",
+  orders: "Global Platform Orders <span>Transaction Operations</span>",
+  complaints: "Disputes &amp; Support Tickets <span>Disputes Management</span>",
+  users: "Platform User Directory <span>Credentials Directory</span>",
+  settings: "System Configuration Panel <span>System Settings</span>",
+  analysis: "Business Analysis <span>Intelligence Dashboard</span>",
+  forecast: "AI Forecasting <span>Predictive Analytics</span>"
+};
+
+function switchPage(name) {
+  // Hide all page sections
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  // Show target page
+  const target = document.getElementById("page-" + name);
+  if (target) target.classList.add("active");
+
+  // Update topbar title
+  document.getElementById("pageTitle").innerHTML = pageTitles[name] || "Platform Admin";
+
+  // Update active sidebar nav items
+  document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => {
+    item.classList.toggle("active", item.getAttribute("data-page") === name);
+  });
+
+  activePage = name;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Page specific render triggers
+  if (name === "overview") renderOverview();
+  else if (name === "stores") renderStores();
+  else if (name === "warehouses") renderWarehouses();
+  else if (name === "products") renderProducts();
+  else if (name === "orders") renderOrders();
+  else if (name === "complaints") renderComplaints();
+  else if (name === "users") renderUsers();
+  else if (name === "analysis") renderAnalysis();
+  else if (name === "forecast") renderForecast();
+}
+
+// Bind Navigation Click Events
+document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => {
+  item.addEventListener("click", () => {
+    switchPage(item.getAttribute("data-page"));
+  });
+});
+
+function logout() {
+  window.location.href = "index.html#login";
+}
+
+// ── OVERVIEW PAGE ──
+function renderOverview() {
+  // Update Counters
+  document.getElementById("overview-pending-approvals").textContent = orders.filter(o => o.status === "pending").length;
+  document.getElementById("overview-disputes-count").textContent = complaints.filter(c => c.status !== "resolved").length;
+
+  // Render Performance ranking
+  const perfContainer = document.getElementById("overviewStoresPerformance");
+  perfContainer.innerHTML = "";
+
+  // Sort stores by revenue descending
+  const ranked = [...stores].sort((a, b) => b.revenue - a.revenue);
+  const maxRevenue = ranked[0] ? ranked[0].revenue : 1;
+
+  ranked.forEach((store, idx) => {
+    const percentage = Math.round((store.revenue / maxRevenue) * 100);
+    perfContainer.innerHTML += `
+      <div class="store-row">
+        <div class="sr-left">
+          <span class="sr-rank">${idx + 1}</span>
+          <span>${store.name}</span>
+        </div>
+        <div class="bar-bg">
+          <div class="bar-fill" style="width: ${percentage}%;"></div>
+        </div>
+        <strong>₹${store.revenue.toLocaleString()}</strong>
+      </div>
+    `;
+  });
+
+  // Render Complaints Preview
+  const compContainer = document.getElementById("overviewComplaintsPreview");
+  compContainer.innerHTML = "";
+
+  complaints.slice(0, 3).forEach(c => {
+    const badgeClass = c.priority === "critical" ? "critical" : c.priority === "medium" ? "medium" : "low";
+    compContainer.innerHTML += `
+      <div class="complaint-card">
+        <div>
+          <h4>#${c.id}</h4>
+          <p>${c.customer} • ${c.subject}</p>
+        </div>
+        <span class="badge ${badgeClass}">${c.priority.toUpperCase()}</span>
+      </div>
+    `;
+  });
+}
+
+// ── STORES PAGE ──
+function renderStores() {
+  const container = document.getElementById("storesContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("storeSearch").value.toLowerCase();
+  const locationFilter = document.getElementById("storeFilterLocation").value;
+  const statusFilter = document.getElementById("storeFilterStatus").value;
+
+  const filtered = stores.filter(s => {
+    const matchesSearch = s.name.toLowerCase().includes(query) || s.manager.toLowerCase().includes(query);
+    const matchesLocation = locationFilter === "All" || s.location === locationFilter;
+    const matchesStatus = statusFilter === "All" || s.status === statusFilter;
+    return matchesSearch && matchesLocation && matchesStatus;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No stores match selected filters.</p>`;
+    return;
+  }
+
+  filtered.forEach(s => {
+    const statusClass = s.status === "active" ? "active" : "inactive";
+    container.innerHTML += `
+      <div class="store-card">
+        <h3>${s.name}</h3>
+        <p><i class="ti ti-map-pin"></i> ${s.location}</p>
+        <p><i class="ti ti-user"></i> ${s.manager}</p>
+        <p><i class="ti ti-coin"></i> ₹${s.revenue.toLocaleString()}</p>
+        <div style="margin-top: 8px;">
+          <span class="badge ${statusClass}">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>
+        </div>
+        <div class="store-actions">
+          <button class="btn-secondary" onclick="toggleStoreStatus(${s.id})">Toggle Status</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterStores() {
+  renderStores();
+}
+
+function openAddStoreModal() {
+  const name = prompt("Enter Store Name:");
+  if (!name) return;
+  const location = prompt("Enter Location (e.g. Bangalore, Mumbai, Delhi):") || "Bangalore";
+  const manager = prompt("Enter Store Manager Name:") || "N/A";
+
+  stores.push({
+    id: stores.length + 1,
+    name,
+    location,
+    manager,
+    status: "active",
+    revenue: 0
+  });
+
+  renderStores();
+  alert("Store registered successfully!");
+}
+
+function toggleStoreStatus(id) {
+  const store = stores.find(s => s.id === id);
+  if (store) {
+    store.status = store.status === "active" ? "inactive" : "active";
+    renderStores();
+  }
+}
+
+// ── WAREHOUSES PAGE ──
+function renderWarehouses() {
+  const container = document.getElementById("warehousesContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("warehouseSearch").value.toLowerCase();
+
+  const filtered = warehouses.filter(w => {
+    return w.name.toLowerCase().includes(query) || w.location.toLowerCase().includes(query);
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No warehouses match selected filters.</p>`;
+    return;
+  }
+
+  filtered.forEach(w => {
+    let statusClass = "active";
+    let statusLabel = "Active";
+    if (w.status === "critical") {
+      statusClass = "critical";
+      statusLabel = "Critical Capacity";
+    } else if (w.status === "inactive") {
+      statusClass = "inactive";
+      statusLabel = "Inactive";
+    }
+
+    container.innerHTML += `
+      <div class="store-card">
+        <h3>${w.name}</h3>
+        <p><i class="ti ti-map-pin"></i> ${w.location}</p>
+        <p><i class="ti ti-package"></i> Batches: ${w.batches}</p>
+        <p><i class="ti ti-chart-pie"></i> Capacity: ${w.capacity}% Used</p>
+        <div style="margin-top: 8px;">
+          <span class="badge ${statusClass}">${statusLabel}</span>
+        </div>
+        <div class="store-actions" style="margin-top: 12px;">
+          <button class="btn-primary" onclick="allocateBatchesPrompt(${w.id})">Allocate Batches</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterWarehouses() {
+  renderWarehouses();
+}
+
+function openAddWarehouseModal() {
+  const name = prompt("Enter Warehouse Hub Name:");
+  if (!name) return;
+  const location = prompt("Enter Regional Location:") || "Bangalore East";
+
+  warehouses.push({
+    id: warehouses.length + 1,
+    name,
+    location,
+    capacity: 0,
+    status: "active",
+    batches: 0
+  });
+
+  renderWarehouses();
+  alert("Warehouse hub created!");
+}
+
+function allocateBatchesPrompt(id) {
+  const hub = warehouses.find(w => w.id === id);
+  if (!hub) return;
+  const qty = parseInt(prompt(`Allocate batch units to ${hub.name}:`, 20));
+  if (isNaN(qty)) return;
+
+  hub.batches += qty;
+  hub.capacity = Math.min(100, hub.capacity + Math.round(qty / 5));
+  if (hub.capacity >= 95) hub.status = "critical";
+  else if (hub.capacity > 0) hub.status = "active";
+
+  renderWarehouses();
+  alert("Batches allocated successfully!");
+}
+
+// ── PRODUCTS OPERATIONS ──
+function renderProducts() {
+  const container = document.getElementById("productsContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("productSearch").value.toLowerCase();
+  const categoryFilter = document.getElementById("productFilterCategory").value;
+
+  const filtered = products.filter(p => {
+    const matchesSearch = p.name.toLowerCase().includes(query);
+    const matchesCategory = categoryFilter === "All" || p.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No products match catalog filters.</p>`;
+    return;
+  }
+
+  filtered.forEach(p => {
+    let badgeClass = "in-stock";
+    let badgeLabel = `In Stock (${p.quantity})`;
+    if (p.status === "low-stock") {
+      badgeClass = "low-stock";
+      badgeLabel = `Low Stock (${p.quantity})`;
+    } else if (p.status === "out-stock") {
+      badgeClass = "out-stock";
+      badgeLabel = "Out of Stock";
+    }
+
+    container.innerHTML += `
+      <div class="product-card">
+        <div class="product-img"><i class="ti ti-package" style="color: var(--accent); font-size: 3rem;"></i></div>
+        <div class="product-body">
+          <h3>${p.name}</h3>
+          <div class="product-meta"><i class="ti ti-category"></i> ${p.category}</div>
+          <div class="product-price">₹${p.price}</div>
+          <div><span class="badge ${badgeClass}">${badgeLabel}</span></div>
+          <div class="product-actions">
+            <button class="btn-secondary" style="width: 100%;" onclick="editProductPrice(${p.id})">Modify price</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterProducts() {
+  renderProducts();
+}
+
+function openAddProductModal() {
+  const name = prompt("Enter SKU Name:");
+  if (!name) return;
+  const category = prompt("Category (Dog Food, Cat Food, Toys, Healthcare):") || "Toys";
+  const price = parseFloat(prompt("Base Price (INR):")) || 199;
+  const quantity = parseInt(prompt("Initial Stock Units:")) || 100;
+
+  let status = "in-stock";
+  if (quantity === 0) status = "out-stock";
+  else if (quantity < 20) status = "low-stock";
+
+  products.push({
+    id: products.length + 1,
+    name,
+    category,
+    price,
+    quantity,
+    status
+  });
+
+  renderProducts();
+  alert("SKU added to global catalog!");
+}
+
+function editProductPrice(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+  const newPrice = parseFloat(prompt(`Edit base price for ${product.name}:`, product.price));
+  if (newPrice) {
+    product.price = newPrice;
+    renderProducts();
+  }
+}
+
+// ── ORDERS OPERATIONS ──
+function renderOrders() {
+  const container = document.getElementById("ordersContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("orderSearch").value.toLowerCase();
+  const statusFilter = document.getElementById("orderFilterStatus").value;
+
+  const filtered = orders.filter(o => {
+    const matchesSearch = o.customer.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.store.toLowerCase().includes(query);
+    const matchesStatus = statusFilter === "All" || o.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="text-align: center; padding: 40px; color: var(--text-secondary);">No orders found.</p>`;
+    return;
+  }
+
+  filtered.forEach(o => {
+    let actionButtons = "";
+    if (o.status === "pending") {
+      actionButtons = `
+        <button class="btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="updateOrderStatus('${o.id}', 'processing')">Approve</button>
+        <button class="btn-danger" style="padding: 4px 8px; font-size: 11px;" onclick="updateOrderStatus('${o.id}', 'cancelled')">Cancel</button>
+      `;
+    } else if (o.status === "processing") {
+      actionButtons = `
+        <button class="btn-primary" style="background: var(--green); padding: 4px 8px; font-size: 11px;" onclick="updateOrderStatus('${o.id}', 'delivered')">Ship</button>
+        <button class="btn-danger" style="padding: 4px 8px; font-size: 11px;" onclick="updateOrderStatus('${o.id}', 'cancelled')">Cancel</button>
+      `;
+    } else {
+      actionButtons = `<span style="font-size: 11px; color: var(--text-secondary);">Archived</span>`;
+    }
+
+    container.innerHTML += `
+      <div class="ot-row">
+        <span class="ct-cell id">#${o.id}</span>
+        <span class="ct-cell customer">${o.customer}</span>
+        <span class="ct-cell">${o.store}</span>
+        <span class="ct-cell">${o.items}</span>
+        <span class="ct-cell amount">₹${o.amount}</span>
+        <span class="ct-cell">
+          <span class="badge ${o.status}">${o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span>
+        </span>
+        <div class="ot-actions">
+          ${actionButtons}
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterOrders() {
+  renderOrders();
+}
+
+function updateOrderStatus(id, newStatus) {
+  const order = orders.find(o => o.id === id);
+  if (order) {
+    order.status = newStatus;
+    renderOrders();
+  }
+}
+
+// ── COMPLAINTS OPERATIONS ──
+function renderComplaints() {
+  const container = document.getElementById("complaintsContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("complaintSearch").value.toLowerCase();
+  const priorityFilter = document.getElementById("complaintFilterPriority").value;
+
+  const filtered = complaints.filter(c => {
+    const matchesSearch = c.subject.toLowerCase().includes(query) || c.customer.toLowerCase().includes(query);
+    const matchesPriority = priorityFilter === "All" || c.priority === priorityFilter;
+    return matchesSearch && matchesPriority;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="text-align: center; padding: 40px; color: var(--text-secondary);">No active complaints.</p>`;
+    return;
+  }
+
+  filtered.forEach(c => {
+    const priorityClass = c.priority === "critical" ? "critical" : c.priority === "medium" ? "medium" : "low";
+    const statusClass = c.status === "open" ? "open" : c.status === "progress" ? "progress" : "resolved";
+    
+    let actionButtons = "";
+    if (c.status !== "resolved") {
+      actionButtons = `
+        <button class="btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="resolveComplaint('${c.id}')">Resolve</button>
+      `;
+    } else {
+      actionButtons = `<span style="font-size: 11px; color: var(--text-secondary);">Resolved</span>`;
+    }
+
+    container.innerHTML += `
+      <div class="ct-row">
+        <span class="ct-cell id">${c.id}</span>
+        <span class="ct-cell title">${c.subject}</span>
+        <span class="ct-cell">${c.customer}</span>
+        <span class="ct-cell">
+          <span class="badge ${priorityClass}">${c.priority.toUpperCase()}</span>
+        </span>
+        <span class="ct-cell">${c.store}</span>
+        <span class="ct-cell">
+          <span class="badge ${statusClass}">${c.status === 'progress' ? 'In Progress' : c.status.charAt(0).toUpperCase() + c.status.slice(1)}</span>
+        </span>
+        <div class="ct-actions">
+          ${actionButtons}
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterComplaints() {
+  renderComplaints();
+}
+
+function resolveComplaint(id) {
+  const ticket = complaints.find(c => c.id === id);
+  if (ticket) {
+    ticket.status = "resolved";
+    renderComplaints();
+    alert(`Complaint ${id} set as Resolved!`);
+  }
+}
+
+// ── USERS OPERATIONS ──
+function renderUsers() {
+  const container = document.getElementById("usersContainer");
+  container.innerHTML = "";
+
+  const query = document.getElementById("userSearch").value.toLowerCase();
+  const roleFilter = document.getElementById("userFilterRole").value;
+
+  const filtered = users.filter(u => {
+    const matchesSearch = u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query);
+    const matchesRole = roleFilter === "All" || u.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p style="text-align: center; padding: 40px; color: var(--text-secondary);">No users found.</p>`;
+    return;
+  }
+
+  filtered.forEach(u => {
+    const roleLabel = u.role === "admin-role" ? "Admin" : u.role === "owner" ? "Store Manager" : "Customer";
+    const statusClass = u.status === "active" ? "active" : "inactive";
+
+    container.innerHTML += `
+      <div class="ut-row">
+        <div class="ut-avatar">${u.avatar}</div>
+        <span class="ut-cell name">${u.name}</span>
+        <span class="ut-cell">${u.email}</span>
+        <span class="ut-cell">${u.phone}</span>
+        <span class="ut-cell">
+          <span class="badge ${u.role}">${roleLabel}</span>
+        </span>
+        <span class="ut-cell">
+          <span class="badge ${statusClass}">${u.status.charAt(0).toUpperCase() + u.status.slice(1)}</span>
+        </span>
+        <div class="ut-actions">
+          <button class="btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="toggleUserStatus('${u.email}')">Toggle Status</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterUsers() {
+  renderUsers();
+}
+
+function toggleUserStatus(email) {
+  const user = users.find(u => u.email === email);
+  if (user) {
+    user.status = user.status === "active" ? "inactive" : "active";
+    renderUsers();
+  }
+}
+
+// ── SETTINGS OPERATIONS ──
+function switchSettingsTab(tabBtn, panelId) {
+  // Toggle active tab class
+  document.querySelectorAll(".settings-sidebar button").forEach(btn => btn.classList.remove("active"));
+  tabBtn.classList.add("active");
+
+  // Toggle active panel visibility
+  document.querySelectorAll(".settings-panel").forEach(panel => panel.style.display = "none");
+  document.getElementById("settings-" + panelId).style.display = "block";
+}
+
+// ── ANALYSIS & CHARTS OPERATIONS ──
+function renderAnalysis() {
+  const container = document.getElementById("analysisContainer");
+  container.innerHTML = `
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="s-icon"><i class="ti ti-chart-arrows-vertical"></i></div>
+        <h3>89.4%</h3>
+        <p>Customer Retention</p>
+        <div class="trend up"><i class="ti ti-trending-up"></i> +2.1% YoY</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon" style="color: var(--blue); background: var(--blue-soft);"><i class="ti ti-receipt-2"></i></div>
+        <h3>₹2,450</h3>
+        <p>Avg Order Value</p>
+        <div class="trend up"><i class="ti ti-trending-up"></i> +450 INR</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-icon" style="color: var(--yellow); background: var(--yellow-soft);"><i class="ti ti-users"></i></div>
+        <h3>24.2K</h3>
+        <p>Monthly Active Users</p>
+        <div class="trend up"><i class="ti ti-trending-up"></i> +1.2K MoM</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="chart-card">
+        <h3><i class="ti ti-category"></i> Revenue by Category (Q2)</h3>
+        
+        <div class="chart-bar-group">
+          <div class="chart-label"><span>Dog Food</span> <strong>₹6.2L</strong></div>
+          <div class="chart-track"><div class="chart-fill" style="width: 75%;"></div></div>
+        </div>
+        
+        <div class="chart-bar-group">
+          <div class="chart-label"><span>Cat Food</span> <strong>₹3.4L</strong></div>
+          <div class="chart-track"><div class="chart-fill" style="width: 45%; background: linear-gradient(90deg, #3B82F6, #2563EB);"></div></div>
+        </div>
+        
+        <div class="chart-bar-group">
+          <div class="chart-label"><span>Toys</span> <strong>₹1.8L</strong></div>
+          <div class="chart-track"><div class="chart-fill" style="width: 25%; background: linear-gradient(90deg, #F59E0B, #D97706);"></div></div>
+        </div>
+        
+        <div class="chart-bar-group">
+          <div class="chart-label"><span>Healthcare</span> <strong>₹0.9L</strong></div>
+          <div class="chart-track"><div class="chart-fill" style="width: 15%; background: linear-gradient(90deg, #10B981, #059669);"></div></div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3><i class="ti ti-map-2"></i> Top Performing Regions</h3>
+        <div class="ct-row" style="grid-template-columns: 1fr 100px;">
+          <span class="ct-cell title" style="padding-left:0;">Bangalore (Central)</span>
+          <span class="ct-cell amount text-success">+14.2%</span>
+        </div>
+        <div class="ct-row" style="grid-template-columns: 1fr 100px;">
+          <span class="ct-cell title" style="padding-left:0;">Mumbai (West)</span>
+          <span class="ct-cell amount text-success">+9.8%</span>
+        </div>
+        <div class="ct-row" style="grid-template-columns: 1fr 100px;">
+          <span class="ct-cell title" style="padding-left:0;">Delhi (NCR)</span>
+          <span class="ct-cell amount text-success">+6.5%</span>
+        </div>
+        <div class="ct-row" style="grid-template-columns: 1fr 100px;">
+          <span class="ct-cell title" style="padding-left:0;">Chennai (South)</span>
+          <span class="ct-cell amount text-danger">-2.1%</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── AI FORECASTING OPERATIONS ──
+function renderForecast() {
+  const container = document.getElementById("forecastContainer");
+  container.innerHTML = `
+    <div class="ai-banner">
+      <div class="ai-banner-content">
+        <h2><i class="ti ti-sparkles"></i> AI Inventory Insights</h2>
+        <p>Our predictive models analyzed 45,000 recent transactions. Here are the top supply chain recommendations for the next 14 days.</p>
+      </div>
+      <div>
+        <button class="btn-primary" style="background: #fff; color: var(--accent); white-space: nowrap;" onclick="alert('Exporting AI Report...')">
+          <i class="ti ti-download"></i> Export Report
+        </button>
+      </div>
+    </div>
+
+    <div class="ai-grid">
+      <!-- Card 1 -->
+      <div class="ai-card urgent">
+        <div class="ai-header">
+          <div>
+            <h3>Premium Dog Food</h3>
+            <p><i class="ti ti-map-pin"></i> Bangalore Hub</p>
+          </div>
+          <span class="confidence-badge"><i class="ti ti-bulb"></i> 98% Confidence</span>
+        </div>
+        <div class="ai-metrics">
+          <div class="ai-metric-box">
+            <span>Current Stock</span>
+            <strong>120 Units</strong>
+          </div>
+          <div class="ai-metric-box">
+            <span>Predicted Demand</span>
+            <strong class="text-danger">340 Units</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Stockout expected in <strong>3 days</strong> due to upcoming festive season demand spike.
+        </p>
+        <div class="ai-actions">
+          <button class="btn-primary" onclick="alert('Auto-allocating 250 units to Bangalore Hub.')">Auto-Restock 250 U</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="ai-card">
+        <div class="ai-header">
+          <div>
+            <h3>Pet Shampoo</h3>
+            <p><i class="ti ti-map-pin"></i> Mumbai Hub</p>
+          </div>
+          <span class="confidence-badge medium"><i class="ti ti-bulb"></i> 82% Confidence</span>
+        </div>
+        <div class="ai-metrics">
+          <div class="ai-metric-box">
+            <span>Current Stock</span>
+            <strong>400 Units</strong>
+          </div>
+          <div class="ai-metric-box">
+            <span>Predicted Demand</span>
+            <strong>150 Units</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Overstock detected. Suggest pausing supplier deliveries for 2 weeks.
+        </p>
+        <div class="ai-actions">
+          <button class="btn-secondary" style="flex:1;" onclick="alert('Supplier paused.')">Pause Supplier</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="ai-card">
+        <div class="ai-header">
+          <div>
+            <h3>Chew Toys (Assorted)</h3>
+            <p><i class="ti ti-map-pin"></i> All Stores</p>
+          </div>
+          <span class="confidence-badge"><i class="ti ti-bulb"></i> 91% Confidence</span>
+        </div>
+        <div class="ai-metrics">
+          <div class="ai-metric-box">
+            <span>Avg Sales/Wk</span>
+            <strong>85 Units</strong>
+          </div>
+          <div class="ai-metric-box">
+            <span>Trend</span>
+            <strong class="text-success">+18%</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Consistent upward trend across all regions. Consider bulk supplier discount negotiation.
+        </p>
+        <div class="ai-actions">
+          <button class="btn-secondary" style="flex:1;" onclick="alert('Generating purchase order draft...')">Draft PO</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Initialise Dashboard Page
+switchPage("overview");

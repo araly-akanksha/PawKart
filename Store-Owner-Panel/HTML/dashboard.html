@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawKart Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../CSS/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../IMG/1780997231855_PawKart.png" alt="PawKart Logo">
+      <span>PawKart Admin</span>
+    </div>
+    <ul>
+      <li class="active" data-page="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Dashboard</span>
+      </li>
+      <li data-page="products">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        <span>Products</span>
+      </li>
+      <li data-page="inventory">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
+        </svg>
+        <span>Inventory</span>
+      </li>
+      <li data-page="orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span>Orders</span>
+      </li>
+      <li data-page="reviews">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>Reviews</span>
+      </li>
+      <li data-page="reports">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <span>Reports</span>
+      </li>
+      <li data-page="settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Settings</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <header>
+      <div class="search-box">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); margin-right: -28px; position: relative; z-index: 2;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="globalSearch" placeholder="Search products, orders, inventory..." oninput="handleGlobalSearch()" style="padding-left: 36px;" />
+      </div>
+      <div class="header-right">
+        <button class="notification-btn" onclick="alert('No new notifications.')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </button>
+        <div class="user-profile">
+          <div class="avatar">AK</div>
+          <div>
+            <h4>Akanksha</h4>
+            <span>Store Owner</span>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb" id="breadcrumb">Dashboard &gt; Home</div>
+
+      <!-- ── DASHBOARD PAGE ── -->
+      <div class="page active" id="page-dashboard">
+        <section class="welcome-card">
+          <div>
+            <h1>Good Morning, Akanksha 👋</h1>
+            <p>Here's what's happening in your store today.</p>
+          </div>
+          <button class="btn-primary" onclick="switchPage('orders')">View Orders</button>
+        </section>
+
+        <section class="stats-grid">
+          <div class="card">
+            <h3>Today's Revenue</h3>
+            <h2>₹24,560</h2>
+            <span class="stat-up">↑ +12% from yesterday</span>
+          </div>
+          <div class="card">
+            <h3>Orders Today</h3>
+            <h2>84</h2>
+            <span class="stat-up">↑ +8% from yesterday</span>
+          </div>
+          <div class="card">
+            <h3>Low Stock Items</h3>
+            <h2 id="dash-low-stock-count">2</h2>
+            <span class="stat-warn">Requires Attention</span>
+          </div>
+          <div class="card">
+            <h3>Pending Deliveries</h3>
+            <h2>15</h2>
+            <span class="stat-info">In Progress</span>
+          </div>
+        </section>
+
+        <section class="quick-actions">
+          <h2>Quick Actions</h2>
+          <div class="action-grid">
+            <div class="action-card" onclick="switchPage('products')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Product</span>
+            </div>
+            <div class="action-card" onclick="switchPage('inventory')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <span>Update Inventory</span>
+            </div>
+            <div class="action-card" onclick="switchPage('orders')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span>Process Orders</span>
+            </div>
+            <div class="action-card" onclick="switchPage('settings')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>Settings</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="recent-orders">
+          <div class="section-header">
+            <h2>Recent Orders</h2>
+            <button onclick="switchPage('orders')">View All</button>
+          </div>
+          <div id="dashboardOrdersList">
+            <!-- Populated dynamically -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ── PRODUCTS PAGE ── -->
+      <div class="page" id="page-products">
+        <section class="products-header">
+          <h1>Products Catalog</h1>
+          <div class="top-actions">
+            <input type="text" placeholder="Search products..." class="search-input" id="productSearch" oninput="filterProducts()" />
+            <button class="add-btn" onclick="openAddProductModal()">+ Add Product</button>
+          </div>
+        </section>
+
+        <section class="filters">
+          <select id="productFilterCategory" onchange="filterProducts()">
+            <option value="All">All Categories</option>
+            <option value="Dog Food">Dog Food</option>
+            <option value="Cat Food">Cat Food</option>
+            <option value="Toys">Toys</option>
+            <option value="Healthcare">Healthcare</option>
+          </select>
+          <select id="productFilterStatus" onchange="filterProducts()">
+            <option value="All">All Status</option>
+            <option value="in-stock">In Stock</option>
+            <option value="low-stock">Low Stock</option>
+            <option value="out-of-stock">Out Of Stock</option>
+          </select>
+          <select id="productSort" onchange="filterProducts()">
+            <option value="newest">Newest</option>
+            <option value="price-low">Price Low-High</option>
+            <option value="price-high">Price High-Low</option>
+          </select>
+        </section>
+
+        <section class="view-toggle">
+          <button id="gridBtn" class="active" onclick="setView('grid')">⊞ Grid View</button>
+          <button id="listBtn" onclick="setView('list')">☰ List View</button>
+        </section>
+
+        <section class="products-grid" id="productsContainer">
+          <!-- Populated dynamically -->
+        </section>
+      </div>
+
+      <!-- ── INVENTORY PAGE ── -->
+      <div class="page" id="page-inventory">
+        <section class="page-header">
+          <div>
+            <h1>Inventory Management</h1>
+            <p>Track warehouse locations, stock levels, and alert points.</p>
+          </div>
+          <button class="add-btn" onclick="switchPage('products')">Manage Catalog</button>
+        </section>
+
+        <section class="inventory-stats">
+          <div class="stat-card">
+            <h3 id="inv-total-skus">4</h3>
+            <p>Total SKUs</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="inv-healthy-skus" style="color: var(--green);">2</h3>
+            <p>Healthy Stock</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="inv-low-skus" style="color: var(--yellow);">1</h3>
+            <p>Low Stock Alerts</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="inv-out-skus" style="color: var(--red);">1</h3>
+            <p>Out of Stock</p>
+          </div>
+        </section>
+
+        <section class="inventory-toolbar">
+          <input type="text" id="inventorySearch" placeholder="Search inventory..." class="search-input" oninput="filterInventory()" />
+          <select id="inventoryWarehouse" onchange="filterInventory()">
+            <option value="All">All Warehouses</option>
+            <option value="Warehouse A">Warehouse A</option>
+            <option value="Warehouse B">Warehouse B</option>
+          </select>
+        </section>
+
+        <section class="inventory-grid" id="inventoryContainer">
+          <!-- Populated dynamically -->
+        </section>
+      </div>
+
+      <!-- ── ORDERS PAGE ── -->
+      <div class="page" id="page-orders">
+        <section class="page-header">
+          <div>
+            <h1>Order Logistics</h1>
+            <p>Manage customer orders, process transactions, and ship packages.</p>
+          </div>
+        </section>
+
+        <section class="order-stats">
+          <div class="stat-card">
+            <h3 id="order-count-total">4</h3>
+            <p>Total Orders</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="order-count-pending" style="color: var(--blue);">1</h3>
+            <p>Pending Approval</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="order-count-processing" style="color: var(--yellow);">1</h3>
+            <p>Processing / Transit</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="order-count-delivered" style="color: var(--green);">1</h3>
+            <p>Completed Orders</p>
+          </div>
+        </section>
+
+        <section class="order-toolbar">
+          <input type="text" id="orderSearch" placeholder="Search orders..." class="search-input" oninput="filterOrders()" />
+          <select id="orderStatusFilter" onchange="filterOrders()">
+            <option value="All">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </section>
+
+        <section class="orders-grid" id="ordersContainer">
+          <!-- Populated dynamically -->
+        </section>
+      </div>
+
+      <!-- ── REVIEWS PAGE ── -->
+      <div class="page" id="page-reviews">
+        <section class="page-header">
+          <div>
+            <h1>Customer Feedback</h1>
+            <p>Monitor reviews, response scores, and rating distributions.</p>
+          </div>
+        </section>
+
+        <section class="review-stats">
+          <div class="stat-card">
+            <h3>4.8 ⭐</h3>
+            <p>Average Rating</p>
+          </div>
+          <div class="stat-card">
+            <h3>856</h3>
+            <p>Total Reviews</p>
+          </div>
+          <div class="stat-card" style="color: var(--green);">
+            <h3>94%</h3>
+            <p>Positive Feedback</p>
+          </div>
+          <div class="stat-card" style="color: var(--yellow);">
+            <h3 id="review-unanswered-count">1</h3>
+            <p>Pending Reply</p>
+          </div>
+        </section>
+
+        <section class="review-toolbar">
+          <select id="reviewRatingFilter" onchange="filterReviews()">
+            <option value="All">All Ratings</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="2">2 Stars</option>
+            <option value="1">1 Star</option>
+          </select>
+        </section>
+
+        <section class="reviews-list" id="reviewsContainer">
+          <!-- Populated dynamically -->
+        </section>
+      </div>
+
+      <!-- ── REPORTS PAGE ── -->
+      <div class="page" id="page-reports">
+        <section class="page-header">
+          <div>
+            <h1>Business Reports</h1>
+            <p>Analytical platform growth, categories breakdown, and revenues.</p>
+          </div>
+        </section>
+
+        <section class="report-stats">
+          <div class="stat-card">
+            <h3>₹1,42,850</h3>
+            <p>Monthly Profit <span class="trend-up">(↑ 15.4%)</span></p>
+          </div>
+          <div class="stat-card">
+            <h3>₹485</h3>
+            <p>AOV (Avg. Order Value)</p>
+          </div>
+          <div class="stat-card">
+            <h3>1.2%</h3>
+            <p>Return Rate <span class="trend-down">(↓ 0.4%)</span></p>
+          </div>
+          <div class="stat-card">
+            <h3>3.6%</h3>
+            <p>Conversion Rate</p>
+          </div>
+        </section>
+
+        <section class="report-actions">
+          <select id="reportRange">
+            <option>Last 30 Days</option>
+            <option>Last 6 Months</option>
+            <option>Year to Date</option>
+          </select>
+          <button class="primary-btn" onclick="alert('CSV exported successfully!')">Export CSV</button>
+          <button class="secondary-btn" onclick="alert('PDF report downloaded!')">Export PDF</button>
+        </section>
+
+        <section class="report-grid">
+          <div class="report-card">
+            <h2>Top Performing Products</h2>
+            <ul id="reportTopProducts">
+              <!-- Populated dynamically -->
+            </ul>
+          </div>
+
+          <div class="report-card">
+            <h2>Sales By Category Breakdown</h2>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar-item">
+                <div class="chart-bar-label"><span>Dog Food</span><span>₹84,200 (45%)</span></div>
+                <div class="chart-bar-track"><div class="chart-bar-fill" style="width: 80%;"></div></div>
+              </div>
+              <div class="chart-bar-item">
+                <div class="chart-bar-label"><span>Cat Treats</span><span>₹42,100 (22%)</span></div>
+                <div class="chart-bar-track"><div class="chart-bar-fill" style="width: 55%; background: linear-gradient(90deg, var(--yellow), #FBBF24);"></div></div>
+              </div>
+              <div class="chart-bar-item">
+                <div class="chart-bar-label"><span>Pet Care &amp; Toys</span><span>₹28,260 (15%)</span></div>
+                <div class="chart-bar-track"><div class="chart-bar-fill" style="width: 35%; background: linear-gradient(90deg, var(--blue), #60A5FA);"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card report-card-full">
+            <h2>Monthly Platform Performance Summary</h2>
+            <table class="monthly-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Total Revenue</th>
+                  <th>Orders Filled</th>
+                  <th>Performance Trend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>January 2026</td>
+                  <td>₹3,24,000</td>
+                  <td>540 Orders</td>
+                  <td><span class="trend-up">+12.4%</span></td>
+                </tr>
+                <tr>
+                  <td>February 2026</td>
+                  <td>₹3,88,000</td>
+                  <td>640 Orders</td>
+                  <td><span class="trend-up">+19.7%</span></td>
+                </tr>
+                <tr>
+                  <td>March 2026</td>
+                  <td>₹4,12,000</td>
+                  <td>710 Orders</td>
+                  <td><span class="trend-up">+6.1%</span></td>
+                </tr>
+                <tr>
+                  <td>April 2026</td>
+                  <td>₹4,80,000</td>
+                  <td>820 Orders</td>
+                  <td><span class="trend-up">+16.5%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ── SETTINGS PAGE ── -->
+      <div class="page" id="page-settings">
+        <section class="page-header">
+          <div>
+            <h1>System Settings</h1>
+            <p>Configure store profile, custom delivery zones, gateway gateways, and security.</p>
+          </div>
+        </section>
+
+        <div class="settings-layout">
+          <aside class="settings-sidebar">
+            <button class="settings-tab active" onclick="switchSettingsTab(this, 'general')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+              </svg>
+              <span>General Profile</span>
+            </button>
+            <button class="settings-tab" onclick="switchSettingsTab(this, 'notifications')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span>Notifications</span>
+            </button>
+            <button class="settings-tab" onclick="switchSettingsTab(this, 'delivery')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" rx="2" ry="2"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <span>Delivery &amp; Payments</span>
+            </button>
+            <button class="settings-tab" onclick="switchSettingsTab(this, 'security')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Security Settings</span>
+            </button>
+          </aside>
+
+          <div class="settings-card">
+            <!-- General Settings Panel -->
+            <div class="settings-panel active" id="settings-general">
+              <h2>General Store Profile</h2>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="set-store-name">Store Name</label>
+                  <input type="text" id="set-store-name" value="PawKart Main Store" />
+                </div>
+                <div class="form-group">
+                  <label for="set-store-email">Contact Email</label>
+                  <input type="email" id="set-store-email" value="akanksha@email.com" />
+                </div>
+                <div class="form-group">
+                  <label for="set-store-phone">Store Phone</label>
+                  <input type="text" id="set-store-phone" value="+91 9876543210" />
+                </div>
+                <div class="form-group">
+                  <label for="set-store-currency">Operating Currency</label>
+                  <select id="set-store-currency">
+                    <option>INR (₹)</option>
+                    <option>USD ($)</option>
+                    <option>EUR (€)</option>
+                  </select>
+                </div>
+                <div class="form-group form-full">
+                  <label for="set-store-address">Physical Location</label>
+                  <textarea id="set-store-address">123 Main Street, Bangalore, Karnataka, India - 560001</textarea>
+                </div>
+              </div>
+              <div class="settings-footer">
+                <button class="primary-btn" onclick="saveSettings('General profile updated!')">Save Settings</button>
+              </div>
+            </div>
+
+            <!-- Notifications Panel -->
+            <div class="settings-panel" id="settings-notifications">
+              <h2>Alert Configurations</h2>
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <h4>Email Order Notifications</h4>
+                  <p>Send an automated summary when a new customer order is placed.</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <h4>Low Stock Critical Warnings</h4>
+                  <p>Send instant email alerts when inventory falls below threshold levels.</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <h4>New Review Moderation Alerts</h4>
+                  <p>Get notified when a customer posts feedback below 3 stars.</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <h4>Weekly Business Report Digest</h4>
+                  <p>Receive a consolidated PDF performance overview every Monday.</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="settings-divider"></div>
+              <div class="settings-footer">
+                <button class="primary-btn" onclick="saveSettings('Notification alerts configured!')">Save Settings</button>
+              </div>
+            </div>
+
+            <!-- Delivery & Payments Panel -->
+            <div class="settings-panel" id="settings-delivery">
+              <h2>Managed Delivery Zones</h2>
+              <p style="font-size: .8rem; color: var(--text-secondary); margin-bottom: 12px;">Adding delivery regions enables shipping quotes for local customers.</p>
+              
+              <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                <input type="text" id="newZoneInput" placeholder="Enter Zone Name (e.g. Bangalore East)" class="search-input" style="flex: 1;" />
+                <button class="add-btn" onclick="addDeliveryZone()">Add Zone</button>
+              </div>
+              
+              <div class="zone-tags" id="deliveryZoneContainer">
+                <!-- Zones rendered dynamically -->
+              </div>
+
+              <div class="settings-divider"></div>
+
+              <h2>Active Payment Gateways</h2>
+              <div class="payment-method">
+                <div class="payment-info">
+                  <span class="payment-icon">💳</span>
+                  <div>
+                    <h4>Stripe Gateway</h4>
+                    <p>Process credit and debit cards globally.</p>
+                  </div>
+                </div>
+                <span class="payment-status connected">Connected</span>
+              </div>
+              <div class="payment-method">
+                <div class="payment-info">
+                  <span class="payment-icon">📱</span>
+                  <div>
+                    <h4>UPI Gateway</h4>
+                    <p>Instant direct bank transfers in India.</p>
+                  </div>
+                </div>
+                <span class="payment-status connected">Connected</span>
+              </div>
+              <div class="payment-method">
+                <div class="payment-info">
+                  <span class="payment-icon">💵</span>
+                  <div>
+                    <h4>Cash On Delivery (COD)</h4>
+                    <p>Receive paper currency upon physical delivery.</p>
+                  </div>
+                </div>
+                <span class="payment-statusConnected conectado connected" style="background: var(--green-soft); color: #15803D;">Active</span>
+              </div>
+            </div>
+
+            <!-- Security Panel -->
+            <div class="settings-panel" id="settings-security">
+              <h2>Authentication Settings</h2>
+              <div class="security-row">
+                <div class="security-info">
+                  <h4>Two-Factor Authentication (2FA)</h4>
+                  <p>Secure login with a secondary token generated on mobile device.</p>
+                </div>
+                <span class="security-status enabled">Enabled</span>
+              </div>
+              <div class="security-row">
+                <div class="security-info">
+                  <h4>Session Hijack Protection</h4>
+                  <p>Track operating system fingerprint and force logouts on changes.</p>
+                </div>
+                <span class="security-status enabled">Enabled</span>
+              </div>
+              <div class="security-row">
+                <div class="security-info">
+                  <h4>Admin Audit Logs</h4>
+                  <p>Log all dashboard modifications, price adjustments, and exports.</p>
+                </div>
+                <span class="security-status disabled">Disabled</span>
+              </div>
+              <div class="settings-divider"></div>
+              <button class="secondary-btn" onclick="alert('Other session tokens revoked!')">Revoke Other Active Sessions</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- JAVASCRIPT -->
+<script src="../JS/dashboard.js"></script>
+
+</body>
+</html>
