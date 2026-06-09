@@ -1,46 +1,64 @@
-// Mock Database State
-let stores = [
-  { id: 1, name: "PawKart Koramangala Store", location: "Bangalore", manager: "Akanksha Naidu", status: "active", revenue: 542000 },
-  { id: 2, name: "PawKart Indiranagar Store", location: "Bangalore", manager: "Rohit Sharma", status: "active", revenue: 421000 },
-  { id: 3, name: "PawKart HSR Layout Store", location: "Bangalore", manager: "Priya Singh", status: "active", revenue: 282690 },
-  { id: 4, name: "PawKart Whitefield Store", location: "Bangalore", manager: "Suresh Kumar", status: "inactive", revenue: 0 }
-];
-
-let warehouses = [
-  { id: 1, name: "Warehouse A", location: "Bangalore East", capacity: 85, status: "active", batches: 140 },
-  { id: 2, name: "Warehouse B", location: "Bangalore West", capacity: 42, status: "active", batches: 80 },
-  { id: 3, name: "Mumbai Hub", location: "Mumbai Central", capacity: 95, status: "critical", batches: 210 },
-  { id: 4, name: "Chennai Hub", location: "Chennai South", capacity: 0, status: "inactive", batches: 0 }
-];
-
-let products = [
-  { id: 1, name: "Premium Dog Food", category: "Dog Food", price: 599, quantity: 1200, status: "in-stock" },
-  { id: 2, name: "Pet Shampoo", category: "Healthcare", price: 249, quantity: 14, status: "low-stock" },
-  { id: 3, name: "Cat Treats", category: "Cat Food", price: 149, quantity: 840, status: "in-stock" },
-  { id: 4, name: "Chew Toy", category: "Toys", price: 399, quantity: 0, status: "out-stock" }
-];
-
-let orders = [
-  { id: "PK1024", customer: "Rahul Sharma", store: "Koramangala Store", items: "Premium Dog Food x2", amount: 1198, status: "delivered" },
-  { id: "PK1025", customer: "Priya Singh", store: "Indiranagar Store", items: "Pet Shampoo x1", amount: 249, status: "processing" },
-  { id: "PK1026", customer: "Meera Iyer", store: "HSR Layout Store", items: "Cat Treats x3", amount: 447, status: "cancelled" },
-  { id: "PK1027", customer: "Karan Johar", store: "Warehouse A", items: "Premium Dog Food x1", amount: 599, status: "pending" }
-];
-
-let complaints = [
-  { id: "CP1084", subject: "Delayed Dog Food Shipment", customer: "Rahul Sharma", priority: "critical", store: "Koramangala", status: "open" },
-  { id: "CP1085", subject: "Damaged Shampoo Container", customer: "Priya Singh", priority: "medium", store: "Indiranagar", status: "progress" },
-  { id: "CP1086", subject: "Billing Error UPI Transaction", customer: "Meera Iyer", priority: "low", store: "HSR Layout", status: "resolved" }
-];
-
-let users = [
-  { avatar: "AK", name: "Akanksha Naidu", email: "akanksha@email.com", phone: "+91 9876543210", role: "owner", status: "active" },
-  { avatar: "AD", name: "Admin User", email: "admin@pawkart.com", phone: "+91 9999999999", role: "admin-role", status: "active" },
-  { avatar: "RS", name: "Rohit Sharma", email: "rohit@email.com", phone: "+91 8888888888", role: "owner", status: "active" },
-  { avatar: "JD", name: "John Doe", email: "john@email.com", phone: "+91 7777777777", role: "customer", status: "inactive" }
-];
-
+// Global State
+let stores = [];
+let products = [];
+let orders = [];
+let complaints = [];
+let users = [];
 let activePage = "overview";
+
+async function fetchAdminData() {
+  try {
+    const [sRes, pRes, oRes, cRes, uRes] = await Promise.all([
+      fetch('http://localhost:8000/stores').catch(() => null),
+      fetch('http://localhost:8000/products').catch(() => null),
+      fetch('http://localhost:8000/orders').catch(() => null),
+      fetch('http://localhost:8000/complaints').catch(() => null),
+      fetch('http://localhost:8000/users').catch(() => null)
+    ]);
+    
+    if (sRes && sRes.ok) stores = await sRes.json();
+    if (pRes && pRes.ok) products = await pRes.json();
+    if (oRes && oRes.ok) orders = await oRes.json();
+    if (cRes && cRes.ok) complaints = await cRes.json();
+    if (uRes && uRes.ok) users = await uRes.json();
+    
+    // Refresh current page if needed
+    if (activePage === "overview") renderOverview();
+    else if (activePage === "stores") renderStores();
+    else if (activePage === "products") renderProducts();
+    else if (activePage === "orders") renderOrders();
+    else if (activePage === "complaints") renderComplaints();
+    else if (activePage === "users") renderUsers();
+    
+  } catch (e) {
+    console.error("Failed to fetch admin data", e);
+  }
+}
+
+async function uploadCatalogCSV(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("http://localhost:8000/admin/upload-catalog", {
+      method: "POST",
+      body: formData
+    });
+    const result = await res.json();
+    if (res.ok) {
+      alert("Success: " + result.message);
+      fetchAdminData(); 
+    } else {
+      alert("Error: " + result.detail);
+    }
+  } catch (e) {
+    console.error(e);
+    alert("Failed to upload CSV.");
+  }
+}
 
 // ── NAVIGATION ──
 const pageTitles = {
@@ -77,7 +95,6 @@ function switchPage(name) {
   // Page specific render triggers
   if (name === "overview") renderOverview();
   else if (name === "stores") renderStores();
-  else if (name === "warehouses") renderWarehouses();
   else if (name === "products") renderProducts();
   else if (name === "orders") renderOrders();
   else if (name === "complaints") renderComplaints();
@@ -107,12 +124,12 @@ function renderOverview() {
   const perfContainer = document.getElementById("overviewStoresPerformance");
   perfContainer.innerHTML = "";
 
-  // Sort stores by revenue descending
-  const ranked = [...stores].sort((a, b) => b.revenue - a.revenue);
-  const maxRevenue = ranked[0] ? ranked[0].revenue : 1;
+  // Sort stores by ID descending (mocking revenue)
+  const ranked = [...stores].sort((a, b) => b.id - a.id);
+  const maxRevenue = 10000;
 
   ranked.forEach((store, idx) => {
-    const percentage = Math.round((store.revenue / maxRevenue) * 100);
+    const percentage = 50 + (idx * 5); // mock percentage
     perfContainer.innerHTML += `
       <div class="store-row">
         <div class="sr-left">
@@ -122,7 +139,7 @@ function renderOverview() {
         <div class="bar-bg">
           <div class="bar-fill" style="width: ${percentage}%;"></div>
         </div>
-        <strong>₹${store.revenue.toLocaleString()}</strong>
+        <strong>₹${store.min_order_amount || 0}</strong>
       </div>
     `;
   });
@@ -132,14 +149,14 @@ function renderOverview() {
   compContainer.innerHTML = "";
 
   complaints.slice(0, 3).forEach(c => {
-    const badgeClass = c.priority === "critical" ? "critical" : c.priority === "medium" ? "medium" : "low";
+    const badgeClass = "medium";
     compContainer.innerHTML += `
       <div class="complaint-card">
         <div>
           <h4>#${c.id}</h4>
-          <p>${c.customer} • ${c.subject}</p>
+          <p>${c.customer_email} • ${c.issue_description}</p>
         </div>
-        <span class="badge ${badgeClass}">${c.priority.toUpperCase()}</span>
+        <span class="badge ${badgeClass}">MEDIUM</span>
       </div>
     `;
   });
@@ -155,9 +172,9 @@ function renderStores() {
   const statusFilter = document.getElementById("storeFilterStatus").value;
 
   const filtered = stores.filter(s => {
-    const matchesSearch = s.name.toLowerCase().includes(query) || s.manager.toLowerCase().includes(query);
-    const matchesLocation = locationFilter === "All" || s.location === locationFilter;
-    const matchesStatus = statusFilter === "All" || s.status === statusFilter;
+    const matchesSearch = s.name.toLowerCase().includes(query) || s.owner_name.toLowerCase().includes(query);
+    const matchesLocation = locationFilter === "All" || (s.address && s.address.includes(locationFilter));
+    const matchesStatus = statusFilter === "All" || (s.is_open ? "active" : "inactive") === statusFilter;
     return matchesSearch && matchesLocation && matchesStatus;
   });
 
@@ -167,15 +184,16 @@ function renderStores() {
   }
 
   filtered.forEach(s => {
-    const statusClass = s.status === "active" ? "active" : "inactive";
+    const statusClass = s.is_open ? "active" : "inactive";
+    const statusLabel = s.is_open ? "Active" : "Inactive";
     container.innerHTML += `
       <div class="store-card">
         <h3>${s.name}</h3>
-        <p><i class="ti ti-map-pin"></i> ${s.location}</p>
-        <p><i class="ti ti-user"></i> ${s.manager}</p>
-        <p><i class="ti ti-coin"></i> ₹${s.revenue.toLocaleString()}</p>
+        <p><i class="ti ti-map-pin"></i> ${s.address || 'Unknown'}</p>
+        <p><i class="ti ti-user"></i> ${s.owner_name}</p>
+        <p><i class="ti ti-coin"></i> Min Order ₹${s.min_order_amount || 0}</p>
         <div style="margin-top: 8px;">
-          <span class="badge ${statusClass}">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span>
+          <span class="badge ${statusClass}">${statusLabel}</span>
         </div>
         <div class="store-actions">
           <button class="btn-secondary" onclick="toggleStoreStatus(${s.id})">Toggle Status</button>
@@ -318,11 +336,11 @@ function renderProducts() {
 
   filtered.forEach(p => {
     let badgeClass = "in-stock";
-    let badgeLabel = `In Stock (${p.quantity})`;
-    if (p.status === "low-stock") {
+    let badgeLabel = `In Stock (${p.quantity || 10})`;
+    if (p.stockStatus === "low-stock" || p.quantity < 20) {
       badgeClass = "low-stock";
-      badgeLabel = `Low Stock (${p.quantity})`;
-    } else if (p.status === "out-stock") {
+      badgeLabel = `Low Stock (${p.quantity || 0})`;
+    } else if (p.stockStatus === "out-stock" || p.quantity === 0) {
       badgeClass = "out-stock";
       badgeLabel = "Out of Stock";
     }
@@ -482,12 +500,12 @@ function renderComplaints() {
     container.innerHTML += `
       <div class="ct-row">
         <span class="ct-cell id">${c.id}</span>
-        <span class="ct-cell title">${c.subject}</span>
-        <span class="ct-cell">${c.customer}</span>
+        <span class="ct-cell title">${c.issue_description}</span>
+        <span class="ct-cell">${c.customer_email}</span>
         <span class="ct-cell">
-          <span class="badge ${priorityClass}">${c.priority.toUpperCase()}</span>
+          <span class="badge ${priorityClass}">MEDIUM</span>
         </span>
-        <span class="ct-cell">${c.store}</span>
+        <span class="ct-cell">Order #${c.order_id || 'N/A'}</span>
         <span class="ct-cell">
           <span class="badge ${statusClass}">${c.status === 'progress' ? 'In Progress' : c.status.charAt(0).toUpperCase() + c.status.slice(1)}</span>
         </span>
@@ -532,20 +550,20 @@ function renderUsers() {
   }
 
   filtered.forEach(u => {
-    const roleLabel = u.role === "admin-role" ? "Admin" : u.role === "owner" ? "Store Manager" : "Customer";
-    const statusClass = u.status === "active" ? "active" : "inactive";
+    const roleLabel = u.role === "admin" ? "Admin" : u.role === "owner" ? "Store Manager" : "Customer";
+    const statusClass = "active";
 
     container.innerHTML += `
       <div class="ut-row">
-        <div class="ut-avatar">${u.avatar}</div>
-        <span class="ut-cell name">${u.name}</span>
+        <div class="ut-avatar">${u.email.charAt(0).toUpperCase()}</div>
+        <span class="ut-cell name">${u.email}</span>
         <span class="ut-cell">${u.email}</span>
-        <span class="ut-cell">${u.phone}</span>
+        <span class="ut-cell">Store ${u.store_id || 'N/A'}</span>
         <span class="ut-cell">
           <span class="badge ${u.role}">${roleLabel}</span>
         </span>
         <span class="ut-cell">
-          <span class="badge ${statusClass}">${u.status.charAt(0).toUpperCase() + u.status.slice(1)}</span>
+          <span class="badge ${statusClass}">Active</span>
         </span>
         <div class="ut-actions">
           <button class="btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="toggleUserStatus('${u.email}')">Toggle Status</button>
@@ -744,4 +762,5 @@ async function renderForecast() {
 }
 
 // Initialise Dashboard Page
+fetchAdminData();
 switchPage("overview");

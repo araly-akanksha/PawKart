@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import pandas as pd
 from app.database import SessionLocal, engine
-from app.models import Base, Product, Inventory, RFIDEvent, Order, OrderItem, Store
+from app.models import Base, Product, Inventory, Order, OrderItem, Store
 
 # ── Configuration ────────────────────────────────────────────
 CSV_PATH = r"C:\Users\Araly Akanksha\Downloads\flipkart_pet_products.csv"
@@ -142,7 +142,6 @@ def main():
     print("Clearing existing data...")
     db.query(OrderItem).delete()
     db.query(Order).delete()
-    db.query(RFIDEvent).delete()
     db.query(Inventory).delete()
     db.query(Product).delete()
     db.query(Store).delete()
@@ -212,28 +211,7 @@ def main():
     db.flush()
     print(f"  Created {len(products)} inventory records ({low_stock_count} low-stock alerts)")
 
-    # ── Create RFID Events ───────────────────────────────────
-    print()
-    print("Creating RFID events...")
-    event_types = ["SALE", "SALE", "SALE", "RESTOCK", "RETURN", "AUDIT"]
-    rfid_count = min(200, len(products) * 3)
-
-    for i in range(rfid_count):
-        product = random.choice(products)
-        ts = datetime.utcnow() - timedelta(
-            days=random.randint(0, 30),
-            hours=random.randint(0, 23),
-            minutes=random.randint(0, 59),
-        )
-        event = RFIDEvent(
-            product_id=product.id,
-            rfid_tag_id=f"TAG-{random.randint(10000, 99999)}",
-            event_type=random.choice(event_types),
-            timestamp=ts,
-        )
-        db.add(event)
-
-    print(f"  Created {rfid_count} RFID events")
+    # (RFID Events removed in Phase 1)
 
     # ── Create Orders ────────────────────────────────────────
     print()
@@ -340,7 +318,6 @@ def main():
     print(f"  Products:      {len(products)} (from Flipkart web scraping)")
     print(f"  Categories:    {len(categories_count)}")
     print(f"  Inventory:     {len(products)} records ({low_stock_count} low-stock)")
-    print(f"  RFID Events:   {rfid_count}")
     print(f"  Orders:        {order_count} ({total_items} items)")
     print(f"  Store:         1 profile")
     print()

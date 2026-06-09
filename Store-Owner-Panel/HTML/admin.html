@@ -20,7 +20,6 @@
     <div class="nav-section">Core</div>
     <button class="nav-item active" data-page="overview"><i class="ti ti-dashboard"></i> Overview</button>
     <button class="nav-item" data-page="stores"><i class="ti ti-store"></i> Managed Stores</button>
-    <button class="nav-item" data-page="warehouses"><i class="ti ti-building-warehouse"></i> Managed Warehouses</button>
     <button class="nav-item" data-page="products"><i class="ti ti-box"></i> Products</button>
     <button class="nav-item" data-page="orders"><i class="ti ti-shopping-cart"></i> Orders</button>
     <div class="nav-section">Insights</div>
@@ -159,26 +158,7 @@
       </div>
     </div>
 
-    <!-- ── MANAGED WAREHOUSES PAGE ── -->
-    <div class="page" id="page-warehouses">
-      <div class="page-header">
-        <div>
-          <h1>Managed Warehouses</h1>
-          <p>Configure regional logistics hubs, storage limits, and supply batches.</p>
-        </div>
-        <button class="add-btn" onclick="openAddWarehouseModal()">
-          <i class="ti ti-plus"></i> Add Hub
-        </button>
-      </div>
 
-      <div class="toolbar">
-        <input type="text" id="warehouseSearch" placeholder="Search warehouses..." oninput="filterWarehouses()" />
-      </div>
-
-      <div class="stores-grid-4" id="warehousesContainer">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
 
     <!-- ── PRODUCTS PAGE ── -->
     <div class="page" id="page-products">
@@ -187,9 +167,15 @@
           <h1>Products SKU Directory</h1>
           <p>Define baseline products, set base retail price, and manage SKU catalog.</p>
         </div>
-        <button class="add-btn" onclick="openAddProductModal()">
-          <i class="ti ti-plus"></i> Create SKU
-        </button>
+        <div style="display: flex; gap: 10px;">
+          <input type="file" id="csvUpload" accept=".csv" style="display: none;" onchange="uploadCatalogCSV(event)" />
+          <button class="btn-secondary" style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 0 16px; font-weight: 500; display: flex; align-items: center; gap: 6px; cursor: pointer;" onclick="document.getElementById('csvUpload').click()">
+            <i class="ti ti-upload"></i> Upload CSV
+          </button>
+          <button class="add-btn" onclick="openAddProductModal()">
+            <i class="ti ti-plus"></i> Create SKU
+          </button>
+        </div>
       </div>
 
       <div class="toolbar">

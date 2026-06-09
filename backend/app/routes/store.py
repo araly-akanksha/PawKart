@@ -9,6 +9,7 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from typing import List
 
 from app.dependencies import get_db
 from app.models import Store
@@ -40,6 +41,9 @@ def get_store(db: Session = Depends(get_db)):
 
     return store
 
+@router.get("/stores", response_model=List[StoreResponse])
+def get_stores(db: Session = Depends(get_db)):
+    return db.query(Store).all()
 
 # ── Update Store Profile ────────────────────────────────────
 

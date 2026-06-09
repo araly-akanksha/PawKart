@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base, verify_and_update_schema
 from app.routes import products, inventory, orders, store, analytics
-from app.routes import forecasting, optimization, auth
+from app.routes import forecasting, optimization, auth, users, complaints, upload
 from app.ai import init_models
 
 
@@ -68,6 +68,21 @@ app.include_router(
 app.include_router(
     products.router,
     tags=["Products"]
+)
+
+app.include_router(
+    upload.router,
+    tags=["Upload"]
+)
+
+app.include_router(
+    users.router,
+    tags=["Users"]
+)
+
+app.include_router(
+    complaints.router,
+    tags=["Complaints"]
 )
 
 app.include_router(
