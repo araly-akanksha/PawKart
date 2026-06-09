@@ -20,7 +20,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import datetime, timedelta
 
-from app.dependencies import get_db
+from app.dependencies import get_db, get_current_admin
+from app import models
 from app.models import Product, OrderItem, Order
 from app.schemas import ForecastResponse, ModelInfoResponse
 
@@ -165,7 +166,7 @@ def _forecast_lstm(product_id: int, db: Session) -> dict:
 # These metrics validate the forecasting accuracy of the system.
 
 @router.get("/forecast/model-info", response_model=ModelInfoResponse)
-def get_model_info():
+def get_model_info(current_user: models.User = Depends(get_current_admin)):
     """
     Returns LSTM model architecture and performance metrics
     from training evaluation on the demand forecasting dataset.
@@ -193,7 +194,11 @@ def get_model_info():
 # ── Endpoint ────────────────────────────────────────────────
 
 @router.get("/forecast/{product_id}", response_model=ForecastResponse)
-def forecast_demand(product_id: int, db: Session = Depends(get_db)):
+def forecast_demand(
+    product_id: int, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_admin)
+):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")

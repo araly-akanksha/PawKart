@@ -14,7 +14,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import datetime, timedelta
 
-from app.dependencies import get_db
+from app.dependencies import get_db, get_current_store_owner
+from app import models
 from app.models import Inventory, Product, OrderItem, Order
 from app.schemas import ReorderResponse
 
@@ -71,7 +72,11 @@ def calculate_reorder_quantity(
 # ── Optimize Reorder Endpoint ───────────────────────────────
 
 @router.get("/optimize-reorder/{product_id}", response_model=ReorderResponse)
-def optimize_reorder(product_id: int, db: Session = Depends(get_db)):
+def optimize_reorder(
+    product_id: int, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     # Get inventory
     inventory = db.query(Inventory).filter(
         Inventory.product_id == product_id
@@ -79,6 +84,9 @@ def optimize_reorder(product_id: int, db: Session = Depends(get_db)):
 
     if not inventory:
         raise HTTPException(status_code=404, detail="Inventory not found for this product")
+        
+    if current_user.role == "store_owner" and inventory.store_id != current_user.store_id:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
 
     # Get product name
     product = db.query(Product).filter(Product.id == product_id).first()

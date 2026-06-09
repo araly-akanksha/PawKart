@@ -13,18 +13,22 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import engine, Base
-from app.routes import products, inventory, rfid, orders, store, analytics
-from app.routes import forecasting, optimization
+from app.database import engine, Base, verify_and_update_schema
+from app.routes import products, inventory, orders, store, analytics
+from app.routes import forecasting, optimization, auth
+from app.ai import init_models
 
 
 # ── Lifespan: create tables on startup ───────────────────────
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: create all database tables
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created/verified.")
+    # Startup: verify database schema and run simple migration
+    verify_and_update_schema()
+    
+    # Initialize and load AI models
+    init_models()
+    
     yield
     # Shutdown: nothing to clean up
 
@@ -35,9 +39,8 @@ app = FastAPI(
     title="PawKart API",
     description=(
         "AI-Driven Omnichannel Inventory & Quick-Commerce System "
-        "for Independent Pet Stores. Features real-time RFID inventory "
-        "tracking, demand forecasting, intelligent replenishment, "
-        "and quick-commerce order fulfillment."
+        "for Independent Pet Stores. Features demand forecasting, "
+        "intelligent replenishment, and quick-commerce order fulfillment."
     ),
     version="2.0",
     docs_url="/docs",
@@ -58,6 +61,11 @@ app.add_middleware(
 # ── Register Routers with Tags ───────────────────────────────
 
 app.include_router(
+    auth.router,
+    tags=["Auth"]
+)
+
+app.include_router(
     products.router,
     tags=["Products"]
 )
@@ -67,10 +75,6 @@ app.include_router(
     tags=["Inventory"]
 )
 
-app.include_router(
-    rfid.router,
-    tags=["RFID"]
-)
 
 app.include_router(
     orders.router,

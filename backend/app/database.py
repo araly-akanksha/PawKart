@@ -28,3 +28,24 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+
+def verify_and_update_schema():
+    """Verify tables exist and add new columns to existing tables if missing."""
+    from sqlalchemy import inspect, text
+    
+    # 1. Create any missing tables (e.g. model_evaluations, forecast_configs)
+    Base.metadata.create_all(bind=engine)
+    print("Database tables verified.")
+    
+    # 2. Check and migrate columns
+    inspector = inspect(engine)
+    if "inventory" in inspector.get_table_names():
+        columns = [col["name"] for col in inspector.get_columns("inventory")]
+        if "lead_time_days" not in columns:
+            print("Migration: Adding 'lead_time_days' column to 'inventory' table...")
+            with engine.begin() as conn:
+                conn.execute(
+                    text("ALTER TABLE inventory ADD COLUMN lead_time_days INTEGER DEFAULT 3 NOT NULL")
+                )
+            print("Migration: 'lead_time_days' column added successfully.")

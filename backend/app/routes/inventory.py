@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 
-from app.dependencies import get_db
+from app.dependencies import get_db, get_current_store_owner
+from app import models
 from app.models import Inventory, Product
 from app.schemas import (
     InventoryCreate, InventoryUpdate, InventoryResponse,
@@ -20,13 +21,19 @@ router = APIRouter()
 # ── List All Inventory (with product name join) ──────────────
 
 @router.get("/inventory", response_model=List[InventoryResponse])
-def list_inventory(db: Session = Depends(get_db)):
-    rows = (
+def list_inventory(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
+    query = (
         db.query(Inventory, Product.product_name)
         .outerjoin(Product, Inventory.product_id == Product.id)
-        .order_by(Inventory.product_id)
-        .all()
     )
+
+    if current_user.role == "store_owner":
+        query = query.filter(Inventory.store_id == current_user.store_id)
+
+    rows = query.order_by(Inventory.product_id).all()
 
     results = []
     for inv, product_name in rows:
@@ -49,7 +56,8 @@ def list_inventory(db: Session = Depends(get_db)):
 @router.post("/inventory", response_model=InventoryResponse, status_code=201)
 def add_inventory(
     inventory: InventoryCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
 ):
     # Check product exists
     product = db.query(Product).filter(Product.id == inventory.product_id).first()
@@ -71,7 +79,8 @@ def add_inventory(
         current_stock=inventory.current_stock,
         reorder_level=inventory.reorder_level,
         unit=inventory.unit,
-        inventory_health_score=100.0
+        inventory_health_score=100.0,
+        store_id=current_user.store_id if current_user.role == "store_owner" else None
     )
 
     db.add(new_inventory)
@@ -96,7 +105,8 @@ def add_inventory(
 def update_inventory(
     product_id: int,
     updates: InventoryUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
 ):
     inventory = db.query(Inventory).filter(
         Inventory.product_id == product_id
@@ -104,6 +114,9 @@ def update_inventory(
 
     if not inventory:
         raise HTTPException(status_code=404, detail="Inventory not found for this product")
+
+    if current_user.role == "store_owner" and inventory.store_id != current_user.store_id:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
 
     update_data = updates.model_dump(exclude_unset=True)
     for field, value in update_data.items():
@@ -130,13 +143,20 @@ def update_inventory(
 # ── Update Stock (original — kept for backward compatibility) ─
 
 @router.put("/inventory/update-stock")
-def update_stock(stock: StockUpdate, db: Session = Depends(get_db)):
+def update_stock(
+    stock: StockUpdate, 
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     inventory = db.query(Inventory).filter(
         Inventory.product_id == stock.product_id
     ).first()
 
     if not inventory:
         raise HTTPException(status_code=404, detail="Product inventory not found")
+
+    if current_user.role == "store_owner" and inventory.store_id != current_user.store_id:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
 
     if stock.quantity_sold > inventory.current_stock:
         raise HTTPException(status_code=400, detail="Not enough stock available")
@@ -159,14 +179,20 @@ def update_stock(stock: StockUpdate, db: Session = Depends(get_db)):
 # ── Low Stock Alerts (from Replit) ───────────────────────────
 
 @router.get("/inventory/low-stock", response_model=List[LowStockAlert])
-def get_low_stock_alerts(db: Session = Depends(get_db)):
-    rows = (
+def get_low_stock_alerts(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
+    query = (
         db.query(Inventory, Product.product_name)
         .join(Product, Inventory.product_id == Product.id)
         .filter(Inventory.current_stock <= Inventory.reorder_level)
-        .order_by(Inventory.current_stock)
-        .all()
     )
+
+    if current_user.role == "store_owner":
+        query = query.filter(Inventory.store_id == current_user.store_id)
+
+    rows = query.order_by(Inventory.current_stock).all()
 
     alerts = []
     for inv, product_name in rows:

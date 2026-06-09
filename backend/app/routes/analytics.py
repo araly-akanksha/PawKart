@@ -14,7 +14,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 from datetime import datetime, timedelta
 
-from app.dependencies import get_db
+from app.dependencies import get_db, get_current_store_owner
+from app import models
 from app.models import Order, OrderItem, Product, Inventory
 from app.schemas import (
     DashboardSummary, SalesDataPoint, FulfillmentStats,
@@ -28,9 +29,16 @@ router = APIRouter()
 # ── Dashboard Summary KPIs (from Replit) ─────────────────────
 
 @router.get("/analytics/dashboard", response_model=DashboardSummary)
-def get_dashboard_summary(db: Session = Depends(get_db)):
+def get_dashboard_summary(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     today = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
     yesterday = today - timedelta(days=1)
+    
+    # Store filter
+    store_filter = True if current_user.role == "admin" else (Order.store_id == current_user.store_id)
+    inv_store_filter = True if current_user.role == "admin" else (Inventory.store_id == current_user.store_id)
 
     # Today's revenue and orders (exclude cancelled)
     today_stats = (
@@ -40,6 +48,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         )
         .filter(Order.created_at >= today)
         .filter(Order.status != "cancelled")
+        .filter(store_filter)
         .first()
     )
 
@@ -51,6 +60,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         )
         .filter(and_(Order.created_at >= yesterday, Order.created_at < today))
         .filter(Order.status != "cancelled")
+        .filter(store_filter)
         .first()
     )
 
@@ -58,6 +68,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
     pending_count = (
         db.query(func.count(Order.id))
         .filter(Order.status.in_(["pending", "confirmed", "preparing"]))
+        .filter(store_filter)
         .scalar() or 0
     )
 
@@ -65,6 +76,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
     low_stock_count = (
         db.query(func.count(Inventory.id))
         .filter(Inventory.current_stock <= Inventory.reorder_level)
+        .filter(inv_store_filter)
         .scalar() or 0
     )
 
@@ -73,12 +85,14 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
     total_orders_30d = (
         db.query(func.count(Order.id))
         .filter(Order.created_at >= thirty_days_ago)
+        .filter(store_filter)
         .scalar() or 0
     )
     delivered_30d = (
         db.query(func.count(Order.id))
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status == "delivered")
+        .filter(store_filter)
         .scalar() or 0
     )
     fulfillment_rate = round((delivered_30d / total_orders_30d * 100), 1) if total_orders_30d > 0 else 0.0
@@ -120,8 +134,12 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
 # ── 30-Day Sales Data (from Replit) ─────────────────────────
 
 @router.get("/analytics/sales", response_model=List[SalesDataPoint])
-def get_sales_analytics(db: Session = Depends(get_db)):
+def get_sales_analytics(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    store_filter = True if current_user.role == "admin" else (Order.store_id == current_user.store_id)
 
     rows = (
         db.query(
@@ -131,6 +149,7 @@ def get_sales_analytics(db: Session = Depends(get_db)):
         )
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status != "cancelled")
+        .filter(store_filter)
         .group_by(func.date(Order.created_at))
         .order_by(func.date(Order.created_at))
         .all()
@@ -159,24 +178,31 @@ def get_sales_analytics(db: Session = Depends(get_db)):
 # ── Fulfillment Stats (from Replit) ──────────────────────────
 
 @router.get("/analytics/fulfillment", response_model=FulfillmentStats)
-def get_fulfillment_analytics(db: Session = Depends(get_db)):
+def get_fulfillment_analytics(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    store_filter = True if current_user.role == "admin" else (Order.store_id == current_user.store_id)
 
     total = (
         db.query(func.count(Order.id))
         .filter(Order.created_at >= thirty_days_ago)
+        .filter(store_filter)
         .scalar() or 0
     )
     delivered = (
         db.query(func.count(Order.id))
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status == "delivered")
+        .filter(store_filter)
         .scalar() or 0
     )
     cancelled = (
         db.query(func.count(Order.id))
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status == "cancelled")
+        .filter(store_filter)
         .scalar() or 0
     )
 
@@ -189,6 +215,7 @@ def get_fulfillment_analytics(db: Session = Depends(get_db)):
         db.query(Order.created_at, Order.updated_at)
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status == "delivered")
+        .filter(store_filter)
         .all()
     )
 
@@ -216,8 +243,12 @@ def get_fulfillment_analytics(db: Session = Depends(get_db)):
 # ── Top Products (from Replit) ───────────────────────────────
 
 @router.get("/analytics/top-products", response_model=List[TopProductResponse])
-def get_top_products(db: Session = Depends(get_db)):
+def get_top_products(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_store_owner)
+):
     thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    store_filter = True if current_user.role == "admin" else (Order.store_id == current_user.store_id)
 
     rows = (
         db.query(
@@ -229,6 +260,7 @@ def get_top_products(db: Session = Depends(get_db)):
         .join(Order, OrderItem.order_id == Order.id)
         .filter(Order.created_at >= thirty_days_ago)
         .filter(Order.status != "cancelled")
+        .filter(store_filter)
         .group_by(OrderItem.product_id, OrderItem.product_name)
         .order_by(func.sum(OrderItem.quantity).desc())
         .limit(5)

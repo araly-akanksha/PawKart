@@ -2,7 +2,7 @@
 PawKart Seed Data Script
 ========================
 Populates the database with realistic pet store products,
-inventory, RFID events, and orders so the dashboard looks alive.
+inventory, and orders for 5 independent stores.
 
 Run: cd backend && python seed_data.py
 """
@@ -15,21 +15,35 @@ from datetime import datetime, timedelta
 sys.path.insert(0, os.path.dirname(__file__))
 
 from app.database import SessionLocal, engine
-from app.models import Base, Product, Inventory, RFIDEvent, Order, OrderItem, Store
+from app.models import Base, Product, Inventory, Order, OrderItem, Store
 
 # ── Create tables ────────────────────────────────────────────
+Base.metadata.drop_all(bind=engine) # Drop to apply new constraints safely
 Base.metadata.create_all(bind=engine)
 db = SessionLocal()
 
-# ── Clear existing data ──────────────────────────────────────
-print("Clearing existing data...")
-db.query(OrderItem).delete()
-db.query(Order).delete()
-db.query(RFIDEvent).delete()
-db.query(Inventory).delete()
-db.query(Product).delete()
-db.query(Store).delete()
-db.commit()
+# ── Store ────────────────────────────────────────────────────
+print("Creating 5 store profiles...")
+
+store_names = ["Koramangala Branch", "Indiranagar Branch", "Whitefield Branch", "Jayanagar Branch", "HSR Layout Branch"]
+stores = []
+for name in store_names:
+    s = Store(
+        name=name,
+        owner_name="Yeshwanth",
+        email=f"{name.split()[0].lower()}@pawkart.in",
+        phone="+91-9876543210",
+        address=f"Main Road, {name.split()[0]}, Bengaluru",
+        is_open=True,
+        opening_time="09:00",
+        closing_time="21:00",
+        delivery_radius_km=8.0,
+        min_order_amount=200.0,
+    )
+    db.add(s)
+    stores.append(s)
+
+db.flush()
 
 # ── Products ─────────────────────────────────────────────────
 print("Creating products...")
@@ -82,56 +96,31 @@ for pd in products_data:
     db.add(p)
     products.append(p)
 
-db.flush()  # assign IDs
-print(f"  Created {len(products)} products across {len(set(p.category for p in products))} categories")
-
-# ── Inventory ────────────────────────────────────────────────
-print("Creating inventory...")
-
-for p in products:
-    stock = random.randint(5, 120)
-    reorder = random.randint(10, 30)
-    inv = Inventory(
-        product_id=p.id,
-        current_stock=stock,
-        reorder_level=reorder,
-        unit="pcs",
-    )
-    db.add(inv)
-
 db.flush()
 
-# Count low stock
-low_count = sum(1 for p in products
-                if db.query(Inventory).filter(Inventory.product_id == p.id).first().current_stock
-                <= db.query(Inventory).filter(Inventory.product_id == p.id).first().reorder_level)
-print(f"  Created {len(products)} inventory records ({low_count} low-stock)")
+# ── Inventory ────────────────────────────────────────────────
+print("Creating inventory across 5 stores...")
 
-# ── RFID Events ──────────────────────────────────────────────
-print("Creating RFID events...")
+inventory_count = 0
+for store in stores:
+    for p in products:
+        stock = random.randint(5, 120)
+        reorder = random.randint(10, 30)
+        inv = Inventory(
+            product_id=p.id,
+            store_id=store.id,
+            current_stock=stock,
+            reorder_level=reorder,
+            unit="pcs",
+        )
+        db.add(inv)
+        inventory_count += 1
 
-event_types = ["SALE", "SALE", "SALE", "RESTOCK", "RETURN", "AUDIT"]  # weighted toward SALE
-rfid_events = []
-for i in range(60):
-    p = random.choice(products)
-    ts = datetime.utcnow() - timedelta(
-        days=random.randint(0, 14),
-        hours=random.randint(0, 12),
-        minutes=random.randint(0, 59),
-    )
-    ev = RFIDEvent(
-        product_id=p.id,
-        rfid_tag_id=f"TAG-{random.randint(1000, 9999)}",
-        event_type=random.choice(event_types),
-        timestamp=ts,
-    )
-    db.add(ev)
-    rfid_events.append(ev)
-
-print(f"  Created {len(rfid_events)} RFID events")
+db.flush()
+print(f"  Created {inventory_count} inventory records")
 
 # ── Orders ───────────────────────────────────────────────────
-print("Creating orders...")
+print("Creating historical orders for forecasting...")
 
 customers = [
     ("Rahul Sharma", "+91-9876543210", "42 MG Road, Bengaluru"),
@@ -150,21 +139,22 @@ delivery_slots = ["09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "1
 statuses = ["pending", "confirmed", "preparing", "out_for_delivery", "delivered", "delivered", "delivered", "cancelled"]
 
 order_count = 0
-for i in range(35):
+# Generate 12 months of synthetic history across all stores
+for i in range(250):
     cust = random.choice(customers)
+    store = random.choice(stores)
     num_items = random.randint(1, 4)
     order_products = random.sample(products, min(num_items, len(products)))
     total = 0
 
-    days_ago = random.randint(0, 29)
+    days_ago = random.randint(0, 360)
     created = datetime.utcnow() - timedelta(
         days=days_ago,
         hours=random.randint(8, 20),
         minutes=random.randint(0, 59),
     )
 
-    status = random.choice(statuses)
-    # Recent orders should be pending/confirmed
+    status = "delivered"
     if days_ago <= 1:
         status = random.choice(["pending", "confirmed", "preparing"])
 
@@ -188,6 +178,7 @@ for i in range(35):
         delivery_slot=random.choice(delivery_slots),
         total_amount=round(total, 2),
         status=status,
+        store_id=store.id,
         created_at=created,
         updated_at=created + timedelta(minutes=random.randint(5, 120)) if status != "pending" else created,
         items=items,
@@ -195,24 +186,7 @@ for i in range(35):
     db.add(order)
     order_count += 1
 
-print(f"  Created {order_count} orders with {sum(len(o.items) for o in db.new if isinstance(o, Order))} items")
-
-# ── Store ────────────────────────────────────────────────────
-print("Creating store profile...")
-
-store = Store(
-    name="PawKart Pet Store",
-    owner_name="Yeshwanth",
-    email="store@pawkart.in",
-    phone="+91-9876543210",
-    address="45 Pet Street, Bengaluru, Karnataka 560001",
-    is_open=True,
-    opening_time="09:00",
-    closing_time="21:00",
-    delivery_radius_km=8.0,
-    min_order_amount=200.0,
-)
-db.add(store)
+print(f"  Created {order_count} historical orders")
 
 # ── Commit everything ────────────────────────────────────────
 db.commit()
@@ -222,11 +196,8 @@ print()
 print("=" * 50)
 print("SEED DATA COMPLETE!")
 print("=" * 50)
-print(f"  Products:     {len(products_data)}")
-print(f"  Categories:   {len(set(p['category'] for p in products_data))}")
-print(f"  Inventory:    {len(products_data)} records")
-print(f"  RFID Events:  {len(rfid_events)}")
+print(f"  Products:     {len(products)}")
+print(f"  Stores:       {len(stores)}")
+print(f"  Inventory:    {inventory_count} records")
 print(f"  Orders:       {order_count}")
-print(f"  Store:        1 profile")
-print()
-print("Open http://localhost:5173 to see the dashboard!")
+print("=" * 50)
