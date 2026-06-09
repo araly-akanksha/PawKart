@@ -652,104 +652,95 @@ function renderAnalysis() {
 }
 
 // ── AI FORECASTING OPERATIONS ──
-function renderForecast() {
+async function renderForecast() {
   const container = document.getElementById("forecastContainer");
   container.innerHTML = `
     <div class="ai-banner">
       <div class="ai-banner-content">
         <h2><i class="ti ti-sparkles"></i> AI Inventory Insights</h2>
-        <p>Our predictive models analyzed 45,000 recent transactions. Here are the top supply chain recommendations for the next 14 days.</p>
+        <p>Our predictive models analyzed recent transactions. Here are the top supply chain recommendations for the next 14 days.</p>
       </div>
       <div>
-        <button class="btn-primary" style="background: #fff; color: var(--accent); white-space: nowrap;" onclick="alert('Exporting AI Report...')">
-          <i class="ti ti-download"></i> Export Report
+        <button class="btn-primary" style="background: #fff; color: var(--accent); white-space: nowrap;" onclick="renderForecast()">
+          <i class="ti ti-refresh"></i> Run AI Sync
         </button>
       </div>
     </div>
-
-    <div class="ai-grid">
-      <!-- Card 1 -->
-      <div class="ai-card urgent">
-        <div class="ai-header">
-          <div>
-            <h3>Premium Dog Food</h3>
-            <p><i class="ti ti-map-pin"></i> Bangalore Hub</p>
-          </div>
-          <span class="confidence-badge"><i class="ti ti-bulb"></i> 98% Confidence</span>
-        </div>
-        <div class="ai-metrics">
-          <div class="ai-metric-box">
-            <span>Current Stock</span>
-            <strong>120 Units</strong>
-          </div>
-          <div class="ai-metric-box">
-            <span>Predicted Demand</span>
-            <strong class="text-danger">340 Units</strong>
-          </div>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Stockout expected in <strong>3 days</strong> due to upcoming festive season demand spike.
-        </p>
-        <div class="ai-actions">
-          <button class="btn-primary" onclick="alert('Auto-allocating 250 units to Bangalore Hub.')">Auto-Restock 250 U</button>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="ai-card">
-        <div class="ai-header">
-          <div>
-            <h3>Pet Shampoo</h3>
-            <p><i class="ti ti-map-pin"></i> Mumbai Hub</p>
-          </div>
-          <span class="confidence-badge medium"><i class="ti ti-bulb"></i> 82% Confidence</span>
-        </div>
-        <div class="ai-metrics">
-          <div class="ai-metric-box">
-            <span>Current Stock</span>
-            <strong>400 Units</strong>
-          </div>
-          <div class="ai-metric-box">
-            <span>Predicted Demand</span>
-            <strong>150 Units</strong>
-          </div>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Overstock detected. Suggest pausing supplier deliveries for 2 weeks.
-        </p>
-        <div class="ai-actions">
-          <button class="btn-secondary" style="flex:1;" onclick="alert('Supplier paused.')">Pause Supplier</button>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="ai-card">
-        <div class="ai-header">
-          <div>
-            <h3>Chew Toys (Assorted)</h3>
-            <p><i class="ti ti-map-pin"></i> All Stores</p>
-          </div>
-          <span class="confidence-badge"><i class="ti ti-bulb"></i> 91% Confidence</span>
-        </div>
-        <div class="ai-metrics">
-          <div class="ai-metric-box">
-            <span>Avg Sales/Wk</span>
-            <strong>85 Units</strong>
-          </div>
-          <div class="ai-metric-box">
-            <span>Trend</span>
-            <strong class="text-success">+18%</strong>
-          </div>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
-          Consistent upward trend across all regions. Consider bulk supplier discount negotiation.
-        </p>
-        <div class="ai-actions">
-          <button class="btn-secondary" style="flex:1;" onclick="alert('Generating purchase order draft...')">Draft PO</button>
-        </div>
-      </div>
+    <div class="ai-grid" id="aiGridContainer">
+      <p style="padding: 20px;"><i class="ti ti-loader"></i> Querying LSTM Neural Network...</p>
     </div>
   `;
+
+  const grid = document.getElementById("aiGridContainer");
+
+  try {
+    // 1. Fetch real products from backend
+    const pRes = await fetch('http://localhost:8000/products');
+    const realProducts = await pRes.json();
+    
+    // We'll take the first 3 products for the forecast cards to avoid a massive wall of AI cards
+    const targets = realProducts.slice(0, 3);
+    grid.innerHTML = "";
+
+    if (targets.length === 0) {
+      grid.innerHTML = "<p style='padding: 20px;'>No products found in database.</p>";
+      return;
+    }
+
+    for (const p of targets) {
+      // 2. Fetch AI Forecast for each product
+      const fRes = await fetch(`http://localhost:8000/forecast/${p.id}`);
+      const forecast = await fRes.json();
+      
+      let confidenceClass = "";
+      let confidenceIcon = "ti-bulb";
+      if (forecast.confidence === "high") {
+        confidenceClass = ""; // default is green in css
+      } else if (forecast.confidence === "medium") {
+        confidenceClass = "medium"; // yellow in css
+      } else {
+        confidenceClass = "low"; 
+      }
+      
+      let demandClass = forecast.predicted_demand_next_week > p.quantity ? "text-danger" : "text-success";
+      let alertClass = forecast.predicted_demand_next_week > p.quantity ? "urgent" : "";
+
+      // Format the explanation text (convert \n to <br>)
+      let explanationHtml = forecast.explanation.replace(/\n/g, '<br>');
+
+      grid.innerHTML += `
+      <div class="ai-card ${alertClass}">
+        <div class="ai-header">
+          <div>
+            <h3>${p.name}</h3>
+            <p><i class="ti ti-map-pin"></i> ${p.location || 'Warehouse Network'}</p>
+          </div>
+          <span class="confidence-badge ${confidenceClass}"><i class="ti ${confidenceIcon}"></i> ${forecast.confidence ? forecast.confidence.toUpperCase() : 'MEDIUM'} Confidence</span>
+        </div>
+        <div class="ai-metrics">
+          <div class="ai-metric-box">
+            <span>Current Stock</span>
+            <strong>${p.quantity} Units</strong>
+          </div>
+          <div class="ai-metric-box">
+            <span>Predicted Demand</span>
+            <strong class="${demandClass}">${forecast.predicted_demand_next_week} Units</strong>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5;">
+          ${explanationHtml}
+        </p>
+        <div class="ai-actions">
+          <button class="btn-primary" onclick="alert('Auto-allocating ${forecast.predicted_demand_next_week} units...')">Auto-Restock</button>
+          <button class="btn-secondary" onclick="alert('Drafting Purchase Order...')">Draft PO</button>
+        </div>
+      </div>
+      `;
+    }
+  } catch (e) {
+    console.error("Forecast error:", e);
+    grid.innerHTML = \`<p style="padding: 20px; color: red;">Failed to connect to AI engine. Ensure FastAPI backend is running.</p>\`;
+  }
 }
 
 // Initialise Dashboard Page
