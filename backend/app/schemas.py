@@ -36,14 +36,13 @@ class ProductUpdate(BaseModel):
 
 class ProductResponse(BaseModel):
     id: int
-    product_name: str
-    description: Optional[str]
+    name: str
     category: str
     price: float
-    sku: Optional[str]
-    image_url: Optional[str]
-    available: bool
-    created_at: Optional[datetime]
+    location: str
+    stockStatus: str
+    quantity: int
+    image: str
 
     class Config:
         from_attributes = True
@@ -92,33 +91,7 @@ class LowStockAlert(BaseModel):
     deficit: int  # how many units below reorder level
 
 
-# ── RFID Schemas ─────────────────────────────────────────────
 
-class RFIDScan(BaseModel):
-    product_id: int
-    rfid_tag_id: Optional[str] = None
-    event_type: str = Field(
-        description="Event type: SALE, RESTOCK, RETURN, or AUDIT"
-    )
-
-
-class RFIDEventResponse(BaseModel):
-    id: int
-    product_id: int
-    rfid_tag_id: Optional[str]
-    event_type: str
-    timestamp: Optional[datetime]
-
-    class Config:
-        from_attributes = True
-
-
-class RFIDStatsResponse(BaseModel):
-    total_events: int
-    sale_count: int
-    restock_count: int
-    return_count: int
-    audit_count: int
 
 
 # ── Order Schemas (adapted from Replit) ──────────────────────
@@ -149,16 +122,12 @@ class OrderItemResponse(BaseModel):
 
 
 class OrderResponse(BaseModel):
-    id: int
-    customer_name: str
-    customer_phone: Optional[str]
-    customer_address: Optional[str]
+    id: str
+    customer: str
+    items: str
+    amount: float
+    gateway: str
     status: str
-    total_amount: float
-    item_count: int = 0
-    delivery_slot: Optional[str]
-    created_at: Optional[datetime]
-    updated_at: Optional[datetime]
 
     class Config:
         from_attributes = True
@@ -303,3 +272,72 @@ class ReorderResponse(BaseModel):
     recommended_reorder_quantity: int
     risk_level: str
     explanation: str
+
+
+# ── Auth & User Schemas ─────────────────────────────────────
+
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    role: str = "customer" # admin, store_owner, customer
+    store_id: Optional[int] = None
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    role: str
+    store_id: Optional[int]
+    created_at: Optional[datetime]
+    
+    class Config:
+        from_attributes = True
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
+    role: Optional[str] = None
+    store_id: Optional[int] = None
+
+
+# ── Complaint & Review Schemas ──────────────────────────────
+
+class ComplaintCreate(BaseModel):
+    customer_email: str
+    order_id: Optional[int] = None
+    issue_description: str
+
+class ComplaintResponse(BaseModel):
+    id: int
+    customer_email: str
+    order_id: Optional[int]
+    issue_description: str
+    status: str
+    created_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+class ReviewCreate(BaseModel):
+    product_id: int
+    customer_name: str
+    rating: int = Field(ge=1, le=5)
+    comment: Optional[str] = None
+
+class ReviewResponse(BaseModel):
+    id: int
+    product_id: int
+    customer_name: str
+    rating: int
+    comment: Optional[str]
+    owner_response: Optional[str]
+    created_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True

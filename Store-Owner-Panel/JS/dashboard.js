@@ -1,27 +1,32 @@
-// Mock Database State
-let products = [
-  { id: 1, name: "Premium Dog Food", category: "Dog Food", price: 599, location: "Warehouse A", stockStatus: "in-stock", quantity: 1200, image: "https://placehold.co/300x200/EDE8F9/7C5CBF?text=Dog+Food" },
-  { id: 2, name: "Pet Shampoo", category: "Healthcare", price: 249, location: "Warehouse B", stockStatus: "low-stock", quantity: 14, image: "https://placehold.co/300x200/FEF3C7/F59E0B?text=Pet+Shampoo" },
-  { id: 3, name: "Cat Treats", category: "Cat Food", price: 149, location: "Warehouse A", stockStatus: "in-stock", quantity: 840, image: "https://placehold.co/300x200/DCFCE7/22C55E?text=Cat+Treats" },
-  { id: 4, name: "Chew Toy", category: "Toys", price: 399, location: "Warehouse B", stockStatus: "out-stock", quantity: 0, image: "https://placehold.co/300x200/FEE2E2/EF4444?text=Chew+Toy" }
-];
-
-let orders = [
-  { id: "PK1024", customer: "Rahul Sharma", items: "Premium Dog Food x 2", amount: 1198, gateway: "UPI", status: "delivered" },
-  { id: "PK1025", customer: "Priya Singh", items: "Pet Shampoo x 1", amount: 249, gateway: "Stripe", status: "processing" },
-  { id: "PK1026", customer: "Meera Iyer", items: "Cat Treats x 3", amount: 447, gateway: "Cash On Delivery", status: "cancelled" },
-  { id: "PK1027", customer: "Karan Johar", items: "Premium Dog Food x 1", amount: 599, gateway: "UPI", status: "pending" }
-];
-
-let reviews = [
-  { id: 1, customer: "Rahul Sharma", rating: 5, date: "1 day ago", text: "My dog absolutely loved the Premium Dog Food. High quality ingredients and visible improvement in coat health.", product: "Premium Dog Food", replied: true },
-  { id: 2, customer: "Priya Singh", rating: 4, date: "3 days ago", text: "Pet Shampoo packaging was excellent and shampoo smells fresh. Delivery was delayed by 1 day.", product: "Pet Shampoo", replied: false },
-  { id: 3, customer: "Karan Johar", rating: 1, date: "5 days ago", text: "Chew toy broke in 5 minutes. Not suitable for large breeds. Very disappointed.", product: "Chew Toy", replied: false }
-];
+// Mock Database State (Now loaded from backend)
+let products = [];
+let orders = [];
+let reviews = [];
 
 let deliveryZones = ["Bangalore Central", "Bangalore East", "Mumbai Central"];
 let viewMode = "grid";
 let activePage = "dashboard";
+
+async function fetchDashboardData() {
+  try {
+    const pRes = await fetch('http://localhost:8000/products');
+    products = await pRes.json();
+    
+    const oRes = await fetch('http://localhost:8000/orders');
+    orders = await oRes.json();
+    
+    const rRes = await fetch('http://localhost:8000/reviews');
+    reviews = await rRes.json();
+    
+    if (activePage === "dashboard") updateDashboardPage();
+    if (activePage === "products") renderProducts();
+    if (activePage === "inventory") renderInventory();
+    if (activePage === "orders") renderOrders();
+    if (activePage === "reviews") renderReviews();
+  } catch (e) {
+    console.error("Failed to fetch data", e);
+  }
+}
 
 // ── NAVIGATION ──
 const breadcrumbLabels = {
@@ -527,5 +532,5 @@ function initUserProfile() {
 
 // Initialise Application Page
 switchPage("dashboard");
-updateDashboardPage();
 initUserProfile();
+fetchDashboardData();
