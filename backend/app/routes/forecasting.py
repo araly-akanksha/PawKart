@@ -196,8 +196,7 @@ def get_model_info(current_user: models.User = Depends(get_current_admin)):
 @router.get("/forecast/{product_id}", response_model=ForecastResponse)
 def forecast_demand(
     product_id: int, 
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_admin)
+    db: Session = Depends(get_db)
 ):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
