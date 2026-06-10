@@ -757,7 +757,7 @@ async function renderForecast() {
     }
   } catch (e) {
     console.error("Forecast error:", e);
-    grid.innerHTML = \`<p style="padding: 20px; color: red;">Failed to connect to AI engine. Ensure FastAPI backend is running.</p>\`;
+    grid.innerHTML = `<p style="padding: 20px; color: red;">Failed to connect to AI engine. Ensure FastAPI backend is running.</p>`;
   }
 }
 
