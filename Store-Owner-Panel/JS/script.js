@@ -52,9 +52,96 @@ window.addEventListener("DOMContentLoaded", () => {
   if (window.location.hash === "#login") {
     nav("login");
   }
+  fetchProductsAndRender();
   renderOrders();
   updateCartSummary();
 });
+
+async function fetchProductsAndRender() {
+  try {
+    const res = await fetch('http://localhost:8000/products');
+    if (!res.ok) throw new Error('Failed to fetch products');
+    const products = await res.json();
+    
+    productData = {}; // Clear hardcoded data
+    
+    products.forEach(p => {
+      let category = 'dog';
+      const nameLower = p.product_name.toLowerCase();
+      if (nameLower.includes('cat') || nameLower.includes('whiskas') || nameLower.includes('sheba') || nameLower.includes('me-o')) category = 'cat';
+      else if (nameLower.includes('bird') || nameLower.includes('budgie') || nameLower.includes('parrot') || nameLower.includes('zupreem')) category = 'bird';
+      else if (nameLower.includes('fish') || nameLower.includes('aquarium') || nameLower.includes('optimum gold')) category = 'aquarium';
+      else if (nameLower.includes('toy') || nameLower.includes('bone')) category = 'toys';
+      else if (nameLower.includes('shampoo') || nameLower.includes('brush') || nameLower.includes('clipper') || nameLower.includes('multivitamin') || nameLower.includes('spot-on') || nameLower.includes('joint')) category = 'health';
+      
+      let badge = '';
+      if (nameLower.includes('organic')) badge = 'Organic';
+      if (nameLower.includes('premium')) badge = 'Best Seller';
+
+      let image = '../IMG/product_dog_food.png';
+      if (category === 'cat') image = '../IMG/product_cat_toys.png';
+      if (category === 'health') image = '../IMG/product_shampoo.png';
+      if (category === 'bird') image = '../IMG/product_bird_feed.png';
+
+      productData[p.id.toString()] = {
+        name: p.product_name,
+        price: p.price,
+        image: image,
+        category: category,
+        rating: 4.5,
+        reviewsCount: 100,
+        description: p.product_name,
+        badge: badge,
+        highlights: ['Premium quality', 'Vet recommended'],
+        ratingBreakdown: { 5: 80, 4: 10, 3: 5, 2: 3, 1: 2 },
+        reviews: []
+      };
+    });
+
+    renderFeaturedProducts();
+  } catch(e) {
+    console.error('Error fetching products', e);
+  }
+}
+
+function renderFeaturedProducts() {
+  const grid = document.getElementById('featured-products-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  
+  const keys = Object.keys(productData).slice(0, 8);
+  keys.forEach(id => {
+    const prod = productData[id];
+    const stars = '★ ★ ★ ★ ★';
+    let badgeHtml = '';
+    if (prod.badge) {
+      badgeHtml = `<span class="prod-badge badge-organic">${prod.badge}</span>`;
+    }
+    const html = `
+      <div class="product-card" onclick="openProductDetail('${id}')">
+        <div class="prod-image-wrapper">
+          <img src="${prod.image}" alt="${prod.name}">
+          ${badgeHtml}
+        </div>
+        <div class="prod-info-wrapper">
+          <div class="prod-rating">${stars} <span>(${prod.rating})</span></div>
+          <h3>${prod.name}</h3>
+          <p class="prod-desc">${prod.description.substring(0, 60)}...</p>
+          <div class="prod-footer">
+            <span class="price">₹${prod.price}</span>
+            <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('${id}', 1); showToast('${prod.name} added to cart!')" title="Add to Cart">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    grid.insertAdjacentHTML('beforeend', html);
+  });
+}
 
 function setThumb(el, src) {
   document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
@@ -119,7 +206,7 @@ function updateCartSummary() {
 // PRODUCT DETAILS & TOAST DYNAMICS
 // ----------------------------------------------------
 
-const productData = {
+let productData = {
   dog_food: {
     name: 'Premium Dog Food',
     price: 599,
@@ -734,7 +821,7 @@ function selectPaymentMethod(method) {
   if (activePanel) activePanel.classList.add('active');
 }
 
-function placeOrder() {
+async function placeOrder() {
   const name = document.getElementById('co-name').value.trim();
   const phone = document.getElementById('co-phone').value.trim();
   const pincode = document.getElementById('co-pincode').value.trim();
@@ -763,30 +850,54 @@ function placeOrder() {
     }
   }
   
-  const orderId = 'PK' + Math.floor(1000 + Math.random() * 9000);
-  
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  const today = new Date();
-  const dateStr = `Placed on ${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
-  
-  const newOrder = {
-    id: orderId,
-    date: dateStr,
-    status: 'processing',
-    items: [...checkoutItems]
+  const fullAddress = `${address}, ${city}, ${state} - ${pincode}`;
+  const payload = {
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: fullAddress,
+    delivery_slot: "ASAP",
+    items: checkoutItems.map(item => ({
+      product_id: parseInt(item.productId.toString().replace(/\\D/g, '') || 1),
+      quantity: item.qty
+    }))
   };
-  
-  ordersData.unshift(newOrder);
-  
-  const cartContainer = document.querySelector('#page-cart .cart-items-box');
-  if (cartContainer) {
-    cartContainer.innerHTML = '<h2>Your Cart</h2>';
+
+  try {
+    const response = await fetch('http://localhost:8000/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Failed to place order');
+    }
+
+    const orderData = await response.json();
+    
+    // Convert to frontend format
+    const newOrder = {
+      id: orderData.id,
+      date: 'Placed just now',
+      status: orderData.status || 'pending',
+      items: checkoutItems
+    };
+    
+    ordersData.unshift(newOrder);
+    
+    const cartContainer = document.querySelector('#page-cart .cart-items-box');
+    if (cartContainer) {
+      cartContainer.innerHTML = '<h2>Your Cart</h2>';
+    }
+    
+    updateCartSummary();
+    renderOrders();
+    nav('orders');
+    showToast(`Order #${orderData.id} placed successfully!`);
+  } catch (error) {
+    alert('Order Error: ' + error.message);
   }
-  
-  updateCartSummary();
-  renderOrders();
-  nav('orders');
-  showToast(`Order #${orderId} placed successfully!`);
 }
 
 // ----------------------------------------------------

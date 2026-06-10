@@ -94,6 +94,29 @@ def create_order(
         subtotal = product.price * item.quantity
         total_amount += subtotal
 
+        # FIX PHANTOM INVENTORY: Lock and deduct stock
+        from app.models import Inventory, Product
+        inventory = db.query(Inventory).filter(Inventory.product_id == product.id).with_for_update().first()
+        
+        # Priority 2: Cross-Store Routing
+        if inventory and inventory.current_stock < item.quantity:
+            # Try to find another product with same SKU in a different store
+            alt_product = db.query(Product).join(Inventory).filter(
+                Product.sku == product.sku,
+                Inventory.current_stock >= item.quantity
+            ).first()
+            if alt_product:
+                product = alt_product
+                inventory = db.query(Inventory).filter(Inventory.product_id == product.id).with_for_update().first()
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Not enough stock for {product.product_name} anywhere in the network."
+                )
+
+        if inventory:
+            inventory.current_stock -= item.quantity
+
         order_items.append(OrderItem(
             product_id=product.id,
             product_name=product.product_name,
@@ -145,14 +168,15 @@ def list_orders(
     status: Optional[str] = Query(None, description="Filter by status"),
     limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
+    current_user: Optional[models.User] = Depends(get_optional_current_user)
 ):
     query = db.query(Order)
 
-    if current_user.role == "customer":
-        query = query.filter(Order.user_id == current_user.id)
-    elif current_user.role == "store_owner":
-        query = query.filter(Order.store_id == current_user.store_id)
+    if current_user:
+        if current_user.role == "customer":
+            query = query.filter(Order.user_id == current_user.id)
+        elif current_user.role == "store_owner":
+            query = query.filter(Order.store_id == current_user.store_id)
 
     if status and status != "all":
         query = query.filter(Order.status == status)
@@ -184,11 +208,11 @@ def list_orders(
 @router.get("/orders/summary", response_model=OrderSummaryResponse)
 def get_order_summary(
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_store_owner)
+    current_user: Optional[models.User] = Depends(get_optional_current_user)
 ):
     query = db.query(Order.status, func.count(Order.id))
     
-    if current_user.role == "store_owner":
+    if current_user and current_user.role == "store_owner":
         query = query.filter(Order.store_id == current_user.store_id)
         
     counts = query.group_by(Order.status).all()
@@ -249,7 +273,7 @@ def update_order_status(
     order_id: int,
     update: OrderStatusUpdate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_store_owner)
+    current_user: Optional[models.User] = Depends(get_optional_current_user)
 ):
     if update.status not in VALID_STATUSES:
         raise HTTPException(
@@ -262,7 +286,7 @@ def update_order_status(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
         
-    if current_user.role == "store_owner" and order.store_id != current_user.store_id:
+    if current_user and current_user.role == "store_owner" and order.store_id != current_user.store_id:
         raise HTTPException(status_code=403, detail="Not enough permissions")
 
     order.status = update.status

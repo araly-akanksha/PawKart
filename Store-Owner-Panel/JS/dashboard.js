@@ -362,11 +362,21 @@ function filterOrders() {
   renderOrders();
 }
 
-function updateOrderStatus(id, newStatus) {
-  const order = orders.find(o => o.id === id);
-  if (order) {
-    order.status = newStatus;
-    renderOrders();
+async function updateOrderStatus(id, newStatus) {
+  try {
+    const numericId = id.startsWith('PK') ? id.substring(2) : id;
+    const res = await fetch(`http://localhost:8000/orders/${numericId}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (!res.ok) throw new Error('Failed to update status');
+    
+    // Refresh dashboard data
+    fetchDashboardData();
+  } catch(e) {
+    console.error('Error updating status:', e);
+    alert('Failed to update order status');
   }
 }
 
