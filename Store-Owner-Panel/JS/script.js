@@ -67,30 +67,34 @@ async function fetchProductsAndRender() {
     
     products.forEach(p => {
       let category = 'dog';
-      const nameLower = p.product_name.toLowerCase();
-      if (nameLower.includes('cat') || nameLower.includes('whiskas') || nameLower.includes('sheba') || nameLower.includes('me-o')) category = 'cat';
-      else if (nameLower.includes('bird') || nameLower.includes('budgie') || nameLower.includes('parrot') || nameLower.includes('zupreem')) category = 'bird';
-      else if (nameLower.includes('fish') || nameLower.includes('aquarium') || nameLower.includes('optimum gold')) category = 'aquarium';
-      else if (nameLower.includes('toy') || nameLower.includes('bone')) category = 'toys';
-      else if (nameLower.includes('shampoo') || nameLower.includes('brush') || nameLower.includes('clipper') || nameLower.includes('multivitamin') || nameLower.includes('spot-on') || nameLower.includes('joint')) category = 'health';
+      const backendCat = (p.category || '').toLowerCase();
+      const nameLower = (p.product_name || p.name || '').toLowerCase();
+      
+      if (backendCat.includes('cat') || nameLower.includes('cat') || nameLower.includes('whiskas')) category = 'cat';
+      else if (backendCat.includes('bird') || nameLower.includes('bird') || nameLower.includes('parrot') || nameLower.includes('budgie')) category = 'bird';
+      else if (backendCat.includes('fish') || backendCat.includes('aquarium') || nameLower.includes('fish') || nameLower.includes('aquarium')) category = 'aquarium';
+      else if (backendCat.includes('toy') || nameLower.includes('toy') || nameLower.includes('bone')) category = 'toys';
+      else if (backendCat.includes('health') || backendCat.includes('grooming') || nameLower.includes('shampoo')) category = 'health';
       
       let badge = '';
       if (nameLower.includes('organic')) badge = 'Organic';
       if (nameLower.includes('premium')) badge = 'Best Seller';
 
-      let image = '../IMG/product_dog_food.png';
-      if (category === 'cat') image = '../IMG/product_cat_toys.png';
-      if (category === 'health') image = '../IMG/product_shampoo.png';
-      if (category === 'bird') image = '../IMG/product_bird_feed.png';
+      let image = p.image || '../IMG/product_dog_food.png';
+      if (!p.image || p.image.includes('placehold.co')) {
+        if (category === 'cat') image = '../IMG/product_cat_toys.png';
+        if (category === 'health') image = '../IMG/product_shampoo.png';
+        if (category === 'bird') image = '../IMG/product_bird_feed.png';
+      }
 
       productData[p.id.toString()] = {
-        name: p.product_name,
+        name: p.product_name || p.name,
         price: p.price,
         image: image,
         category: category,
         rating: 4.5,
         reviewsCount: 100,
-        description: p.product_name,
+        description: p.product_name || p.name || 'No description available',
         badge: badge,
         highlights: ['Premium quality', 'Vet recommended'],
         ratingBreakdown: { 5: 80, 4: 10, 3: 5, 2: 3, 1: 2 },
@@ -101,6 +105,12 @@ async function fetchProductsAndRender() {
     renderFeaturedProducts();
   } catch(e) {
     console.error('Error fetching products', e);
+    const offlineMsg = `<div style="text-align:center; padding: 40px; grid-column: 1/-1;">
+      <h3 style="color:var(--text-color);">Server Offline</h3>
+      <p style="color:var(--text-muted);">Please start your backend server to view products.</p>
+    </div>`;
+    const featuredGrid = document.getElementById('featured-products-grid');
+    if (featuredGrid) featuredGrid.innerHTML = offlineMsg;
   }
 }
 
@@ -109,7 +119,7 @@ function renderFeaturedProducts() {
   if(!grid) return;
   grid.innerHTML = '';
   
-  const keys = Object.keys(productData).slice(0, 8);
+  const keys = Object.keys(productData); // Show all products
   keys.forEach(id => {
     const prod = productData[id];
     const stars = '★ ★ ★ ★ ★';
@@ -203,183 +213,39 @@ function updateCartSummary() {
 }
 
 // ----------------------------------------------------
-// PRODUCT DETAILS & TOAST DYNAMICS
 // ----------------------------------------------------
 
-let productData = {
-  dog_food: {
-    name: 'Premium Dog Food',
-    price: 599,
-    image: '../IMG/product_dog_food.png',
-    category: 'dog',
-    rating: 4.8,
-    reviewsCount: 523,
-    description: 'High-protein dog food made from premium organic ingredients for healthier growth, stronger immunity, and active lifestyles.',
-    badge: 'Organic',
-    highlights: [
-      'High Protein Formula with real chicken & grains',
-      'Rich in Vitamins, Minerals, and Omega-3 for shiny coat',
-      'Suitable For All Breeds & Age Groups',
-      'Recommended by leading pet nutritionists & veterinarians'
-    ],
-    ratingBreakdown: { 5: 82, 4: 12, 3: 4, 2: 1, 1: 1 },
-    reviews: [
-      { author: 'Rahul', rating: 5, date: '3 days ago', text: 'My dog loved it immediately. Very good kibble size and digestability. Highly recommend!' },
-      { author: 'Priya', rating: 5, date: '1 week ago', text: 'Packaging was excellent and double sealed. Clean, natural ingredients are visible. Vet recommended.' },
-      { author: 'Vikram', rating: 4, date: '2 weeks ago', text: 'Great quality food. My lab has a noticeably shinier coat now. Shipping took two days.' }
-    ]
-  },
-  cat_toys: {
-    name: 'Cat Toy Pack',
-    price: 349,
-    image: '../IMG/product_cat_toys.png',
-    category: 'toys',
-    rating: 4.9,
-    reviewsCount: 312,
-    description: 'Interactive 6-in-1 variety set designed to keep your cats active, playful, and mentally stimulated throughout the day.',
-    badge: 'Best Seller',
-    highlights: [
-      '6-in-1 variety pack (crinkle balls, mice, play feathers)',
-      'Non-toxic organic catnip infusions and natural dye-free fibers',
-      'Promotes active exercises, jumping, and claw wellness',
-      'Durable stitching made to resist intensive clawing and biting'
-    ],
-    ratingBreakdown: { 5: 91, 4: 6, 3: 2, 2: 1, 1: 0 },
-    reviews: [
-      { author: 'Sneha', rating: 5, date: '2 days ago', text: 'My kitten went absolutely wild for the feather wand and the little mice! Best cat toys I have bought.' },
-      { author: 'Rohan', rating: 5, date: '5 days ago', text: 'Highly interactive set. Sturdy materials, has lasted through weeks of aggressive chewing.' },
-      { author: 'Divya', rating: 4, date: '1 month ago', text: 'Nice toys and good variety. The rod for the wand is a bit short but works great anyway!' }
-    ]
-  },
-  shampoo: {
-    name: 'Pet Shampoo',
-    price: 249,
-    image: '../IMG/product_shampoo.png',
-    category: 'health',
-    rating: 4.7,
-    reviewsCount: 184,
-    description: 'Gentle organic lavender and oatmeal formula tailored specifically to soothe dry, itchy, or sensitive pet skin.',
-    badge: 'New',
-    highlights: [
-      'Organic oatmeal & fresh lavender extracts for natural aroma',
-      'Balanced pH formula optimized for both dogs and cats',
-      '100% paraben-free, dye-free, alcohol-free, and soap-free',
-      'Eliminates wet pet odors and maintains a soft, glossy coat'
-    ],
-    ratingBreakdown: { 5: 78, 4: 15, 3: 5, 2: 1, 1: 1 },
-    reviews: [
-      { author: 'Anjali', rating: 5, date: '4 days ago', text: 'Smells incredibly clean and fresh! Lathers perfectly and is very gentle on my pup\'s sensitive skin.' },
-      { author: 'Manoj', rating: 4, date: '1 week ago', text: 'Lathers nicely and washes off clean. The lavender scent is very soothing during bath time.' },
-      { author: 'Tina', rating: 5, date: '3 weeks ago', text: 'No more scratching or redness after baths. Will buy this brand exclusively from now on.' }
-    ]
-  },
-  bird_feed: {
-    name: 'Bird Feed',
-    price: 199,
-    image: '../IMG/product_bird_feed.png',
-    category: 'bird',
-    rating: 4.6,
-    reviewsCount: 98,
-    description: 'Nutritious premium seed mix enriched with essential vitamins and calcium, perfect for wild birds and companion aviaries.',
-    badge: '100% Organic',
-    highlights: [
-      'Multi-grain mix with striped sunflower seeds & millet',
-      'Enriched with calcium and amino acids for beak and egg health',
-      'Promotes feather vibrant coloration and natural foraging habits',
-      '100% pesticide-free, triple-cleaned to prevent dust and weed seeds'
-    ],
-    ratingBreakdown: { 5: 72, 4: 18, 3: 7, 2: 2, 1: 1 },
-    reviews: [
-      { author: 'Arjun', rating: 5, date: '2 days ago', text: 'The sparrows and lovebirds in my balcony adore this mix. Very clean seeds, no dust.' },
-      { author: 'Pooja', rating: 4, date: '6 days ago', text: 'Good assortment of grains. Attracts a wide variety of local birds every morning.' },
-      { author: 'Karan', rating: 5, date: '2 weeks ago', text: 'Excellent quality seed packet. Scarcely any waste or empty shells. Will buy again.' }
-    ]
-  },
-  cat_food: {
-    name: 'Gourmet Cat Salmon Feast',
-    price: 429,
-    image: 'https://placehold.co/600x500/ffedd5/ea580c?text=Salmon+Cat+Feast',
-    category: 'cat',
-    rating: 4.8,
-    reviewsCount: 156,
-    description: 'Delectable salmon and tuna wet feast loaded with essential taurine and ocean nutrients for mature cats.',
-    badge: 'Bestseller',
-    highlights: [
-      'Rich in Omega-3 fatty acids for hairball control',
-      'Contains essential Taurine for vision and cardiac health',
-      '100% grain-free recipe with real wild-caught salmon flakes',
-      'Hydrates and balances urinary tract environment'
-    ],
-    ratingBreakdown: { 5: 84, 4: 10, 3: 4, 2: 1, 1: 1 },
-    reviews: [
-      { author: 'Meera', rating: 5, date: '4 days ago', text: 'My cat is extremely picky but cleaned her bowl immediately! Excellent moisture content.' },
-      { author: 'Ravi', rating: 5, date: '1 week ago', text: 'Very high quality ingredients, smells like real fish. Highly recommend for coat shine.' }
-    ]
-  },
-  aquarium_flakes: {
-    name: 'Premium Goldfish Flakes',
-    price: 180,
-    image: 'https://placehold.co/600x500/e0f2fe/0284c7?text=Goldfish+Flakes',
-    category: 'aquarium',
-    rating: 4.7,
-    reviewsCount: 84,
-    description: 'Highly digestible, color-enhancing flake food formulated to keep pond fish and goldfish healthy and tank water clean.',
-    badge: 'New',
-    highlights: [
-      'Probiotic formula supporting robust immune systems',
-      'Natural carotenoids to enhance vibrant gold and red coloring',
-      'Clean water formulation that will not cloud aquarium water',
-      'Rich in vitamin C and mineral blends for scale development'
-    ],
-    ratingBreakdown: { 5: 76, 4: 16, 3: 6, 2: 2, 1: 0 },
-    reviews: [
-      { author: 'Sanjay', rating: 5, date: '3 days ago', text: 'My goldfish are much more active and their colors are visibly brighter. Flakes float well.' },
-      { author: 'Aditi', rating: 4, date: '2 weeks ago', text: 'Very good food. Tank stays very clean, no nasty smell or clouding. Great value.' }
-    ]
-  },
-  chew_bone: {
-    name: 'Natural Chew Toy Bone',
-    price: 299,
-    image: 'https://placehold.co/600x500/f3e8ff/9333ea?text=Natural+Chew+Bone',
-    category: 'toys',
-    rating: 4.6,
-    reviewsCount: 142,
-    description: 'Durable, allergen-free dental chew toy bone made from natural rubber, perfect for active chewing and cleaning teeth.',
-    badge: 'Organic',
-    highlights: [
-      'Made from 100% natural, non-toxic eco-friendly rubber',
-      'Ridged texture sweeps away plaque and tartar during play',
-      'Infused with mild natural beef flavor to attract interest',
-      'Tough structure designed to withstand large dogs'
-    ],
-    ratingBreakdown: { 5: 70, 4: 20, 3: 7, 2: 2, 1: 1 },
-    reviews: [
-      { author: 'Kartik', rating: 5, date: '5 days ago', text: 'My golden retriever has chewed this for hours daily and it shows no damage. Highly durable!' },
-      { author: 'Nisha', rating: 4, date: '1 month ago', text: 'Excellent chew toy. Really helps with puppy teething. Teeth look much cleaner.' }
-    ]
-  },
-  vitamins: {
-    name: 'Pet Multivitamin Drops',
-    price: 399,
-    image: 'https://placehold.co/600x500/fce7f3/db2777?text=Multivitamin+Drops',
-    category: 'health',
-    rating: 4.8,
-    reviewsCount: 112,
-    description: 'Daily liquid multivitamin drops rich in vitamins A, D, E, and calcium to promote strong bones and high energy.',
-    badge: '100% Organic',
-    highlights: [
-      'Comprehensive vitamin profile (A, B-Complex, D3, E)',
-      'Liquid dropper format for easy mixing with pet food',
-      'Supports puppy bone growth, joint flexibility, and vitality',
-      'All-natural, sugar-free, preservative-free drops'
-    ],
-    ratingBreakdown: { 5: 85, 4: 10, 3: 3, 2: 1, 1: 1 },
-    reviews: [
-      { author: 'Harish', rating: 5, date: '2 days ago', text: 'My older dog has much more energy since starting these drops. Easy to mix in kibble.' },
-      { author: 'Ritu', rating: 5, date: '3 weeks ago', text: 'Excellent daily booster. Coat is shedding less, highly recommend for senior pet care.' }
-    ]
+let productData = {};
+
+
+// ----------------------------------------------------
+// WISHLIST LOGIC
+// ----------------------------------------------------
+let wishlist = JSON.parse(localStorage.getItem('pawkart_wishlist') || '[]');
+
+function toggleWishlist(productId) {
+  if (wishlist.includes(productId)) {
+    wishlist = wishlist.filter(id => id !== productId);
+    showToast('Removed from Wishlist');
+  } else {
+    wishlist.push(productId);
+    showToast('Added to Wishlist');
   }
-};
+  localStorage.setItem('pawkart_wishlist', JSON.stringify(wishlist));
+  updateWishlistIcon(productId);
+}
+
+function updateWishlistIcon(productId) {
+  const icon = document.getElementById('pd-wishlist-icon');
+  if (!icon) return;
+  if (wishlist.includes(productId)) {
+    icon.setAttribute('fill', '#ec4899');
+    icon.style.color = '#ec4899';
+  } else {
+    icon.setAttribute('fill', 'none');
+    icon.style.color = 'currentColor';
+  }
+}
 
 let currentDetailProductId = '';
 let currentDetailQty = 1;
@@ -504,6 +370,14 @@ function openProductDetail(productId) {
     nav('cart');
   };
   
+  const wishlistBtn = document.getElementById('pd-wishlist-btn');
+  if (wishlistBtn) {
+    wishlistBtn.onclick = function() {
+      toggleWishlist(productId);
+    };
+    updateWishlistIcon(productId);
+  }
+  
   // Navigate
   nav('product');
 }
@@ -593,32 +467,34 @@ function showToast(message) {
 // DYNAMIC CHECKOUT & ORDER LIFECYCLE
 // ----------------------------------------------------
 
-let ordersData = [
-  {
-    id: 'PK1001',
-    date: 'Placed on June 8, 2026',
-    status: 'delivered',
-    items: [
-      { productId: 'dog_food', qty: 2, price: 599 }
-    ]
-  },
-  {
-    id: 'PK1002',
-    date: 'Placed on June 9, 2026',
-    status: 'shipped',
-    items: [
-      { productId: 'shampoo', qty: 1, price: 249 }
-    ]
-  },
-  {
-    id: 'PK1003',
-    date: 'Placed on June 9, 2026',
-    status: 'processing',
-    items: [
-      { productId: 'bird_feed', qty: 3, price: 199 }
-    ]
+let ordersData = [];
+
+async function fetchOrders() {
+  try {
+    const res = await fetch('http://localhost:8000/orders');
+    if (!res.ok) return;
+    const orders = await res.json();
+    
+    ordersData = orders.map(o => ({
+      id: o.id,
+      date: o.created_at ? new Date(o.created_at).toLocaleDateString() : 'Recent',
+      status: o.status,
+      items: o.items.map(item => ({
+        productId: item.product_id,
+        qty: item.quantity,
+        price: item.price
+      }))
+    })).reverse(); // Newest first
+    renderOrders();
+  } catch(e) {
+    console.error('Error fetching orders:', e);
   }
-];
+}
+
+// Call fetchOrders on load
+window.addEventListener("DOMContentLoaded", () => {
+  fetchOrders();
+});
 
 function renderOrders() {
   const container = document.getElementById('orders-list-container');
@@ -926,6 +802,14 @@ function openCategory(categoryKey) {
   
   const grid = document.getElementById('category-products-grid');
   grid.innerHTML = '';
+  
+  if (Object.keys(productData).length === 0) {
+    grid.innerHTML = `<div style="text-align:center; padding: 40px; grid-column: 1/-1;">
+      <h3 style="color:var(--text-color);">Server Offline</h3>
+      <p style="color:var(--text-muted);">Please start your backend server to view products.</p>
+    </div>`;
+    return;
+  }
   
   let found = false;
   for (const [id, prod] of Object.entries(productData)) {

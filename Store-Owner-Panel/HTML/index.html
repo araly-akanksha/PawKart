@@ -679,13 +679,13 @@
           <span class="pulse-dot"></span>
           In Stock (Ready to Ship)
         </div>
-        <h1 id="pd-title">Premium Dog Food</h1>
+        <h1 id="pd-title">Loading...</h1>
         <div class="rating-summary-row" onclick="document.getElementById('pd-reviews-section').scrollIntoView({behavior:'smooth'})">
-          <div class="stars-gold" id="pd-stars-top">★★★★★</div>
-          <span id="pd-rating-text">4.8 (523 Reviews)</span>
+          <div class="stars-gold" id="pd-stars-top"></div>
+          <span id="pd-rating-text"></span>
         </div>
-        <div class="big-price" id="pd-price">₹599</div>
-        <p class="description" id="pd-desc">High-protein dog food made from premium ingredients for healthier growth and stronger immunity.</p>
+        <div class="big-price" id="pd-price">₹0</div>
+        <p class="description" id="pd-desc">Loading product details...</p>
         
         <div class="quantity-selector-wrapper">
           <span class="qty-label">Quantity</span>
@@ -710,6 +710,11 @@
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
             Buy Now
+          </button>
+          <button class="action-icon-btn" id="pd-wishlist-btn" title="Add to Wishlist" style="margin-left: 10px; border: 1px solid var(--border); border-radius: var(--radius); padding: 0 16px; background: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="pd-wishlist-icon">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -875,50 +880,9 @@
   </header>
 
   <section class="cart-layout">
-    <div class="cart-items-box">
+    <div class="cart-items-box" id="cart-items-container">
       <h2>Your Cart</h2>
-      
-      <!-- Cart Card 1 -->
-      <div class="cart-card" data-product-id="dog_food">
-        <img class="cart-item-thumb" src="../IMG/product_dog_food.png" alt="Premium Dog Food">
-        <div class="cart-item-info">
-          <h3>Premium Dog Food</h3>
-          <p class="cart-price">₹599</p>
-        </div>
-        <div class="qty-controls">
-          <button onclick="changeQty(this,-1)">−</button>
-          <span>1</span>
-          <button onclick="changeQty(this,1)">+</button>
-        </div>
-        <button class="remove-btn" onclick="removeItem(this)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          Remove
-        </button>
-      </div>
-      
-      <!-- Cart Card 2 -->
-      <div class="cart-card" data-product-id="shampoo">
-        <img class="cart-item-thumb" src="../IMG/product_shampoo.png" alt="Pet Shampoo">
-        <div class="cart-item-info">
-          <h3>Pet Shampoo</h3>
-          <p class="cart-price">₹249</p>
-        </div>
-        <div class="qty-controls">
-          <button onclick="changeQty(this,-1)">−</button>
-          <span>2</span>
-          <button onclick="changeQty(this,1)">+</button>
-        </div>
-        <button class="remove-btn" onclick="removeItem(this)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          Remove
-        </button>
-      </div>
+      <!-- Cart items will be dynamically injected here -->
     </div>
 
     <div class="summary-card">
@@ -1263,7 +1227,7 @@
 <!-- ════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════ -->
-<script src="../JS/script.js"></script>
+<script src="../JS/script.js?v=3"></script>
 
 </body>
 </html>
