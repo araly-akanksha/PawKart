@@ -11,8 +11,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.dependencies import get_db
-from app.models import Store
+from app.dependencies import get_db, get_current_user
+from app.models import Store, User
 from app.schemas import StoreResponse, StoreUpdate
 
 router = APIRouter()
@@ -22,7 +22,7 @@ router = APIRouter()
 # Auto-creates a default store if none exists (like Replit)
 
 @router.get("/store", response_model=StoreResponse)
-def get_store(db: Session = Depends(get_db)):
+def get_store(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     store = db.query(Store).first()
 
     if not store:
@@ -42,13 +42,13 @@ def get_store(db: Session = Depends(get_db)):
     return store
 
 @router.get("/stores", response_model=List[StoreResponse])
-def get_stores(db: Session = Depends(get_db)):
+def get_stores(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(Store).all()
 
 # ── Update Store Profile ────────────────────────────────────
 
 @router.patch("/store", response_model=StoreResponse)
-def update_store(updates: StoreUpdate, db: Session = Depends(get_db)):
+def update_store(updates: StoreUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     store = db.query(Store).first()
 
     if not store:

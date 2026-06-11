@@ -36,13 +36,14 @@ class ProductUpdate(BaseModel):
 
 class ProductResponse(BaseModel):
     id: int
-    name: str
+    product_name: str
     category: str
     price: float
-    location: str
-    stockStatus: str
-    quantity: int
-    image: str
+    description: Optional[str] = None
+    sku: Optional[str] = None
+    image_url: Optional[str] = None
+    available: bool = True
+    store_id: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -132,9 +133,21 @@ class OrderResponse(BaseModel):
     class Config:
         from_attributes = True
 
-
-class OrderDetailResponse(OrderResponse):
+class OrderDetailResponse(BaseModel):
+    id: int
+    customer_name: str
+    customer_phone: Optional[str] = None
+    customer_address: Optional[str] = None
+    status: str
+    total_amount: float
+    item_count: int
+    delivery_slot: Optional[str] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     items: List[OrderItemResponse] = []
+
+    class Config:
+        from_attributes = True
 
 
 class OrderStatusUpdate(BaseModel):

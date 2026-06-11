@@ -28,7 +28,7 @@ from app.database import SessionLocal, engine
 from app.models import Base, Product, Inventory, Order, OrderItem, Store
 
 # ── Configuration ────────────────────────────────────────────
-CSV_PATH = r"C:\Users\Araly Akanksha\Downloads\flipkart_pet_products.csv"
+CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Datasets', 'flipkart_pet_products.csv')
 
 # ── Category detection from product names ────────────────────
 CATEGORY_KEYWORDS = {
