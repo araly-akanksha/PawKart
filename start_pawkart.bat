@@ -11,8 +11,15 @@ pip install -r requirements.txt -q
 echo Dependencies installed successfully.
 echo.
 
-:: 2. Seed the database automatically to ensure no "Server Offline" errors
-echo [2/3] Preparing database and verifying inventory...
+:: 2. Prepare Database and Environment
+echo [2/3] Preparing environment and database...
+if not exist ".env" (
+    echo Creating missing .env file with a secure SECRET_KEY...
+    echo DATABASE_URL=sqlite:///./pawkart.db > ".env"
+    echo SECRET_KEY=pawkart-auto-generated-secret-key-32chars >> ".env"
+    echo DEBUG=True >> ".env"
+)
+
 python seed_real_data.py
 echo Database prepared successfully.
 echo.
