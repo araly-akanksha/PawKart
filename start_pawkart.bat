@@ -19,7 +19,7 @@ echo.
 
 :: 3. Start the Backend API in a separate window
 echo [3/3] Starting the FastAPI Backend Server...
-start "PawKart Backend Server" cmd /c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+start "PawKart Backend Server" cmd /k "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 echo Backend server is booting up in a new window!
 echo.
 
