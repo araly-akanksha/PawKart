@@ -40,7 +40,19 @@
 <main class="main">
   <!-- TOPBAR -->
   <div class="topbar">
-    <div class="topbar-title" id="pageTitle">Platform Overview <span>Platform Admin</span></div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <div class="topbar-title" id="pageTitle">Platform Overview <span>Platform Admin</span></div>
+      <div>
+        <select id="adminStoreSelector" onchange="handleStoreSelection()" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.9rem;">
+          <option value="all">Compare All Stores</option>
+          <option value="store1">Store 1 - Indiranagar</option>
+          <option value="store2">Store 2 - Koramangala</option>
+          <option value="store3">Store 3 - Whitefield</option>
+          <option value="store4">Store 4 - Jayanagar</option>
+          <option value="store5">Store 5 - Malleshwaram</option>
+        </select>
+      </div>
+    </div>
     <div class="topbar-right">
       <button class="tb-btn" onclick="alert('No system logs.')">
         <i class="ti ti-bell"></i>
@@ -116,10 +128,51 @@
       </section>
 
       <div class="two-col">
-        <div class="performance-card">
-          <h2><i class="ti ti-chart-bar"></i> Managed Retail Outlets Revenue Performance</h2>
-          <div id="overviewStoresPerformance">
-            <!-- Rendered dynamically -->
+        <div class="performance-card" id="multiStoreComparisonCard">
+          <h2><i class="ti ti-chart-bar"></i> Multi-Store Comparison</h2>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 16px; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border);">
+                  <th style="padding: 12px 8px;">Store Name</th>
+                  <th style="padding: 12px 8px;">Revenue</th>
+                  <th style="padding: 12px 8px;">Total Orders</th>
+                  <th style="padding: 12px 8px;">Top Selling Product</th>
+                </tr>
+              </thead>
+              <tbody id="multiStoreComparisonBody">
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 12px 8px; font-weight: 500;">Store 1 - Indiranagar</td>
+                  <td style="padding: 12px 8px; color: var(--green); font-weight: 600;">₹4,25,000</td>
+                  <td style="padding: 12px 8px;">1,240</td>
+                  <td style="padding: 12px 8px;">Royal Canin Maxi Adult</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 12px 8px; font-weight: 500;">Store 2 - Koramangala</td>
+                  <td style="padding: 12px 8px; color: var(--green); font-weight: 600;">₹3,80,500</td>
+                  <td style="padding: 12px 8px;">980</td>
+                  <td style="padding: 12px 8px;">Whiskas Kitten Ocean Fish</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 12px 8px; font-weight: 500;">Store 3 - Whitefield</td>
+                  <td style="padding: 12px 8px; color: var(--green); font-weight: 600;">₹5,10,200</td>
+                  <td style="padding: 12px 8px;">1,520</td>
+                  <td style="padding: 12px 8px;">Pedigree Meat & Rice</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 12px 8px; font-weight: 500;">Store 4 - Jayanagar</td>
+                  <td style="padding: 12px 8px; color: var(--green); font-weight: 600;">₹2,90,000</td>
+                  <td style="padding: 12px 8px;">750</td>
+                  <td style="padding: 12px 8px;">Drools Chicken and Egg</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 8px; font-weight: 500;">Store 5 - Malleshwaram</td>
+                  <td style="padding: 12px 8px; color: var(--green); font-weight: 600;">₹3,15,000</td>
+                  <td style="padding: 12px 8px;">890</td>
+                  <td style="padding: 12px 8px;">Meat Up Puppy Dog Food</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

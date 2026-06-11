@@ -220,6 +220,19 @@ function renderFeaturedProducts(searchQuery = "") {
     })
     .slice(0, query ? 50 : 8); // Show up to 50 results if searching
     
+  if (featured.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--slate); font-weight: 500;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 16px; color: #cbd5e1; display: block; margin-left: auto; margin-right: auto;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <p>No products found for "${searchQuery}".</p>
+      </div>
+    `;
+    return;
+  }
+    
   featured.forEach(id => {
     const prod = productData[id];
     const pNameDisplay = prod.product_name || prod.name || 'Product';
@@ -942,12 +955,38 @@ function renderCategoryProducts() {
     return;
   }
   
+  // Gather filter inputs
+  const maxPrice = parseFloat(document.getElementById('filter-price')?.value || 5000);
+  const minRating = parseFloat(document.getElementById('filter-rating')?.value || 0);
+  const inStockOnly = document.getElementById('filter-instock')?.checked;
+  const brandCheckboxes = document.querySelectorAll('.filter-brand:checked');
+  const selectedBrands = Array.from(brandCheckboxes).map(cb => cb.value.toLowerCase());
+
   let filteredProducts = [];
   for (const [id, prod] of Object.entries(productData)) {
     if (prod.category === currentCategory) {
-      if (!query || prod.name.toLowerCase().includes(query) || prod.description.toLowerCase().includes(query)) {
-        filteredProducts.push({ id, ...prod });
+      const pName = prod.name.toLowerCase();
+      const pDesc = (prod.description || '').toLowerCase();
+      
+      // 1. Check Search Query
+      if (query && !pName.includes(query) && !pDesc.includes(query)) continue;
+      
+      // 2. Check Price Filter
+      if (parseFloat(prod.price) > maxPrice) continue;
+      
+      // 3. Check Rating Filter
+      if (parseFloat(prod.rating || 0) < minRating) continue;
+      
+      // 4. Check Stock Filter (Assuming all are in stock right now unless we add an out-of-stock flag)
+      if (inStockOnly && prod.stock === 0) continue;
+      
+      // 5. Check Brand Filter (Mocking brand based on name if brand property doesn't exist)
+      if (selectedBrands.length > 0) {
+        const matchesBrand = selectedBrands.some(b => pName.includes(b));
+        if (!matchesBrand) continue;
       }
+
+      filteredProducts.push({ id, ...prod });
     }
   }
   

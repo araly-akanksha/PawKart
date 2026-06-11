@@ -136,35 +136,60 @@ function logout() {
   window.location.href = "index.html#login";
 }
 
+function handleStoreSelection() {
+  const selector = document.getElementById("adminStoreSelector");
+  if (!selector) return;
+  const value = selector.value;
+  
+  const tbody = document.getElementById("multiStoreComparisonBody");
+  if (!tbody) return;
+  
+  const rows = tbody.querySelectorAll("tr");
+  rows.forEach(row => {
+    // Determine which store this row belongs to based on the first column text
+    const text = row.cells[0].innerText.toLowerCase();
+    
+    if (value === "all") {
+      row.style.display = "";
+    } else {
+      // e.g. "store 1" from "store1" value
+      const storeNum = value.replace("store", "");
+      if (text.includes("store " + storeNum)) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    }
+  });
+}
+
 // ── OVERVIEW PAGE ──
 function renderOverview() {
   // Update Counters
   document.getElementById("overview-pending-approvals").textContent = orders.filter(o => o.status === "pending").length;
   document.getElementById("overview-disputes-count").textContent = complaints.filter(c => c.status !== "resolved").length;
 
-  // Render Performance ranking
+  // (Performance ranking block was replaced by the static 5-store comparison table)
   const perfContainer = document.getElementById("overviewStoresPerformance");
-  perfContainer.innerHTML = "";
-
-  // Sort stores by ID descending (mocking revenue)
-  const ranked = [...stores].sort((a, b) => b.id - a.id);
-  const maxRevenue = 10000;
-
-  ranked.forEach((store, idx) => {
-    const percentage = 50 + (idx * 5); // mock percentage
-    perfContainer.innerHTML += `
-      <div class="store-row">
-        <div class="sr-left">
-          <span class="sr-rank">${idx + 1}</span>
-          <span>${store.name}</span>
+  if (perfContainer) {
+    perfContainer.innerHTML = "";
+    const ranked = [...stores].sort((a, b) => b.id - a.id);
+    ranked.forEach((store, idx) => {
+      const percentage = 50 + (idx * 5); // mock percentage
+      perfContainer.innerHTML += `
+        <div class="store-row">
+          <div class="sr-left">
+            <span class="sr-rank">${idx + 1}</span>
+            <span>${store.name}</span>
+          </div>
+          <div class="bar-bg">
+            <div class="bar-fill" style="width: ${percentage}%;"></div>
+          </div>
+          <strong>₹${store.min_order_amount || 0}</strong>
         </div>
-        <div class="bar-bg">
-          <div class="bar-fill" style="width: ${percentage}%;"></div>
-        </div>
-        <strong>₹${store.min_order_amount || 0}</strong>
-      </div>
-    `;
-  });
+      `;
+    });
+  }
 
   // Render Complaints Preview
   const compContainer = document.getElementById("overviewComplaintsPreview");

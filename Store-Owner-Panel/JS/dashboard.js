@@ -42,7 +42,7 @@ const breadcrumbLabels = {
 let navHistory = [];
 function switchPage(name, addToHistory = true) {
   if (addToHistory) {
-    const activePage = document.querySelector('.dashboard-page.active');
+    const activePage = document.querySelector('.page.active');
     if (activePage) {
       const activeId = activePage.id.replace('page-', '');
       if (activeId !== name) {
@@ -50,7 +50,7 @@ function switchPage(name, addToHistory = true) {
       }
     }
   }
-  document.querySelectorAll('.dashboard-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
   
   const pageElement = document.getElementById('page-' + name);
