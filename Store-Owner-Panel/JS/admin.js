@@ -210,7 +210,7 @@ function renderOverview() {
 }
 
 // ── STORES PAGE ──
-function renderStores() {
+function renderStores(page = 1) {
   const container = document.getElementById("storesContainer");
   container.innerHTML = "";
 
@@ -282,7 +282,7 @@ function toggleStoreStatus(id) {
 }
 
 // ── WAREHOUSES PAGE ──
-function renderWarehouses() {
+function renderWarehouses(page = 1) {
   const container = document.getElementById("warehousesContainer");
   container.innerHTML = "";
 
@@ -363,7 +363,7 @@ function allocateBatchesPrompt(id) {
 }
 
 // ── PRODUCTS OPERATIONS ──
-function renderProducts() {
+function renderProducts(page = 1) {
   const container = document.getElementById("productsContainer");
   container.innerHTML = "";
 
@@ -384,7 +384,7 @@ function renderProducts() {
 
   let htmlString = "";
   // Paginate / limit to 50 items to avoid DOM crashes
-  filtered.slice(0, 50).forEach(p => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(p => {
     let badgeClass = "in-stock";
     let badgeLabel = `In Stock (${p.quantity || 10})`;
     if (p.stockStatus === "low-stock" || p.quantity < 20) {
@@ -413,6 +413,7 @@ function renderProducts() {
     `;
   });
   container.innerHTML = htmlString;
+  setupPagination(filtered.length, 12, page, "storesContainer", "renderStores");
 }
 
 function filterProducts() {
@@ -454,7 +455,7 @@ function editProductPrice(id) {
 }
 
 // ── ORDERS OPERATIONS ──
-function renderOrders() {
+function renderOrders(page = 1) {
   const container = document.getElementById("ordersContainer");
   container.innerHTML = "";
 
@@ -519,7 +520,7 @@ function updateOrderStatus(id, newStatus) {
 }
 
 // ── COMPLAINTS OPERATIONS ──
-function renderComplaints() {
+function renderComplaints(page = 1) {
   const container = document.getElementById("complaintsContainer");
   container.innerHTML = "";
 
@@ -584,7 +585,7 @@ function resolveComplaint(id) {
 }
 
 // ── USERS OPERATIONS ──
-function renderUsers() {
+function renderUsers(page = 1) {
   const container = document.getElementById("usersContainer");
   container.innerHTML = "";
 
@@ -846,3 +847,31 @@ async function loadNetworkForecast() {
 // Initialise Dashboard Page
 fetchAdminData();
 switchPage("overview");
+
+
+function setupPagination(totalItems, itemsPerPage, currentPage, containerId, pageChangeCallbackName) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const existingNav = container.nextElementSibling;
+  if (existingNav && existingNav.classList.contains('pagination-wrapper')) {
+    existingNav.remove();
+  }
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  if (totalPages <= 1) return;
+  let html = '<div class="pagination-wrapper" style="display: flex; justify-content: center; gap: 8px; margin-top: 24px; width: 100%; grid-column: 1/-1;">';
+  html += `<button class="secondary-btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="${pageChangeCallbackName}(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+      if (i === currentPage) {
+        html += `<button class="primary-btn" style="padding: 6px 12px; font-size: 0.85rem;">${i}</button>`;
+      } else {
+        html += `<button class="secondary-btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="${pageChangeCallbackName}(${i})">${i}</button>`;
+      }
+    } else if (i === currentPage - 3 || i === currentPage + 3) {
+      html += `<span style="padding: 6px 4px;">...</span>`;
+    }
+  }
+  html += `<button class="secondary-btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="${pageChangeCallbackName}(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`;
+  html += '</div>';
+  container.insertAdjacentHTML('afterend', html);
+}
