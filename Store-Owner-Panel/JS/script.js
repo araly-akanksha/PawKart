@@ -34,18 +34,7 @@ function doLogin() {
   }
 }
 
-function loginAsGuest() {
-  const activeRoleBtn = document.querySelector('.role-btn.active');
-  const role = activeRoleBtn ? activeRoleBtn.textContent.trim() : 'Customer';
-  
-  if (role === 'Store Manager') {
-    window.location.href = 'dashboard.html?role=manager&guest=true';
-  } else if (role === 'Admin') {
-    alert('Admin guest access is not permitted. Please sign in with your credentials.');
-  } else {
-    nav('home');
-  }
-}
+
 
 // Handle direct hash navigation and cart initialization on load
 window.addEventListener("DOMContentLoaded", () => {
@@ -119,9 +108,18 @@ function renderFeaturedProducts() {
   if(!grid) return;
   grid.innerHTML = '';
   
-  const keys = Object.keys(productData); // Show all products
-  keys.forEach(id => {
+  // Filter to highly rated products and limit to top 8
+  const featured = Object.keys(productData)
+    .filter(id => {
+      const prod = productData[id];
+      const rating = parseFloat(prod.rating) || 0;
+      return rating >= 4.5;
+    })
+    .slice(0, 8);
+    
+  featured.forEach(id => {
     const prod = productData[id];
+    const pNameDisplay = prod.product_name || prod.name || 'Product';
     const stars = '★ ★ ★ ★ ★';
     let badgeHtml = '';
     if (prod.badge) {
@@ -130,13 +128,13 @@ function renderFeaturedProducts() {
     const html = `
       <div class="product-card" onclick="openProductDetail('${id}')">
         <div class="prod-image-wrapper">
-          <img src="${prod.image}" alt="${prod.name}">
+          <img src="${prod.image}" alt="${pNameDisplay}" loading="lazy">
           ${badgeHtml}
         </div>
         <div class="prod-info-wrapper">
-          <div class="prod-rating">${stars} <span>(${prod.rating})</span></div>
-          <h3>${prod.name}</h3>
-          <p class="prod-desc">${prod.description.substring(0, 60)}...</p>
+          <div class="prod-rating">${stars} <span>(${prod.rating || 4.5})</span></div>
+          <h3>${pNameDisplay}</h3>
+          <p class="prod-desc">${(prod.description || '').substring(0, 60)}...</p>
           <div class="prod-footer">
             <span class="price">₹${prod.price}</span>
             <button class="add-btn-round" onclick="event.stopPropagation(); addToCart('${id}', 1); showToast('${prod.name} added to cart!')" title="Add to Cart">

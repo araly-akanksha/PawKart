@@ -324,7 +324,8 @@ function renderProducts() {
   const categoryFilter = document.getElementById("productFilterCategory").value;
 
   const filtered = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(query);
+    const pName = (p.product_name || p.name || "").toLowerCase();
+    const matchesSearch = pName.includes(query);
     const matchesCategory = categoryFilter === "All" || p.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
@@ -334,7 +335,9 @@ function renderProducts() {
     return;
   }
 
-  filtered.forEach(p => {
+  let htmlString = "";
+  // Paginate / limit to 50 items to avoid DOM crashes
+  filtered.slice(0, 50).forEach(p => {
     let badgeClass = "in-stock";
     let badgeLabel = `In Stock (${p.quantity || 10})`;
     if (p.stockStatus === "low-stock" || p.quantity < 20) {
@@ -345,11 +348,13 @@ function renderProducts() {
       badgeLabel = "Out of Stock";
     }
 
-    container.innerHTML += `
+    const pNameDisplay = p.product_name || p.name || 'Product';
+
+    htmlString += `
       <div class="product-card">
         <div class="product-img"><i class="ti ti-package" style="color: var(--accent); font-size: 3rem;"></i></div>
         <div class="product-body">
-          <h3>${p.name}</h3>
+          <h3>${pNameDisplay}</h3>
           <div class="product-meta"><i class="ti ti-category"></i> ${p.category}</div>
           <div class="product-price">₹${p.price}</div>
           <div><span class="badge ${badgeClass}">${badgeLabel}</span></div>
@@ -360,6 +365,7 @@ function renderProducts() {
       </div>
     `;
   });
+  container.innerHTML = htmlString;
 }
 
 function filterProducts() {

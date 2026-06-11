@@ -146,7 +146,8 @@ function renderProducts() {
 
   // Apply filters
   let filtered = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+    const pName = (p.product_name || p.name || "").toLowerCase();
+    const matchesSearch = pName.includes(query) || (p.category || "").toLowerCase().includes(query);
     const matchesCategory = categoryFilter === "All" || p.category === categoryFilter;
     const matchesStatus = statusFilter === "All" || p.stockStatus === statusFilter;
     return matchesSearch && matchesCategory && matchesStatus;
@@ -154,9 +155,11 @@ function renderProducts() {
 
   // Apply sorting
   if (sortBy === "price-low") {
-    filtered.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
   } else if (sortBy === "price-high") {
-    filtered.sort((a, b) => b.price - a.price);
+    filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+  } else if (sortBy === "rating-high") {
+    filtered.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
   } else {
     // Default sort by id (newest/reversed)
     filtered.sort((a, b) => b.id - a.id);
@@ -167,15 +170,18 @@ function renderProducts() {
     return;
   }
 
-  filtered.forEach(p => {
+  let htmlString = "";
+  // Paginate / limit to 50 items to avoid DOM crashes
+  filtered.slice(0, 50).forEach(p => {
     const stockClass = p.stockStatus;
     const stockLabel = p.stockStatus === "in-stock" ? "In Stock" : p.stockStatus === "low-stock" ? "Low Stock" : "Out of Stock";
+    const pNameDisplay = p.product_name || p.name || 'Product';
     
-    container.innerHTML += `
-      <div class="product-card" data-name="${p.name}">
-        <img src="${p.image}" alt="${p.name}" />
+    htmlString += `
+      <div class="product-card" data-name="${pNameDisplay}">
+        <img src="${p.image}" alt="${pNameDisplay}" loading="lazy" />
         <div class="product-card-body">
-          <h3>${p.name}</h3>
+          <h3>${pNameDisplay}</h3>
           <p>Category: ${p.category}</p>
           <span class="stock ${stockClass}">${stockLabel} (${p.quantity})</span>
           <div class="product-footer">
@@ -186,6 +192,7 @@ function renderProducts() {
       </div>
     `;
   });
+  container.innerHTML = htmlString;
 }
 
 function filterProducts() {
@@ -250,7 +257,9 @@ function renderInventory() {
 
   // Filter
   const filtered = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(query) || p.location.toLowerCase().includes(query);
+    const pName = (p.product_name || p.name || "").toLowerCase();
+    const pLoc = (p.location || "").toLowerCase();
+    const matchesSearch = pName.includes(query) || pLoc.includes(query);
     const matchesWarehouse = warehouseFilter === "All" || p.location === warehouseFilter;
     return matchesSearch && matchesWarehouse;
   });
@@ -260,15 +269,18 @@ function renderInventory() {
     return;
   }
 
-  filtered.forEach(p => {
+  let htmlString = "";
+  // Paginate / limit to 50 items to avoid DOM crashes
+  filtered.slice(0, 50).forEach(p => {
     const stockClass = p.stockStatus;
     const stockLabel = p.stockStatus === "in-stock" ? "Healthy" : p.stockStatus === "low-stock" ? "Low Stock" : "Out of Stock";
+    const pNameDisplay = p.product_name || p.name || 'Product';
 
-    container.innerHTML += `
+    htmlString += `
       <div class="inventory-card">
-        <img src="${p.image}" alt="${p.name}" />
+        <img src="${p.image}" alt="${pNameDisplay}" loading="lazy" />
         <div class="inventory-card-body">
-          <h3>${p.name}</h3>
+          <h3>${pNameDisplay}</h3>
           <p>Location: ${p.location}</p>
           <div class="stock-row">
             <strong>${p.quantity} Units</strong>
@@ -279,6 +291,7 @@ function renderInventory() {
       </div>
     `;
   });
+  container.innerHTML = htmlString;
 }
 
 function filterInventory() {
@@ -314,7 +327,10 @@ function renderOrders() {
   document.getElementById("order-count-delivered").textContent = orders.filter(o => o.status === "delivered").length;
 
   const filtered = orders.filter(o => {
-    const matchesSearch = o.customer.toLowerCase().includes(query) || o.id.toLowerCase().includes(query) || o.items.toLowerCase().includes(query);
+    const oCust = (o.customer || "").toLowerCase();
+    const oId = (o.id || "").toString().toLowerCase();
+    const oItems = (o.items || "").toLowerCase();
+    const matchesSearch = oCust.includes(query) || oId.includes(query) || oItems.includes(query);
     const matchesStatus = statusFilter === "All" || o.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -324,7 +340,9 @@ function renderOrders() {
     return;
   }
 
-  filtered.forEach(o => {
+  let htmlString = "";
+  // Paginate / limit to 50 items to avoid DOM crashes
+  filtered.slice(0, 50).forEach(o => {
     let actionButtons = "";
     if (o.status === "pending") {
       actionButtons = `
@@ -340,11 +358,11 @@ function renderOrders() {
       actionButtons = `<p style="font-size: .75rem; color: var(--text-secondary);">No actions required.</p>`;
     }
 
-    container.innerHTML += `
+    htmlString += `
       <div class="order-card" style="display: block;">
         <div class="order-header">
           <h3>#${o.id}</h3>
-          <span class="badge ${o.status}">${o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span>
+          <span class="badge ${o.status}">${(o.status || "Unknown").charAt(0).toUpperCase() + (o.status || "Unknown").slice(1)}</span>
         </div>
         <p>Customer: <span>${o.customer}</span></p>
         <p>Items: <span>${o.items}</span></p>
@@ -356,6 +374,7 @@ function renderOrders() {
       </div>
     `;
   });
+  container.innerHTML = htmlString;
 }
 
 function filterOrders() {
