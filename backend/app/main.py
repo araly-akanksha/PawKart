@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base, verify_and_update_schema
 from app.routes import products, inventory, orders, store, analytics
 from app.routes import forecasting, optimization, auth, users, complaints, upload
+from app.routes import ai_forecasting, ai_customers, ai_recommendations
 from app.ai import init_models
 
 
@@ -114,6 +115,26 @@ app.include_router(
 app.include_router(
     optimization.router,
     tags=["Optimization"]
+)
+
+# ── Next-Gen AI Upgrade Routes ───────────────────────────────
+
+app.include_router(
+    ai_forecasting.router,
+    prefix="/ai",
+    tags=["AI Forecasting (TFT)"]
+)
+
+app.include_router(
+    ai_customers.router,
+    prefix="/ai",
+    tags=["AI Customer Prediction (CatBoost)"]
+)
+
+app.include_router(
+    ai_recommendations.router,
+    prefix="/ai",
+    tags=["AI Recommendations (XGBoost)"]
 )
 
 

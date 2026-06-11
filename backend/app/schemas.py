@@ -363,3 +363,26 @@ class ReviewResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# ── AI Upgrade Schemas (TFT, CatBoost, XGBoost) ──────────────
+
+class TFTForecastResponse(BaseModel):
+    product_id: int
+    forecast_1_day: int
+    forecast_7_days: int
+    forecast_30_days: int
+    confidence: float
+
+class CustomerPurchaseResponse(BaseModel):
+    customer_id: int
+    purchase_probability: float
+    segment: str  # HIGH, MEDIUM, LOW
+
+class RecommendationItem(BaseModel):
+    product_id: int
+    score: float
+    reason: str
+
+class CustomerRecommendationResponse(BaseModel):
+    customer_id: int
+    recommendations: List[RecommendationItem]
