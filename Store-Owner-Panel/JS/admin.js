@@ -238,10 +238,10 @@ function openAddStoreModal() {
   stores.push({
     id: stores.length + 1,
     name,
-    location,
-    manager,
-    status: "active",
-    revenue: 0
+    address: location,
+    owner_name: manager,
+    is_open: true,
+    min_order_amount: 0
   });
 
   renderStores();
@@ -251,7 +251,7 @@ function openAddStoreModal() {
 function toggleStoreStatus(id) {
   const store = stores.find(s => s.id === id);
   if (store) {
-    store.status = store.status === "active" ? "inactive" : "active";
+    store.is_open = !store.is_open;
     renderStores();
   }
 }

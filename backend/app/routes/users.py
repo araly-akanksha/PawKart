@@ -1,14 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from app.dependencies import get_db
-from app.models import User
-from app.schemas import UserResponse, UserCreate
+from app.auth import get_password_hash
+from app.dependencies import get_db, get_current_user
 
 router = APIRouter()
 
 @router.get("/users", response_model=List[UserResponse])
-def get_users(db: Session = Depends(get_db)):
+def get_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(User).all()
 
 @router.post("/users", response_model=UserResponse)
@@ -20,7 +19,7 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
     
     new_user = User(
         email=user_in.email,
-        password_hash="mock_hash_for_now", # Assuming auth handles real hashing
+        password_hash=get_password_hash(user_in.password),
         role=user_in.role,
         store_id=user_in.store_id
     )

@@ -268,7 +268,7 @@ def get_order(
 
 # ── Update Order Status ─────────────────────────────────────
 
-@router.patch("/orders/{order_id}/status", response_model=OrderResponse)
+@router.patch("/orders/{order_id}/status", response_model=OrderDetailResponse)
 def update_order_status(
     order_id: int,
     update: OrderStatusUpdate,
@@ -294,7 +294,7 @@ def update_order_status(
     db.commit()
     db.refresh(order)
 
-    return OrderResponse(
+    return OrderDetailResponse(
         id=order.id,
         customer_name=order.customer_name,
         customer_phone=order.customer_phone,
@@ -304,7 +304,8 @@ def update_order_status(
         item_count=sum(i.quantity for i in order.items),
         delivery_slot=order.delivery_slot,
         created_at=order.created_at,
-        updated_at=order.updated_at
+        updated_at=order.updated_at,
+        items=[OrderItemResponse.model_validate(i) for i in order.items]
     )
 
 

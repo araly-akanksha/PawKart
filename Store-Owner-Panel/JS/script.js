@@ -776,7 +776,7 @@ async function placeOrder() {
     customer_address: fullAddress,
     delivery_slot: "ASAP",
     items: checkoutItems.map(item => ({
-      product_id: parseInt(item.productId.toString().replace(/\\D/g, '') || 1),
+      product_id: parseInt(item.productId.toString().replace(/\D/g, '') || 1),
       quantity: item.qty
     }))
   };

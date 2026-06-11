@@ -82,7 +82,8 @@ def detect_category(product_name):
     if "fish" in name_lower or "aqua" in name_lower: return "Fish Food"
     return "Accessories"
 
-df = pd.read_csv(r'C:\Users\yeshw\Documents\GitHub\PawKart\Datasets\flipkart_pet_products.csv', encoding='utf-8-sig')
+dataset_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Datasets', 'flipkart_pet_products.csv')
+df = pd.read_csv(dataset_path, encoding='utf-8-sig')
 df = df.drop_duplicates(subset=['Product Name'], keep='first')
 df = df[df['Product Name'].str.strip().str.len() > 0]
 

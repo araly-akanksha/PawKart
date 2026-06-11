@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
-from app.dependencies import get_db
-from app.models import Product, Inventory
+from app.dependencies import get_db, get_current_admin
+from app.models import Product, Inventory, User
 import pandas as pd
 import io
 
 router = APIRouter()
 
 @router.post("/admin/upload-catalog")
-async def upload_catalog(file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_catalog(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_admin)):
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Only CSV files are allowed")
 
