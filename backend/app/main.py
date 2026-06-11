@@ -16,7 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base, verify_and_update_schema
 from app.routes import products, inventory, orders, store, analytics
 from app.routes import forecasting, optimization, auth, users, complaints, upload
-from app.routes import ai_forecasting, ai_customers, ai_recommendations
+from app.routes import ai_forecasting, ai_customers, ai_recommendations, ai_chat
 from app.ai import init_models
 
 
@@ -137,6 +137,11 @@ app.include_router(
     tags=["AI Recommendations (XGBoost)"]
 )
 
+app.include_router(
+    ai_chat.router,
+    prefix="/ai",
+    tags=["AI Chatbot (NLP)"]
+)
 
 # ── Health Check ─────────────────────────────────────────────
 

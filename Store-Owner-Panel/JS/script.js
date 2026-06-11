@@ -1014,3 +1014,79 @@ function renderCategoryProducts() {
   }
 }
 
+// ----------------------------------------------------
+// AI CHATBOT WIDGET LOGIC
+// ----------------------------------------------------
+function toggleChatbot() {
+  const body = document.getElementById('chatbot-body');
+  const icon = document.getElementById('chatbot-toggle-icon');
+  if (body.style.display === 'none') {
+    body.style.display = 'flex';
+    icon.textContent = '▼';
+  } else {
+    body.style.display = 'none';
+    icon.textContent = '▲';
+  }
+}
+
+function handleChatKeyPress(event) {
+  if (event.key === 'Enter') {
+    sendChatMessage();
+  }
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('chat-input-field');
+  const message = input.value.trim();
+  if (!message) return;
+  
+  const messagesContainer = document.getElementById('chat-messages');
+  
+  // Append user message
+  messagesContainer.innerHTML += `
+    <div class="chat-message user">${message}</div>
+  `;
+  input.value = '';
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  
+  try {
+    const res = await fetch('http://localhost:8000/ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customer_id: 1, message: message }) // Hardcoded ID 1 for POC
+    });
+    
+    if (!res.ok) throw new Error('Network error');
+    
+    const data = await res.json();
+    
+    // Append AI reply text
+    messagesContainer.innerHTML += `
+      <div class="chat-message ai">${data.reply}</div>
+    `;
+    
+    // Append AI product recommendations directly into chat
+    if (data.suggested_products && data.suggested_products.length > 0) {
+      data.suggested_products.forEach(p => {
+        messagesContainer.innerHTML += `
+          <div class="chat-product-card" onclick="openProductDetail('${p.id}')">
+            <img src="${p.image_url || '../IMG/product_placeholder.png'}" class="chat-product-thumb" alt="${p.product_name}">
+            <div class="chat-product-info">
+              <h4>${p.product_name}</h4>
+              <p>₹${p.price}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+    
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+  } catch (error) {
+    console.error('Chatbot error:', error);
+    messagesContainer.innerHTML += `
+      <div class="chat-message ai">Sorry, I am having trouble connecting to the AI server right now. Please try again later!</div>
+    `;
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+}
