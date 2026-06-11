@@ -127,6 +127,61 @@ function updateDashboardPage() {
       </div>
     `;
   });
+
+  // Populate AI forecast dropdown
+  const select = document.getElementById("forecast-product-select");
+  if (select && products.length > 0) {
+    select.innerHTML = '';
+    products.slice(0, 10).forEach(p => {
+      const pNameDisplay = p.product_name || p.name || 'Product';
+      select.innerHTML += `<option value="${p.id}">${pNameDisplay}</option>`;
+    });
+    fetchAIForecast(); // Load initial forecast
+  }
+}
+
+async function fetchAIForecast() {
+  const select = document.getElementById("forecast-product-select");
+  const container = document.getElementById("forecast-data-container");
+  if (!select || !container) return;
+  
+  const productId = select.value;
+  container.innerHTML = '<p style="color: #64748b; font-style: italic;">Loading AI forecast data...</p>';
+  
+  try {
+    const res = await fetch(`http://localhost:8000/ai/forecast/product/${productId}`);
+    if (!res.ok) throw new Error('Forecast API failed');
+    const data = await res.json();
+    
+    container.innerHTML = '';
+    
+    // Convert flat fields to array
+    const forecastArray = [
+      { predicted_demand: data.forecast_1_day, label: "Next 24h" },
+      { predicted_demand: data.forecast_7_days, label: "Next 7d" },
+      { predicted_demand: data.forecast_30_days, label: "Next 30d" }
+    ];
+
+    // Determine max value for bar scaling
+    const maxDemand = Math.max(...forecastArray.map(d => d.predicted_demand));
+    
+    forecastArray.forEach(d => {
+      const heightPct = Math.max((d.predicted_demand / maxDemand) * 100, 10);
+      container.innerHTML += `
+        <div style="display: flex; flex-direction: column; align-items: center; min-width: 60px;">
+          <div style="height: 100px; width: 40px; background: #f1f5f9; border-radius: 6px; display: flex; align-items: flex-end; overflow: hidden; position: relative;">
+            <div style="width: 100%; height: ${heightPct}%; background: linear-gradient(180deg, #6d5dfc 0%, #4f46e5 100%); border-radius: 0 0 6px 6px;"></div>
+          </div>
+          <span style="font-weight: 700; color: #1e293b; margin-top: 8px;">${d.predicted_demand}</span>
+          <span style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">${d.label}</span>
+        </div>
+      `;
+    });
+    
+  } catch (e) {
+    console.error('Error fetching AI forecast:', e);
+    container.innerHTML = '<p style="color: #ef4444;">Failed to load forecast data.</p>';
+  }
 }
 
 // ── PRODUCTS OPERATIONS ──

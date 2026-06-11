@@ -124,6 +124,10 @@ async function fetchProductsAndRender() {
     });
 
     renderFeaturedProducts();
+    
+    // Attempt to load AI recommendations
+    fetchAIRecommendations();
+    
   } catch(e) {
     console.error('Error fetching products', e);
     const offlineMsg = `<div style="text-align:center; padding: 40px; grid-column: 1/-1;">
@@ -132,6 +136,60 @@ async function fetchProductsAndRender() {
     </div>`;
     const featuredGrid = document.getElementById('featured-products-grid');
     if (featuredGrid) featuredGrid.innerHTML = offlineMsg;
+  }
+}
+
+async function fetchAIRecommendations() {
+  try {
+    const res = await fetch('http://localhost:8000/ai/recommendations/customer/1');
+    if (!res.ok) throw new Error('AI endpoint failed');
+    const data = await res.json();
+    
+    const grid = document.getElementById('ai-recommendations-grid');
+    const section = document.getElementById('ai-recommendations-section');
+    if (!grid || !section) return;
+    
+    grid.innerHTML = '';
+    let hasValidProducts = false;
+    
+    data.recommendations.forEach(reco => {
+      const prod = productData[reco.product_id];
+      if (!prod) return;
+      hasValidProducts = true;
+      
+      const pNameDisplay = prod.product_name || prod.name || 'Product';
+      const stars = '★ ★ ★ ★ ★';
+      
+      const html = `
+        <div class="product-card" style="border: 2px solid #ec4899; box-shadow: 0 10px 25px rgba(236,72,153,0.15);" onclick="openProductDetail('${reco.product_id}')">
+          <div class="prod-image-wrapper">
+            <img src="${prod.image}" alt="${pNameDisplay}" loading="lazy">
+            <span class="prod-badge badge-organic" style="background:#ec4899; color:white;">${Math.round(reco.score * 100)}% Match</span>
+          </div>
+          <div class="prod-info-wrapper">
+            <div class="prod-rating">${stars} <span>(${prod.rating || 4.5})</span></div>
+            <h3>${pNameDisplay}</h3>
+            <p class="prod-desc" style="color: #ec4899; font-weight: 500; font-size: 0.85rem; margin-top: 5px;">🤖 ${reco.reason}</p>
+            <div class="prod-footer">
+              <span class="price">₹${prod.price}</span>
+              <button class="add-btn-round" style="background:#ec4899;" onclick="event.stopPropagation(); addToCart('${reco.product_id}', 1); showToast('${prod.name} added to cart!')" title="Add to Cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.insertAdjacentHTML('beforeend', html);
+    });
+    
+    if (hasValidProducts) {
+      section.style.display = 'block';
+    }
+  } catch(e) {
+    console.error('Failed to load AI recommendations:', e);
   }
 }
 

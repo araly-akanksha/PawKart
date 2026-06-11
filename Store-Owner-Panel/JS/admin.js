@@ -697,95 +697,124 @@ function renderAnalysis() {
   `;
 }
 
-// ── AI FORECASTING OPERATIONS ──
+// ── AI FORECASTING & INSIGHTS OPERATIONS ──
 async function renderForecast() {
   const container = document.getElementById("forecastContainer");
   container.innerHTML = `
-    <div class="ai-banner">
-      <div class="ai-banner-content">
-        <h2><i class="ti ti-sparkles"></i> AI Inventory Insights</h2>
-        <p>Our predictive models analyzed recent transactions. Here are the top supply chain recommendations for the next 14 days.</p>
-      </div>
-      <div>
-        <button class="btn-primary" style="background: #fff; color: var(--accent); white-space: nowrap;" onclick="renderForecast()">
+    <div class="ai-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); padding: 30px; border-radius: 12px; color: white; margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="ai-banner-content">
+          <h2 style="color: white; margin-bottom: 10px; font-size: 1.5rem;"><i class="ti ti-brain"></i> AI Platform Intelligence</h2>
+          <p style="color: #cbd5e1; max-width: 600px;">Our CatBoost and Temporal Fusion Transformer models have analyzed the latest transaction data to predict customer behavior and network-wide demand.</p>
+        </div>
+        <button class="btn-primary" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;" onclick="renderForecast()">
           <i class="ti ti-refresh"></i> Run AI Sync
         </button>
       </div>
     </div>
-    <div class="ai-grid" id="aiGridContainer">
-      <p style="padding: 20px;"><i class="ti ti-loader"></i> Querying LSTM Neural Network...</p>
+    
+    <div class="two-col">
+      <div class="ai-card" style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <h3 style="margin-bottom: 20px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <i class="ti ti-users" style="color: #6366f1;"></i> High-Probability Customers (Next 7 Days)
+        </h3>
+        <div id="ai-customers-grid">
+          <p style="color: #64748b;"><i class="ti ti-loader"></i> Querying CatBoost Model...</p>
+        </div>
+      </div>
+      
+      <div class="ai-card" style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+        <h3 style="margin-bottom: 20px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+          <i class="ti ti-chart-bar" style="color: #ec4899;"></i> Network Demand Forecast (TFT)
+        </h3>
+        <select id="network-forecast-select" onchange="loadNetworkForecast()" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <option value="1">Dog Food</option>
+        </select>
+        <div id="ai-demand-grid" style="min-height: 150px;">
+          <p style="color: #64748b;"><i class="ti ti-loader"></i> Querying TFT Engine...</p>
+        </div>
+      </div>
     </div>
   `;
 
-  const grid = document.getElementById("aiGridContainer");
-
+  // 1. Fetch CatBoost Customers
+  const custGrid = document.getElementById("ai-customers-grid");
   try {
-    // 1. Fetch real products from backend
-    const pRes = await fetch('http://localhost:8000/products');
-    const realProducts = await pRes.json();
-    
-    // We'll take the first 3 products for the forecast cards to avoid a massive wall of AI cards
-    const targets = realProducts.slice(0, 3);
-    grid.innerHTML = "";
-
-    if (targets.length === 0) {
-      grid.innerHTML = "<p style='padding: 20px;'>No products found in database.</p>";
-      return;
+    const cRes = await fetch('http://localhost:8000/ai/customer-purchase/high-probability');
+    if (cRes.ok) {
+      const customers = await cRes.json();
+      custGrid.innerHTML = "";
+      customers.forEach(c => {
+        custGrid.innerHTML += `
+          <div style="border-bottom: 1px solid #f1f5f9; padding: 12px 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h4 style="margin: 0; color: #334155;">Customer ID: #${c.customer_id}</h4>
+              <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Predicted to buy: <strong>${c.predicted_category || 'General'}</strong></p>
+            </div>
+            <div style="text-align: right;">
+              <span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">${Math.round(c.purchase_probability * 100)}% Probability</span>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      custGrid.innerHTML = '<p style="color: #ef4444;">Failed to load customer predictions.</p>';
     }
+  } catch(e) {
+    custGrid.innerHTML = '<p style="color: #ef4444;">API Connection Error.</p>';
+  }
 
-    for (const p of targets) {
-      // 2. Fetch AI Forecast for each product
-      const fRes = await fetch(`http://localhost:8000/forecast/${p.id}`);
-      const forecast = await fRes.json();
+  // Populate Select for Demand
+  const select = document.getElementById("network-forecast-select");
+  if (products.length > 0) {
+    select.innerHTML = '';
+    products.slice(0, 10).forEach(p => {
+      const pNameDisplay = p.product_name || p.name || 'Product';
+      select.innerHTML += `<option value="${p.id}">${pNameDisplay}</option>`;
+    });
+  }
+  loadNetworkForecast();
+}
+
+async function loadNetworkForecast() {
+  const select = document.getElementById("network-forecast-select");
+  const grid = document.getElementById("ai-demand-grid");
+  if (!select || !grid) return;
+  
+  const productId = select.value;
+  grid.innerHTML = '<p style="color: #64748b;"><i class="ti ti-loader"></i> Loading...</p>';
+  
+  try {
+    const res = await fetch(`http://localhost:8000/ai/forecast/product/${productId}`);
+    if (res.ok) {
+      const data = await res.json();
+      grid.innerHTML = `<div style="display: flex; gap: 10px; overflow-x: auto; padding-top: 10px;"></div>`;
+      const innerGrid = grid.querySelector('div');
       
-      let confidenceClass = "";
-      let confidenceIcon = "ti-bulb";
-      if (forecast.confidence === "high") {
-        confidenceClass = ""; // default is green in css
-      } else if (forecast.confidence === "medium") {
-        confidenceClass = "medium"; // yellow in css
-      } else {
-        confidenceClass = "low"; 
-      }
+      const forecastArray = [
+        { predicted_demand: data.forecast_1_day, label: "Next 24h" },
+        { predicted_demand: data.forecast_7_days, label: "Next 7d" },
+        { predicted_demand: data.forecast_30_days, label: "Next 30d" }
+      ];
       
-      let demandClass = forecast.predicted_demand_next_week > p.quantity ? "text-danger" : "text-success";
-      let alertClass = forecast.predicted_demand_next_week > p.quantity ? "urgent" : "";
-
-      // Format the explanation text (convert \n to <br>)
-      let explanationHtml = forecast.explanation.replace(/\n/g, '<br>');
-
-      grid.innerHTML += `
-      <div class="ai-card ${alertClass}">
-        <div class="ai-header">
-          <div>
-            <h3>${p.name}</h3>
-            <p><i class="ti ti-map-pin"></i> ${p.location || 'Warehouse Network'}</p>
+      const maxDemand = Math.max(...forecastArray.map(d => d.predicted_demand));
+      forecastArray.forEach(d => {
+        const heightPct = Math.max((d.predicted_demand / maxDemand) * 100, 10);
+        innerGrid.innerHTML += `
+          <div style="display: flex; flex-direction: column; align-items: center; min-width: 60px;">
+            <div style="height: 120px; width: 36px; background: #f1f5f9; border-radius: 4px; display: flex; align-items: flex-end;">
+              <div style="width: 100%; height: ${heightPct}%; background: linear-gradient(180deg, #ec4899 0%, #be185d 100%); border-radius: 0 0 4px 4px;"></div>
+            </div>
+            <span style="font-weight: 700; color: #1e293b; margin-top: 8px; font-size: 0.85rem;">${d.predicted_demand}</span>
+            <span style="font-size: 0.7rem; color: #64748b; margin-top: 2px;">${d.label}</span>
           </div>
-          <span class="confidence-badge ${confidenceClass}"><i class="ti ${confidenceIcon}"></i> ${forecast.confidence ? forecast.confidence.toUpperCase() : 'MEDIUM'} Confidence</span>
-        </div>
-        <div class="ai-metrics">
-          <div class="ai-metric-box">
-            <span>Current Stock</span>
-            <strong>${p.quantity} Units</strong>
-          </div>
-          <div class="ai-metric-box">
-            <span>Predicted Demand</span>
-            <strong class="${demandClass}">${forecast.predicted_demand_next_week} Units</strong>
-          </div>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5;">
-          ${explanationHtml}
-        </p>
-        <div class="ai-actions">
-          <button class="btn-primary" onclick="alert('Auto-allocating ${forecast.predicted_demand_next_week} units...')">Auto-Restock</button>
-          <button class="btn-secondary" onclick="alert('Drafting Purchase Order...')">Draft PO</button>
-        </div>
-      </div>
-      `;
+        `;
+      });
+    } else {
+      grid.innerHTML = '<p style="color: #ef4444;">Failed to load forecast.</p>';
     }
-  } catch (e) {
-    console.error("Forecast error:", e);
-    grid.innerHTML = `<p style="padding: 20px; color: red;">Failed to connect to AI engine. Ensure FastAPI backend is running.</p>`;
+  } catch(e) {
+    grid.innerHTML = '<p style="color: #ef4444;">API Connection Error.</p>';
   }
 }
 
