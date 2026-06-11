@@ -74,7 +74,18 @@ const pageTitles = {
   forecast: "AI Forecasting <span>Predictive Analytics</span>"
 };
 
-function switchPage(name) {
+let navHistory = [];
+function switchPage(name, addToHistory = true) {
+  if (addToHistory) {
+    const activePage = document.querySelector('.page.active');
+    if (activePage) {
+      const activeId = activePage.id.replace('page-', '');
+      if (activeId !== name) {
+        navHistory.push(activeId);
+      }
+    }
+  }
+
   // Hide all page sections
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   // Show target page
@@ -101,6 +112,17 @@ function switchPage(name) {
   else if (name === "users") renderUsers();
   else if (name === "analysis") renderAnalysis();
   else if (name === "forecast") renderForecast();
+}
+
+function goBack() {
+  if (navHistory.length > 0) {
+    const prevPage = navHistory.pop();
+    switchPage(prevPage, false);
+  } else {
+    // Default fallback
+    if (document.getElementById('page-overview')) switchPage('overview', false);
+    else window.location.href = 'index.html';
+  }
 }
 
 // Bind Navigation Click Events

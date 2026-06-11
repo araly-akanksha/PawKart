@@ -39,13 +39,26 @@ const breadcrumbLabels = {
   settings: "Dashboard > Settings"
 };
 
-function switchPage(name) {
-  // Hide all pages
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  // Show target page
-  const target = document.getElementById("page-" + name);
-  if (target) target.classList.add("active");
+let navHistory = [];
+function switchPage(name, addToHistory = true) {
+  if (addToHistory) {
+    const activePage = document.querySelector('.dashboard-page.active');
+    if (activePage) {
+      const activeId = activePage.id.replace('page-', '');
+      if (activeId !== name) {
+        navHistory.push(activeId);
+      }
+    }
+  }
+  document.querySelectorAll('.dashboard-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
   
+  const pageElement = document.getElementById('page-' + name);
+  if (pageElement) pageElement.classList.add('active');
+  
+  const navLink = document.querySelector(`li[onclick="switchPage('${name}')"]`);
+  if (navLink) navLink.classList.add('active');
+
   // Update breadcrumb
   document.getElementById("breadcrumb").textContent = breadcrumbLabels[name] || "Dashboard";
   
@@ -563,3 +576,14 @@ function initUserProfile() {
 switchPage("dashboard");
 initUserProfile();
 fetchDashboardData();
+
+function goBack() {
+  if (typeof navHistory !== 'undefined' && navHistory.length > 0) {
+    const prevPage = navHistory.pop();
+    switchPage(prevPage, false);
+  } else {
+    // Default fallback
+    if (document.getElementById('page-dashboard')) switchPage('dashboard', false);
+    else window.location.href = 'index.html';
+  }
+}
