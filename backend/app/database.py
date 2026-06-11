@@ -13,11 +13,8 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
-    raise RuntimeError(
-        "DATABASE_URL environment variable is not set. "
-        "Create a .env file in the backend/ directory. "
-        "See .env.example for the required format."
-    )
+    print("WARNING: No DATABASE_URL found in environment variables. Falling back to default local SQLite database.")
+    DATABASE_URL = "sqlite:///./pawkart.db"
 
 engine = create_engine(DATABASE_URL)
 
@@ -49,3 +46,15 @@ def verify_and_update_schema():
                     text("ALTER TABLE inventory ADD COLUMN lead_time_days INTEGER DEFAULT 3 NOT NULL")
                 )
             print("Migration: 'lead_time_days' column added successfully.")
+
+    # 3. Check if database is completely empty and warn user
+    from app.models import Product
+    with engine.begin() as conn:
+        res = conn.execute(text("SELECT COUNT(*) FROM products"))
+        count = res.scalar()
+        if count == 0:
+            print("\n" + "="*60)
+            print("🚨 WARNING: YOUR DATABASE IS EMPTY! 🚨")
+            print("The frontend will display 'Server Offline' if there are no products.")
+            print("Please run `python seed_real_data.py` to populate it.")
+            print("="*60 + "\n")
