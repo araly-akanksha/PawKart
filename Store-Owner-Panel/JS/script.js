@@ -34,7 +34,18 @@ function doLogin() {
   }
 }
 
-
+function loginAsGuest() {
+  const activeRoleBtn = document.querySelector('.role-btn.active');
+  const role = activeRoleBtn ? activeRoleBtn.textContent.trim() : 'Customer';
+  
+  if (role === 'Store Manager') {
+    alert('Store Manager guest access has been disabled. Please sign in with your credentials.');
+  } else if (role === 'Admin') {
+    alert('Admin guest access is not permitted. Please sign in with your credentials.');
+  } else {
+    nav('home');
+  }
+}
 
 // Handle direct hash navigation and cart initialization on load
 window.addEventListener("DOMContentLoaded", () => {
@@ -103,19 +114,32 @@ async function fetchProductsAndRender() {
   }
 }
 
-function renderFeaturedProducts() {
+function handleCustomerSearch() {
+  const query = document.getElementById("customerSearch").value;
+  renderFeaturedProducts(query);
+}
+
+function renderFeaturedProducts(searchQuery = "") {
   const grid = document.getElementById('featured-products-grid');
   if(!grid) return;
   grid.innerHTML = '';
   
-  // Filter to highly rated products and limit to top 8
+  const query = searchQuery.toLowerCase().trim();
+  
+  // If searching, show all matching products. Else filter to highly rated products (top 8)
   const featured = Object.keys(productData)
     .filter(id => {
       const prod = productData[id];
+      const pName = (prod.product_name || prod.name || "").toLowerCase();
+      
+      if (query) {
+        return pName.includes(query) || (prod.category || "").toLowerCase().includes(query);
+      }
+      
       const rating = parseFloat(prod.rating) || 0;
       return rating >= 4.5;
     })
-    .slice(0, 8);
+    .slice(0, query ? 50 : 8); // Show up to 50 results if searching
     
   featured.forEach(id => {
     const prod = productData[id];

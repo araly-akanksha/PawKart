@@ -416,6 +416,7 @@
           </div>
           
           <button class="signin-btn" onclick="doLogin()">Login to Account</button>
+          <button id="guest-login-btn" class="guest-btn" onclick="loginAsGuest()">Continue as Guest</button>
         </div>
 
         <p class="login-footer-note">Don't have an account? <a href="#" style="color:var(--purple);font-weight:600">Sign up</a></p>
@@ -441,7 +442,7 @@
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <input type="text" placeholder="Search pet products, food, toys...">
+      <input type="text" id="customerSearch" placeholder="Search pet products, food, toys..." oninput="handleCustomerSearch()">
     </div>
     <div class="hdr-actions">
       <button class="action-icon-btn" onclick="nav('orders')" title="My Orders">
