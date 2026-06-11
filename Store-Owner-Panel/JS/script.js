@@ -9,14 +9,14 @@ function selectRole(btn) {
     .forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   
-  // Hide guest button for Admin
+  // Hide guest button for Admin and Store Manager
   const role = btn.textContent.trim();
   const guestBtn = document.getElementById('guest-login-btn');
   if (guestBtn) {
-    if (role === 'Admin') {
+    if (role === 'Admin' || role === 'Store Manager') {
       guestBtn.style.display = 'none';
     } else {
-      guestBtn.style.display = 'block';
+      guestBtn.style.display = 'inline-block';
     }
   }
 }
