@@ -10,14 +10,14 @@ from typing import List, Optional
 from app.dependencies import get_db, get_current_store_owner, get_optional_current_user
 from app import models
 from app.models import Product
-from app.schemas import ProductCreate, ProductUpdate, ProductResponse
+from app.schemas import ProductCreate, ProductUpdate, ProductResponse, DashboardProductResponse
 
 router = APIRouter()
 
 
 # ── List Products ────────────────────────────────────────────
 
-@router.get("/products", response_model=List[ProductResponse])
+@router.get("/products", response_model=List[DashboardProductResponse])
 def list_products(
     category: Optional[str] = Query(None, description="Filter by category"),
     available: Optional[bool] = Query(None, description="Filter by availability"),

@@ -48,6 +48,15 @@ class ProductResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class DashboardProductResponse(BaseModel):
+    id: int
+    name: str
+    category: str
+    price: float
+    location: str
+    stockStatus: str
+    quantity: int
+    image: str
 
 # ── Inventory Schemas ────────────────────────────────────────
 

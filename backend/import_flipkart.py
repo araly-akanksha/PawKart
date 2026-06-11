@@ -28,6 +28,7 @@ from app.database import SessionLocal, engine
 from app.models import Base, Product, Inventory, Order, OrderItem, Store
 
 # ── Configuration ────────────────────────────────────────────
+# Define relative path to dataset
 CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Datasets', 'flipkart_pet_products.csv')
 
 # ── Category detection from product names ────────────────────
