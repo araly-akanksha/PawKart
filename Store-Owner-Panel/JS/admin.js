@@ -230,7 +230,7 @@ function renderStores(page = 1) {
     return;
   }
 
-  filtered.forEach(s => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(s => {
     const statusClass = s.is_open ? "active" : "inactive";
     const statusLabel = s.is_open ? "Active" : "Inactive";
     container.innerHTML += `
@@ -248,6 +248,7 @@ function renderStores(page = 1) {
       </div>
     `;
   });
+  setupPagination(filtered.length, 12, page, "storesContainer", "renderStores");
 }
 
 function filterStores() {
@@ -413,7 +414,7 @@ function renderProducts(page = 1) {
     `;
   });
   container.innerHTML = htmlString;
-  setupPagination(filtered.length, 12, page, "storesContainer", "renderStores");
+  setupPagination(filtered.length, 12, page, "productsContainer", "renderProducts");
 }
 
 function filterProducts() {
@@ -473,7 +474,7 @@ function renderOrders(page = 1) {
     return;
   }
 
-  filtered.forEach(o => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(o => {
     let actionButtons = "";
     if (o.status === "pending") {
       actionButtons = `
@@ -505,6 +506,7 @@ function renderOrders(page = 1) {
       </div>
     `;
   });
+  setupPagination(filtered.length, 12, page, 'ordersContainer', 'renderOrders');
 }
 
 function filterOrders() {
@@ -538,7 +540,7 @@ function renderComplaints(page = 1) {
     return;
   }
 
-  filtered.forEach(c => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(c => {
     const priorityClass = c.priority === "critical" ? "critical" : c.priority === "medium" ? "medium" : "low";
     const statusClass = c.status === "open" ? "open" : c.status === "progress" ? "progress" : "resolved";
     
@@ -569,6 +571,7 @@ function renderComplaints(page = 1) {
       </div>
     `;
   });
+  setupPagination(filtered.length, 12, page, 'complaintsContainer', 'renderComplaints');
 }
 
 function filterComplaints() {
@@ -603,7 +606,7 @@ function renderUsers(page = 1) {
     return;
   }
 
-  filtered.forEach(u => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(u => {
     const roleLabel = u.role === "admin" ? "Admin" : u.role === "owner" ? "Store Manager" : "Customer";
     const statusClass = "active";
 
@@ -625,6 +628,7 @@ function renderUsers(page = 1) {
       </div>
     `;
   });
+  setupPagination(filtered.length, 12, page, 'usersContainer', 'renderUsers');
 }
 
 function filterUsers() {

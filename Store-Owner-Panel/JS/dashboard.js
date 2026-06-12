@@ -85,7 +85,6 @@ document.querySelectorAll(".sidebar ul li[data-page]").forEach(li => {
   li.addEventListener("click", () => {
     switchPage(li.getAttribute("data-page"));
   });
-  setupPagination(filtered.length, 12, page, "reviewsContainer", "renderReviews");
 });
 
 // ── GLOBAL SEARCH ──
@@ -362,7 +361,7 @@ function renderInventory(page = 1) {
     `;
   });
   container.innerHTML = htmlString;
-  setupPagination(filtered.length, 12, page, "productsContainer", "renderProducts");
+  setupPagination(filtered.length, 12, page, "inventoryContainer", "renderInventory");
 }
 
 function filterInventory() {
@@ -446,7 +445,7 @@ function renderOrders(page = 1) {
     `;
   });
   container.innerHTML = htmlString;
-  setupPagination(filtered.length, 12, page, "productsContainer", "renderProducts");
+  setupPagination(filtered.length, 12, page, "ordersContainer", "renderOrders");
 }
 
 function filterOrders() {
@@ -490,7 +489,7 @@ function renderReviews(page = 1) {
     return;
   }
 
-  filtered.forEach(r => {
+  filtered.slice((page - 1) * 12, page * 12).forEach(r => {
     let stars = "⭐".repeat(r.rating);
     let replyButton = r.replied 
       ? `<p style="font-size: .8rem; color: var(--green); font-weight: 500;">✓ Replied</p>` 
@@ -509,6 +508,8 @@ function renderReviews(page = 1) {
       </div>
     `;
   });
+  
+  setupPagination(filtered.length, 12, page, "reviewsContainer", "renderReviews");
 }
 
 function filterReviews() {
