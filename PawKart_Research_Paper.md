@@ -1,3 +1,5 @@
+<img width="650" height="92" alt="image" src="https://github.com/user-attachments/assets/f2df4436-8bd8-45a7-83b8-e2cbbf1e0bcd" />
+
 # PawKart: Real-Time Inventory Synchronization and Intelligent Replenishment for Independent Pet Stores Competing in Quick-Commerce Environments
 
 **Araly Akanksha Naidu** (Dept. of MSc. Big Data Analytics, 252BDA32)  
