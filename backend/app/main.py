@@ -15,10 +15,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base, verify_and_update_schema
 from app.routes import products, inventory, orders, store, analytics
-from app.routes import forecasting, optimization, auth, users, complaints, upload
+from app.routes import optimization, auth, users, complaints, upload
 from app.routes import ai_forecasting, ai_customers, ai_recommendations, ai_chat
-from app.ai import init_models
-
 
 # ── Lifespan: create tables on startup ───────────────────────
 
@@ -27,8 +25,7 @@ async def lifespan(app: FastAPI):
     # Startup: verify database schema and run simple migration
     verify_and_update_schema()
     
-    # Initialize and load AI models
-    init_models()
+    # (AI models are now loaded dynamically or in their respective routes)
     
     yield
     # Shutdown: nothing to clean up
@@ -107,10 +104,7 @@ app.include_router(
     tags=["Analytics"]
 )
 
-app.include_router(
-    forecasting.router,
-    tags=["Forecasting"]
-)
+
 
 app.include_router(
     optimization.router,
