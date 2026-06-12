@@ -387,7 +387,8 @@ function renderOrders(page = 1) {
   const container = document.getElementById("ordersContainer");
   container.innerHTML = "";
 
-  const query = document.getElementById("orderSearch").value.toLowerCase();
+  const rawQuery = document.getElementById("orderSearch").value.toLowerCase();
+  const query = rawQuery.replace(/#/g, ''); // Strip '#' to allow searching for exact order IDs like #PK1089
   const statusFilter = document.getElementById("orderStatusFilter").value;
 
   // Update stats
