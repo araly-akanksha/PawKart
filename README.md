@@ -87,4 +87,4 @@ While the current prototype successfully validates the integration of advanced p
 As an open-source research initiative, we welcome enterprise contributions. Please ensure all pull requests adhere to PEP-8 standards for Python and include appropriate unit test coverage for any modified API routes.
 
 ## 📄 License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is done in AI/ML Internship at COMEDEKARES Innovation Hub Bengaluru.
